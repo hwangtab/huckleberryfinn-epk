@@ -1,0 +1,28 @@
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
+import './globals.css';
+
+const pretendard = localFont({
+  src: '../public/fonts/PretendardVariable.woff2',
+  display: 'swap',
+  variable: '--font-pretendard',
+  weight: '100 900',
+});
+
+export const metadata: Metadata = {
+  title: 'Huckleberryfinn - 나를 닮은 사내 (2025 Re-Recording)',
+  description: '24년의 시간을 넘어, 못다 한 이야기가 다시 시작됩니다. 허클베리핀 2집 재녹음 프로젝트.',
+  keywords: ['허클베리핀', 'Huckleberryfinn', '나를 닮은 사내', '인디 록', 'Korean indie rock', '옐로우 콘서트'],
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="ko" className={pretendard.variable}>
+      <body className="font-sans">{children}</body>
+    </html>
+  );
+}
