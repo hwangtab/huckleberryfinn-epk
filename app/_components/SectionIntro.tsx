@@ -40,9 +40,6 @@ export default function SectionIntro() {
         quality={90}
       />
 
-      {/* 노란색 그라데이션 오버레이 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-hbf-yellow/70 to-hbf-yellow/50 z-[5]" />
-
       {/* 텍스트 콘텐츠 */}
       <motion.div
         className="relative z-10 text-center px-6"
