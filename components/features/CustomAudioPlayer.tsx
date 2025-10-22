@@ -113,7 +113,7 @@ export default function CustomAudioPlayer({
           whileTap={{ scale: 0.95 }}
           aria-label={isPlaying ? '일시정지' : '재생'}
         >
-          {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
+          {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} className="ml-0.5" />}
         </motion.button>
 
         <div className="flex-1">
