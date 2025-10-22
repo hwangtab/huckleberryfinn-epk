@@ -63,9 +63,9 @@ export default function SectionProfile() {
             Huckleberryfinn
           </Heading>
           <p className="text-lg text-hbf-white leading-relaxed max-w-2xl mx-auto">
-            1997년 결성된 허클베리핀은 한국 인디 록 씬의 전설적 선구자입니다.
+            한국 인디 1세대 밴드, 허클베리핀.
             <br />
-            25년간 음악으로 청년과 대화해온 밴드의 현재를 소개합니다.
+            1997년부터 지금까지 서정적 록 사운드로 독보적인 음악 세계를 만들어왔습니다.
           </p>
         </motion.div>
 
