@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 
 const container: Variants = {
@@ -27,7 +28,22 @@ const item: Variants = {
 
 export default function SectionIntro() {
   return (
-    <section className="relative flex flex-col justify-center items-center min-h-screen bg-hbf-yellow overflow-hidden">
+    <section className="relative flex flex-col justify-center items-center min-h-screen overflow-hidden">
+      {/* 앨범 아트 배경 */}
+      <Image
+        src="/images/2th_album/album_art.jpg"
+        alt="나를 닮은 사내 앨범 아트"
+        fill
+        className="object-cover"
+        priority
+        sizes="100vw"
+        quality={90}
+      />
+
+      {/* 노란색 그라데이션 오버레이 */}
+      <div className="absolute inset-0 bg-gradient-to-b from-hbf-yellow/70 to-hbf-yellow/50 z-[5]" />
+
+      {/* 텍스트 콘텐츠 */}
       <motion.div
         className="relative z-10 text-center px-6"
         variants={container}
@@ -65,13 +81,13 @@ export default function SectionIntro() {
 
       {/* 스크롤 힌트 */}
       <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2, duration: 1, repeat: Infinity, repeatType: "reverse" }}
       >
-        <div className="w-6 h-10 border-2 border-hbf-charcoal rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-hbf-charcoal rounded-full mt-2"></div>
+        <div className="w-6 h-10 border-2 border-hbf-white rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-hbf-white rounded-full mt-2"></div>
         </div>
       </motion.div>
     </section>
