@@ -41,7 +41,7 @@ export default function SectionProfile() {
           transition={{ duration: 0.8 }}
         >
           <Image
-            src="/images/profile/허클베리핀 1.jpg"
+            src="/images/profile/허클베리핀 3.jpg"
             alt="Huckleberryfinn band photo"
             width={1200}
             height={675}
@@ -62,7 +62,7 @@ export default function SectionProfile() {
           <Heading level="h2" className="text-hbf-white mb-4">
             Huckleberryfinn
           </Heading>
-          <p className="text-lg text-hbf-charcoal-light leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg text-hbf-white leading-relaxed max-w-2xl mx-auto">
             1997년 결성된 허클베리핀은 한국 인디 록 씬의 전설적 선구자입니다.
             <br />
             25년간 음악으로 청년과 대화해온 밴드의 현재를 소개합니다.
