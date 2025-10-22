@@ -2,6 +2,86 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import 'tailwindcss';
 
+/* CucumberSalad from Noonnu CDN */
+@font-face {
+  font-family: 'CucumberSalad';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_cucumbersalad.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+
+/* Paperozi from Noonnu CDN - Weight 100 */
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210@1.0/Paperozi-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-display: swap;
+}
+
+/* Paperozi - Weight 200 */
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210@1.0/Paperozi-ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-display: swap;
+}
+
+/* Paperozi - Weight 300 */
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210@1.0/Paperozi-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+/* Paperozi - Weight 400 */
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210@1.0/Paperozi-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* Paperozi - Weight 500 */
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210@1.0/Paperozi-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+/* Paperozi - Weight 600 */
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210@1.0/Paperozi-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+/* Paperozi - Weight 700 */
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210@1.0/Paperozi-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* Paperozi - Weight 800 */
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210@1.0/Paperozi-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+
+/* Paperozi - Weight 900 */
+@font-face {
+  font-family: 'Paperozi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210@1.0/Paperozi-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
+
 /* ONE Mobile Title from Noonnu CDN */
 @font-face {
   font-family: 'ONE Mobile Title';
