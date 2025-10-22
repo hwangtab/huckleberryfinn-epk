@@ -1,59 +1,113 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Heading from '@/components/ui/Heading';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { narrativeImages } from '@/app/data/narrativeImages';
 
 export default function SectionNarrative() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 스크롤 진행률 측정
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
+  // 자동 전환 기능 (3초마다)
+  useEffect(() => {
+    const startAutoplay = () => {
+      autoplayTimerRef.current = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
+      }, 3000);
+    };
 
-  // 스크롤 30%~70% 구간에서 0에서 1로 변환 (흑백 → 컬러)
-  const colorOpacity = useTransform(scrollYProgress, [0.3, 0.7], [0, 1]);
+    startAutoplay();
+
+    return () => {
+      if (autoplayTimerRef.current) {
+        clearInterval(autoplayTimerRef.current);
+      }
+    };
+  }, []);
+
+  // 네비게이션 핸들러
+  const handlePrev = () => {
+    setCurrentImageIndex(
+      (prev) => (prev - 1 + narrativeImages.length) % narrativeImages.length
+    );
+    // 타이머 리셋
+    if (autoplayTimerRef.current) {
+      clearInterval(autoplayTimerRef.current);
+    }
+    autoplayTimerRef.current = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
+    }, 3000);
+  };
+
+  const handleNext = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
+    // 타이머 리셋
+    if (autoplayTimerRef.current) {
+      clearInterval(autoplayTimerRef.current);
+    }
+    autoplayTimerRef.current = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
+    }, 3000);
+  };
 
   return (
     <section ref={sectionRef} className="bg-hbf-white py-24 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* Image Section - 스크롤 기반 이미지 전환 */}
+          {/* Image Section - 자동 전환 슬라이더 */}
           <motion.div
-            className="relative aspect-[4/5] rounded-lg overflow-hidden"
+            className="relative aspect-[4/5] rounded-lg overflow-hidden group"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            {/* 흑백 이미지 (베이스) */}
-            <div className="absolute inset-0">
-              <Image
-                src="/images/2th_album/20001허클베리핀03.jpg"
-                alt="Huckleberryfinn 흑백 사진"
-                fill
-                className="object-cover grayscale"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority
-              />
-            </div>
+            {/* 이미지 슬라이더 */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentImageIndex}
+                className="absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Image
+                  src={narrativeImages[currentImageIndex]}
+                  alt={`Huckleberryfinn past photo ${currentImageIndex + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+              </motion.div>
+            </AnimatePresence>
 
-            {/* 컬러 이미지 (오버레이 - 스크롤에 따라 나타남) */}
-            <motion.div
-              className="absolute inset-0"
-              style={{ opacity: colorOpacity }}
+            {/* 좌 네비게이션 버튼 */}
+            <motion.button
+              onClick={handlePrev}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-hbf-charcoal/30 text-hbf-white flex items-center justify-center opacity-0 hover:bg-hbf-charcoal/50 transition-all group-hover:opacity-100"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label="이전 사진"
             >
-              <Image
-                src="/images/2th_album/20001허클베리핀03.jpg"
-                alt="Huckleberryfinn 컬러 사진"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </motion.div>
+              <FaChevronLeft size={20} />
+            </motion.button>
+
+            {/* 우 네비게이션 버튼 */}
+            <motion.button
+              onClick={handleNext}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-hbf-charcoal/30 text-hbf-white flex items-center justify-center opacity-0 hover:bg-hbf-charcoal/50 transition-all group-hover:opacity-100"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label="다음 사진"
+            >
+              <FaChevronRight size={20} />
+            </motion.button>
           </motion.div>
 
           {/* Text Content */}
