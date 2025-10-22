@@ -65,7 +65,7 @@ export default function SectionIntro() {
 
         <motion.h1
           className="text-6xl md:text-7xl lg:text-8xl text-hbf-charcoal mb-8"
-          style={{ fontFamily: 'CucumberSalad', fontWeight: 'normal' }}
+          style={{ fontFamily: 'Watermelon', fontWeight: 'normal' }}
           variants={item}
         >
           Huckleberryfinn
@@ -73,7 +73,7 @@ export default function SectionIntro() {
 
         <motion.p
           className="text-3xl md:text-4xl lg:text-5xl text-hbf-charcoal-light"
-          style={{ fontFamily: 'CucumberSalad', fontWeight: 'normal' }}
+          style={{ fontFamily: 'Watermelon', fontWeight: 'normal' }}
           variants={item}
         >
           2025 Re-Recording: 나를 닮은 사내

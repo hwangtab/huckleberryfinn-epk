@@ -2,10 +2,10 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import 'tailwindcss';
 
-/* CucumberSalad from Noonnu CDN */
+/* Watermelon from Noonnu CDN */
 @font-face {
-  font-family: 'CucumberSalad';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_cucumbersalad.woff2') format('woff2');
+  font-family: 'Watermelon';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_watermelonSalad.woff2') format('woff2');
   font-weight: normal;
   font-display: swap;
 }
