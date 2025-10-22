@@ -175,8 +175,8 @@ export default function CustomAudioPlayer({
         )}
       </AnimatePresence>
 
-      {/* Visual Feedback Container - Fixed Height to Prevent Flickering */}
-      <div className="mt-4 h-12 flex justify-center items-end gap-2">
+      {/* Visual Feedback Container - Dynamic Height based on Playing State */}
+      <div className={`mt-4 flex justify-center items-end gap-2 transition-all duration-200 ${isPlaying ? 'h-12' : 'h-0'}`}>
         <AnimatePresence>
           {isPlaying && (
             <motion.div
