@@ -10,6 +10,14 @@
   font-display: swap;
 }
 
+/* CucumberSalad from Noonnu CDN */
+@font-face {
+  font-family: 'CucumberSalad';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_cucumbersalad.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+
 /* Paperozi from Noonnu CDN - Weight 100 */
 @font-face {
   font-family: 'Paperozi';
