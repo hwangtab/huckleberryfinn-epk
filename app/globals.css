@@ -1,3 +1,7 @@
+/* Web Fonts from Noonnu CDN */
+@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/ONE-Mobile-Title.woff');
+@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoPeacefullA.woff');
+
 @import 'tailwindcss';
 
 @theme {
@@ -7,6 +11,10 @@
   --color-hbf-charcoal-light: #4F4F4F;
   --color-hbf-bluegray: #8B9AAB;
   --color-hbf-white: #FDFBF6;
+
+  /* Font Families */
+  --font-display: 'ONE Mobile Title', sans-serif;
+  --font-headline: 'MapoPeacefullA', sans-serif;
 }
 
 body {
@@ -38,4 +46,17 @@ body {
 /* 부드러운 스크롤 */
 html {
   scroll-behavior: smooth;
+}
+
+/* Custom Font Classes */
+.font-display {
+  font-family: 'ONE Mobile Title', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.font-headline {
+  font-family: 'MapoPeacefullA', sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }

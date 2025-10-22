@@ -35,28 +35,28 @@ export default function SectionIntro() {
         animate="show"
       >
         <motion.p
-          className="text-2xl md:text-3xl lg:text-4xl text-hbf-charcoal-light mb-6"
+          className="font-display text-4xl md:text-5xl lg:text-6xl text-hbf-charcoal mb-6"
           variants={item}
         >
           24년의 시간을 넘어,
         </motion.p>
 
         <motion.p
-          className="text-xl md:text-2xl lg:text-3xl text-hbf-charcoal mb-12"
+          className="font-headline text-2xl md:text-3xl lg:text-4xl text-hbf-charcoal mb-12"
           variants={item}
         >
           못다 한 이야기가 다시 시작됩니다.
         </motion.p>
 
         <motion.h1
-          className="text-6xl md:text-7xl lg:text-8xl font-bold text-hbf-charcoal mb-8"
+          className="font-headline text-6xl md:text-7xl lg:text-8xl font-bold text-hbf-charcoal mb-8"
           variants={item}
         >
           Huckleberryfinn
         </motion.h1>
 
         <motion.p
-          className="text-2xl md:text-3xl lg:text-4xl text-hbf-charcoal-light"
+          className="font-display text-3xl md:text-4xl lg:text-5xl text-hbf-charcoal-light"
           variants={item}
         >
           2025 Re-Recording: 나를 닮은 사내

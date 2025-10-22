@@ -42,7 +42,7 @@ export default function SectionFuture() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <h3 className="text-2xl font-bold text-hbf-charcoal mb-6">
+          <h3 className="text-2xl font-bold text-hbf-charcoal mb-6 font-headline">
             프로젝트 혜택
           </h3>
           <div className="grid md:grid-cols-3 gap-6 text-left">

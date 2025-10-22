@@ -13,7 +13,7 @@ export default function Heading({
 }: HeadingProps) {
   const Tag = level;
 
-  const baseStyles = 'font-bold tracking-tight';
+  const baseStyles = 'font-bold tracking-tight font-headline';
 
   const sizeStyles = {
     h1: 'text-5xl md:text-6xl lg:text-7xl',
