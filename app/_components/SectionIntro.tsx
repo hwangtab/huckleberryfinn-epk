@@ -73,7 +73,7 @@ export default function SectionIntro() {
 
         <motion.p
           className="text-3xl md:text-4xl lg:text-5xl text-hbf-charcoal-light"
-          style={{ fontFamily: 'Paperozi', fontWeight: 600 }}
+          style={{ fontFamily: 'CucumberSalad', fontWeight: 'normal' }}
           variants={item}
         >
           2025 Re-Recording: 나를 닮은 사내
