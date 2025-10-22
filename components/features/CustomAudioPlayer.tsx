@@ -175,30 +175,35 @@ export default function CustomAudioPlayer({
         )}
       </AnimatePresence>
 
-      {/* Visual Feedback when Playing */}
-      {isPlaying && (
-        <motion.div
-          className="mt-4 flex justify-center gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          {[...Array(5)].map((_, i) => (
+      {/* Visual Feedback Container - Fixed Height to Prevent Flickering */}
+      <div className="mt-4 h-12 flex justify-center items-end gap-2">
+        <AnimatePresence>
+          {isPlaying && (
             <motion.div
-              key={i}
-              className="w-1 bg-hbf-yellow rounded-full"
-              animate={{
-                height: ['20px', '40px', '20px'],
-              }}
-              transition={{
-                duration: 0.6,
-                repeat: Infinity,
-                delay: i * 0.1,
-              }}
-            />
-          ))}
-        </motion.div>
-      )}
+              className="flex justify-center items-end gap-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="w-1 bg-hbf-yellow rounded-full"
+                  animate={{
+                    height: ['20px', '40px', '20px'],
+                  }}
+                  transition={{
+                    duration: 0.6,
+                    repeat: Infinity,
+                    delay: i * 0.1,
+                  }}
+                />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </motion.div>
   );
 }
