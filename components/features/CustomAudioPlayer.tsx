@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, MouseEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPlay, FaPause, FaInfoCircle } from 'react-icons/fa';
+import { useAudioPlayer } from '@/app/contexts/AudioPlayerContext';
 
 interface CustomAudioPlayerProps {
   src: string;
   title: string;
-  producersNote: string;
+  producersNote?: string;
 }
 
 export default function CustomAudioPlayer({
@@ -15,12 +16,26 @@ export default function CustomAudioPlayer({
   title,
   producersNote,
 }: CustomAudioPlayerProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const { playingSrc, setPlayingSrc } = useAudioPlayer();
+  const isPlaying = playingSrc === src;
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showNote, setShowNote] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const progressContainerRef = useRef<HTMLDivElement>(null);
+
+  // Context의 playingSrc 변경에 따라 재생/정지
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.play().catch(e => console.error('Audio play failed:', e));
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -34,10 +49,12 @@ export default function CustomAudioPlayer({
     };
 
     const updateDuration = () => {
-      setDuration(audio.duration);
+      if (!isNaN(audio.duration)) {
+        setDuration(audio.duration);
+      }
     };
 
-    const handleEnded = () => setIsPlaying(false);
+    const handleEnded = () => setPlayingSrc(null);
 
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('loadedmetadata', updateDuration);
@@ -48,31 +65,31 @@ export default function CustomAudioPlayer({
       audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, []);
+  }, [setPlayingSrc]);
 
   const togglePlay = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
     if (isPlaying) {
-      audio.pause();
+      setPlayingSrc(null);
     } else {
-      audio.play();
+      setPlayingSrc(src);
     }
-    setIsPlaying(!isPlaying);
   };
 
-  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleProgressClick = (e: MouseEvent<HTMLDivElement>) => {
+    const container = progressContainerRef.current;
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!container || !audio || !audio.duration) return;
 
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = x / rect.width;
-    audio.currentTime = percentage * audio.duration;
+    const rect = container.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    const percentage = clickX / width;
+    const newTime = percentage * audio.duration;
+    audio.currentTime = newTime;
   };
 
   const formatTime = (time: number) => {
+    if (isNaN(time) || time === 0) return '0:00';
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -102,17 +119,20 @@ export default function CustomAudioPlayer({
         <div className="flex-1">
           <div className="flex items-center justify-between mb-2">
             <h4 className="text-xl font-bold text-hbf-charcoal">{title}</h4>
-            <button
-              onClick={() => setShowNote(!showNote)}
-              className="text-hbf-charcoal-light hover:text-hbf-yellow transition-colors"
-              aria-label="프로듀서 노트 보기"
-            >
-              <FaInfoCircle size={20} />
-            </button>
+            {producersNote && (
+              <button
+                onClick={() => setShowNote(!showNote)}
+                className="text-hbf-charcoal-light hover:text-hbf-yellow transition-colors"
+                aria-label="프로듀서 노트 보기"
+              >
+                <FaInfoCircle size={20} />
+              </button>
+            )}
           </div>
 
           {/* Progress Bar */}
           <div
+            ref={progressContainerRef}
             className="relative h-2 bg-hbf-charcoal/10 rounded-full cursor-pointer group"
             onClick={handleProgressClick}
           >
@@ -137,7 +157,7 @@ export default function CustomAudioPlayer({
 
       {/* Producer's Note */}
       <AnimatePresence>
-        {showNote && (
+        {showNote && producersNote && (
           <motion.div
             className="mt-4 p-4 bg-hbf-yellow/10 border-l-4 border-hbf-yellow rounded"
             initial={{ opacity: 0, height: 0 }}
