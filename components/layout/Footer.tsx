@@ -47,7 +47,7 @@ export default function Footer() {
           {/* SNS Icons */}
           <div className="flex gap-6">
             <a
-              href="https://youtube.com/@huckleberryfinnmusic"
+              href="https://www.youtube.com/user/shalabel"
               target="_blank"
               rel="noopener noreferrer"
               className="text-2xl hover:text-hbf-yellow transition-colors"
@@ -56,7 +56,7 @@ export default function Footer() {
               <FaYoutube />
             </a>
             <a
-              href="https://instagram.com/huckleberryfinn_official"
+              href="https://www.instagram.com/band__huckleberryfinn/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-2xl hover:text-hbf-yellow transition-colors"
@@ -65,7 +65,7 @@ export default function Footer() {
               <FaInstagram />
             </a>
             <a
-              href="https://facebook.com/huckleberryfinn"
+              href="https://www.facebook.com/HuckleberryFinn.Band/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-2xl hover:text-hbf-yellow transition-colors"
