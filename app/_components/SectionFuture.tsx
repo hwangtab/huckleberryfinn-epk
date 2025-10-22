@@ -45,7 +45,7 @@ export default function SectionFuture() {
           <h3 className="text-2xl font-bold text-hbf-charcoal mb-6 font-headline">
             프로젝트 혜택
           </h3>
-          <div className="grid md:grid-cols-3 gap-6 text-left">
+          <div className="grid md:grid-cols-3 gap-6 text-center">
             <div className="space-y-2">
               <div className="text-4xl mb-2">🎵</div>
               <p className="font-bold text-hbf-charcoal">
