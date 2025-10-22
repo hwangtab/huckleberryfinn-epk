@@ -1,8 +1,14 @@
-/* Web Fonts from Noonnu CDN */
-@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/ONE-Mobile-Title.woff');
-@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoPeacefullA.woff');
-
+/* Web Fonts and Tailwind */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import 'tailwindcss';
+
+/* ONE Mobile Title from Noonnu CDN */
+@font-face {
+  font-family: 'ONE Mobile Title';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-Title.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
 @theme {
   --color-hbf-yellow: #F3A847;
@@ -14,7 +20,7 @@
 
   /* Font Families */
   --font-display: 'ONE Mobile Title', sans-serif;
-  --font-headline: 'MapoPeacefullA', sans-serif;
+  --font-headline: 'Pretendard', sans-serif;
 }
 
 body {
@@ -56,7 +62,7 @@ html {
 }
 
 .font-headline {
-  font-family: 'MapoPeacefullA', sans-serif;
-  font-weight: 400;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
