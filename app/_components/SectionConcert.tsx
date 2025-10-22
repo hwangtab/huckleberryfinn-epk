@@ -51,10 +51,10 @@ export default function SectionConcert() {
 
             <p className="text-lg text-hbf-white/90 leading-relaxed">
               2004년부터 이어진 허클베리핀의 단독 브랜드 공연 &apos;옐로우 콘서트&apos;.
-              스물한 번째의 무대는 새롭게 태어난 2집 &apos;나를 닮은 사내&apos;의 첫
-              라이브와 함께합니다. 과거와 현재가 공존하는 특별한 밤, 10년 만에 다시
-              찾는 대구 클럽 헤비와 서울 롤링홀에서 오랜 팬들과의 뜨거운 만남을
-              기다립니다.
+              <br />
+              스물한 번째의 무대는 새롭게 태어난 2집 &apos;나를 닮은 사내&apos;의 첫 라이브와 함께합니다.
+              <br />
+              과거와 현재가 공존하는 특별한 밤, 10년 만에 다시 찾는 대구 클럽 헤비와 서울 롤링홀에서 오랜 팬들과의 뜨거운 만남을 기다립니다.
             </p>
 
             <div className="space-y-4 pt-6">

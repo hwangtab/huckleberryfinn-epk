@@ -20,8 +20,7 @@ export default function SectionMusic() {
             다시, 숨 쉬는 노래들
           </Heading>
           <p className="text-lg text-hbf-charcoal-light max-w-3xl mx-auto mb-4">
-            이것은 단순한 리마스터가 아닌, 모든 악기와 목소리를 새롭게 녹음하고
-            재해석한 &apos;2025년의 앨범&apos;입니다.
+            이것은 단순한 리마스터가 아닌, 모든 악기와 목소리를 새롭게 녹음하고 재해석한 &apos;2025년의 앨범&apos;입니다.
           </p>
           <p className="text-sm text-hbf-charcoal-light">
             전곡 (Total 11 Tracks)
