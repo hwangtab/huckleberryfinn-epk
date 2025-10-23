@@ -71,7 +71,7 @@ export default function SectionIntro() {
               alt="나를 닮은 사내 앨범 아트"
               width={300}
               height={300}
-              className="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 object-cover"
+              className="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-112 xl:h-112 object-cover"
               priority
               quality={85}
             />
