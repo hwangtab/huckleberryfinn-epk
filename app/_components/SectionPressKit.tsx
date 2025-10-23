@@ -34,8 +34,8 @@ export default function SectionPressKit() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          <Button href="/presskit/presskit.zip" variant="primary">
-            모든 자료 한번에 받기 (.ZIP)
+          <Button href="https://drive.google.com/drive/folders/1OcARASSeww-g_SBYr0ywBcxchKGi8eYF?usp=sharing" variant="primary">
+            Google Drive에서 전체 자료 보기
           </Button>
         </motion.div>
       </div>
