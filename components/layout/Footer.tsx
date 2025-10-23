@@ -1,4 +1,5 @@
 import { FaYoutube, FaInstagram, FaFacebook } from 'react-icons/fa';
+import { contactInfo } from '@/app/data/contact';
 
 export default function Footer() {
   return (
@@ -9,27 +10,27 @@ export default function Footer() {
           <h3 className="text-2xl font-bold mb-4">CONTACT</h3>
           <div className="space-y-2 text-hbf-white/80">
             <p>
-              <span className="font-semibold">Label:</span> 샤 레이블 (Sha Label)
+              <span className="font-semibold">Label:</span> {contactInfo.label}
             </p>
             <p>
-              <span className="font-semibold">Contact:</span> 성장규
+              <span className="font-semibold">Contact:</span> {contactInfo.contact}
             </p>
             <p>
               <span className="font-semibold">Email:</span>{' '}
               <a
-                href="mailto:shalabel@naver.com"
+                href={`mailto:${contactInfo.email}`}
                 className="hover:text-hbf-yellow transition-colors"
               >
-                shalabel@naver.com
+                {contactInfo.email}
               </a>
             </p>
             <p>
               <span className="font-semibold">Phone:</span>{' '}
               <a
-                href="tel:+82-10-5229-8099"
+                href={`tel:${contactInfo.phone}`}
                 className="hover:text-hbf-yellow transition-colors"
               >
-                010-5229-8099
+                {contactInfo.phone.replace(/^\+82-/, '0')}
               </a>
             </p>
           </div>
@@ -47,7 +48,7 @@ export default function Footer() {
           {/* SNS Icons */}
           <div className="flex gap-6">
             <a
-              href="https://www.youtube.com/user/shalabel"
+              href={contactInfo.youtube}
               target="_blank"
               rel="noopener noreferrer"
               className="text-2xl hover:text-hbf-yellow transition-colors"
@@ -56,7 +57,7 @@ export default function Footer() {
               <FaYoutube />
             </a>
             <a
-              href="https://www.instagram.com/band__huckleberryfinn/"
+              href={contactInfo.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="text-2xl hover:text-hbf-yellow transition-colors"
@@ -65,7 +66,7 @@ export default function Footer() {
               <FaInstagram />
             </a>
             <a
-              href="https://www.facebook.com/HuckleberryFinn.Band/"
+              href={contactInfo.facebook}
               target="_blank"
               rel="noopener noreferrer"
               className="text-2xl hover:text-hbf-yellow transition-colors"
