@@ -10,7 +10,7 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://huckleberryfinn-epk.vercel.app'),
+  metadataBase: new URL('https://huckleberryfinn.vercel.app'),
   title: 'Huckleberryfinn - 나를 닮은 사내 (2025 Re-Recording)',
   description: '24년의 시간을 넘어, 못다 한 이야기가 다시 시작됩니다. 허클베리핀 2집 재녹음 프로젝트.',
   keywords: ['허클베리핀', 'Huckleberryfinn', '나를 닮은 사내', '인디 록', 'Korean indie rock', '옐로우 콘서트'],
