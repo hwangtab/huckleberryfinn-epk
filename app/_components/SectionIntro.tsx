@@ -31,13 +31,13 @@ export default function SectionIntro() {
     <section className="relative flex flex-col justify-center items-center min-h-screen overflow-hidden">
       {/* 앨범 아트 배경 */}
       <Image
-        src="/images/2th_album/album_art.jpg"
+        src="/images/2th_album/album_art.webp"
         alt="나를 닮은 사내 앨범 아트"
         fill
         className="object-cover"
         priority
         sizes="100vw"
-        quality={90}
+        quality={75}
       />
 
       {/* 텍스트 콘텐츠 */}

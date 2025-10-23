@@ -26,7 +26,7 @@ export default function SectionConcert() {
           >
             <div className="relative aspect-[9/16] max-w-md mx-auto">
               <Image
-                src="/images/yellowconcert/포스터-1080_1920-250917.png"
+                src="/images/yellowconcert/포스터.webp"
                 alt="Yellow Concert 21 포스터"
                 fill
                 className="object-cover rounded-lg"

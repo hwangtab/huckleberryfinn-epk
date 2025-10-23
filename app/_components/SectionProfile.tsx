@@ -41,7 +41,7 @@ export default function SectionProfile() {
           transition={{ duration: 0.8 }}
         >
           <Image
-            src="/images/profile/허클베리핀 3.jpg"
+            src="/images/profile/허클베리핀 3.webp"
             alt="Huckleberryfinn band photo"
             width={1200}
             height={675}

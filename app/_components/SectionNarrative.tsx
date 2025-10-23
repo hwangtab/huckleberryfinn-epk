@@ -82,7 +82,7 @@ export default function SectionNarrative() {
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
+                  loading="lazy"
                 />
               </motion.div>
             </AnimatePresence>
