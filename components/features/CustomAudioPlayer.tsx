@@ -105,10 +105,10 @@ export default function CustomAudioPlayer({
     >
       <audio ref={audioRef} src={src} preload="metadata" />
 
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-center gap-2 md:gap-4 mb-4">
         <motion.button
           onClick={togglePlay}
-          className="w-16 h-16 bg-hbf-yellow rounded-full flex items-center justify-center text-hbf-charcoal hover:bg-hbf-yellow-light transition-colors"
+          className="w-14 h-14 md:w-16 md:h-16 bg-hbf-yellow rounded-full flex items-center justify-center text-hbf-charcoal hover:bg-hbf-yellow-light transition-colors flex-shrink-0"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           aria-label={isPlaying ? '일시정지' : '재생'}
@@ -116,16 +116,16 @@ export default function CustomAudioPlayer({
           {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} className="ml-0.5" />}
         </motion.button>
 
-        <div className="flex-1">
-          <div className="flex items-center justify-between mb-2">
-            <h4 className="text-xl font-bold text-hbf-charcoal">{title}</h4>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between mb-2 gap-2">
+            <h4 className="text-sm md:text-base lg:text-lg font-bold text-hbf-charcoal truncate">{title}</h4>
             {producersNote && (
               <button
                 onClick={() => setShowNote(!showNote)}
-                className="text-hbf-charcoal-light hover:text-hbf-yellow transition-colors"
+                className="text-hbf-charcoal-light hover:text-hbf-yellow transition-colors flex-shrink-0"
                 aria-label="프로듀서 노트 보기"
               >
-                <FaInfoCircle size={20} />
+                <FaInfoCircle size={16} className="md:w-5 md:h-5" />
               </button>
             )}
           </div>
@@ -133,7 +133,7 @@ export default function CustomAudioPlayer({
           {/* Progress Bar */}
           <div
             ref={progressContainerRef}
-            className="relative h-2 bg-hbf-charcoal/10 rounded-full cursor-pointer group"
+            className="relative h-3 bg-hbf-charcoal/10 rounded-full cursor-pointer group"
             onClick={handleProgressClick}
           >
             <motion.div

@@ -30,7 +30,7 @@ const pressKitItems = [
 
 export default function SectionPressKit() {
   return (
-    <section className="bg-hbf-white py-24 px-6">
+    <section className="bg-hbf-white py-16 md:py-24 px-6">
       <div className="max-w-4xl mx-auto">
         <motion.div
           className="text-center mb-12"

@@ -55,9 +55,9 @@ export default function SectionNarrative() {
   };
 
   return (
-    <section ref={sectionRef} className="bg-hbf-white py-24 px-6">
+    <section ref={sectionRef} className="bg-hbf-white py-16 md:py-24 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
           {/* Image Section - 자동 전환 슬라이더 */}
           <motion.div
             className="relative aspect-[4/5] rounded-lg overflow-hidden group"

@@ -6,7 +6,7 @@ import Button from '@/components/ui/Button';
 
 export default function SectionFuture() {
   return (
-    <section className="bg-hbf-white py-24 px-6">
+    <section className="bg-hbf-white py-16 md:py-24 px-6">
       <motion.div
         className="max-w-4xl mx-auto text-center"
         initial={{ opacity: 0, y: 30 }}

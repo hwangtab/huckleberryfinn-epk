@@ -48,7 +48,7 @@ export default function SectionIntro() {
         animate="show"
       >
         <motion.p
-          className="text-4xl md:text-5xl lg:text-6xl text-hbf-charcoal mb-6"
+          className="text-2xl md:text-3xl lg:text-4xl text-hbf-charcoal mb-6"
           style={{ fontFamily: 'Watermelon', fontWeight: 'normal' }}
           variants={item}
         >
@@ -56,7 +56,7 @@ export default function SectionIntro() {
         </motion.p>
 
         <motion.p
-          className="text-2xl md:text-3xl lg:text-4xl text-hbf-charcoal mb-12"
+          className="text-lg md:text-2xl lg:text-3xl text-hbf-charcoal mb-12"
           style={{ fontFamily: 'Watermelon', fontWeight: 'normal' }}
           variants={item}
         >
@@ -64,7 +64,7 @@ export default function SectionIntro() {
         </motion.p>
 
         <motion.h1
-          className="text-6xl md:text-7xl lg:text-8xl text-hbf-charcoal mb-8"
+          className="text-4xl md:text-5xl lg:text-6xl text-hbf-charcoal mb-8"
           style={{ fontFamily: 'CucumberSalad', fontWeight: 'normal' }}
           variants={item}
         >
@@ -72,7 +72,7 @@ export default function SectionIntro() {
         </motion.h1>
 
         <motion.p
-          className="text-3xl md:text-4xl lg:text-5xl text-hbf-charcoal-light"
+          className="text-lg md:text-2xl lg:text-3xl text-hbf-charcoal-light"
           style={{ fontFamily: 'Watermelon', fontWeight: 'normal' }}
           variants={item}
         >
