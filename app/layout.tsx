@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     siteName: 'Huckleberryfinn EPK',
     images: [
       {
-        url: '/images/2th_album/og-image.webp',
+        url: '/images/2th_album/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Huckleberryfinn - 나를 닮은 사내',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Huckleberryfinn - 나를 닮은 사내 (2025 Re-Recording)',
     description: '24년의 시간을 넘어, 못다 한 이야기가 다시 시작됩니다.',
-    images: ['/images/2th_album/og-image.webp'],
+    images: ['/images/2th_album/og-image.jpg'],
   },
 };
 
