@@ -12,12 +12,12 @@ export default function SectionNarrative() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 자동 전환 기능 (3초마다)
+  // 자동 전환 기능 (5초마다)
   useEffect(() => {
     const startAutoplay = () => {
       autoplayTimerRef.current = setInterval(() => {
         setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
-      }, 3000);
+      }, 5000);
     };
 
     startAutoplay();
@@ -40,7 +40,7 @@ export default function SectionNarrative() {
     }
     autoplayTimerRef.current = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
-    }, 3000);
+    }, 5000);
   };
 
   const handleNext = () => {
@@ -51,7 +51,7 @@ export default function SectionNarrative() {
     }
     autoplayTimerRef.current = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
-    }, 3000);
+    }, 5000);
   };
 
   return (
@@ -74,7 +74,7 @@ export default function SectionNarrative() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.3 }}
               >
                 <Image
                   src={narrativeImages[currentImageIndex]}
