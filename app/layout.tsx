@@ -10,6 +10,7 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://huckleberryfinn-epk.vercel.app'),
   title: 'Huckleberryfinn - 나를 닮은 사내 (2025 Re-Recording)',
   description: '24년의 시간을 넘어, 못다 한 이야기가 다시 시작됩니다. 허클베리핀 2집 재녹음 프로젝트.',
   keywords: ['허클베리핀', 'Huckleberryfinn', '나를 닮은 사내', '인디 록', 'Korean indie rock', '옐로우 콘서트'],
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     siteName: 'Huckleberryfinn EPK',
     images: [
       {
-        url: '/images/2th_album/album_art.jpg',
+        url: '/images/2th_album/album_art.webp',
         width: 1200,
         height: 630,
         alt: 'Huckleberryfinn - 나를 닮은 사내',
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Huckleberryfinn - 나를 닮은 사내 (2025 Re-Recording)',
     description: '24년의 시간을 넘어, 못다 한 이야기가 다시 시작됩니다.',
-    images: ['/images/2th_album/album_art.jpg'],
+    images: ['/images/2th_album/album_art.webp'],
   },
 };
 
