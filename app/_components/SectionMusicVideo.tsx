@@ -64,13 +64,8 @@ export default function SectionMusicVideo() {
             <motion.div
               key={video.title}
               variants={item}
-              className="flex flex-col gap-4"
+              className="flex flex-col"
             >
-              {/* Video Title */}
-              <h3 className="text-2xl md:text-3xl font-watermelon text-hbf-yellow">
-                {video.title}
-              </h3>
-
               {/* YouTube Embed */}
               <div className="w-full aspect-video rounded-lg overflow-hidden shadow-2xl bg-black">
                 <iframe
