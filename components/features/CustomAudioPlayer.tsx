@@ -25,10 +25,12 @@ export default function CustomAudioPlayer({
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-expand when playing
+  // Auto-expand when playing, auto-close when stopped
   useEffect(() => {
     if (isPlaying && lyrics) {
       setShowDetails(true);
+    } else if (!isPlaying) {
+      setShowDetails(false);
     }
   }, [isPlaying, lyrics]);
 
