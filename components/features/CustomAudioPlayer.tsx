@@ -8,14 +8,12 @@ import { useAudioPlayer } from '@/app/contexts/AudioPlayerContext';
 interface CustomAudioPlayerProps {
   src: string;
   title: string;
-  producersNote?: string;
   lyrics?: string;
 }
 
 export default function CustomAudioPlayer({
   src,
   title,
-  producersNote,
   lyrics,
 }: CustomAudioPlayerProps) {
   const { playingSrc, setPlayingSrc } = useAudioPlayer();
@@ -29,10 +27,10 @@ export default function CustomAudioPlayer({
 
   // Auto-expand when playing
   useEffect(() => {
-    if (isPlaying && (lyrics || producersNote)) {
+    if (isPlaying && lyrics) {
       setShowDetails(true);
     }
-  }, [isPlaying, lyrics, producersNote]);
+  }, [isPlaying, lyrics]);
 
   // Context의 playingSrc 변경에 따라 재생/정지
   useEffect(() => {
@@ -111,7 +109,7 @@ export default function CustomAudioPlayer({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      onClick={() => (lyrics || producersNote) && setShowDetails(!showDetails)}
+      onClick={() => lyrics && setShowDetails(!showDetails)}
     >
       <audio ref={audioRef} src={src} preload="metadata" />
 
@@ -129,7 +127,7 @@ export default function CustomAudioPlayer({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-2 gap-2">
             <h4 className="text-sm md:text-base lg:text-lg font-bold text-hbf-charcoal truncate">{title}</h4>
-            {(lyrics || producersNote) && (
+            {lyrics && (
               <span className="text-xs text-hbf-charcoal-light flex-shrink-0">
                 {showDetails ? '▼' : '▶'}
               </span>
@@ -161,44 +159,22 @@ export default function CustomAudioPlayer({
         </div>
       </div>
 
-      {/* Lyrics & Producer's Note */}
+      {/* Lyrics */}
       <AnimatePresence>
-        {showDetails && (lyrics || producersNote) && (
+        {showDetails && lyrics && (
           <motion.div
-            className="mt-4 p-4 bg-hbf-yellow/5 border-l-4 border-hbf-yellow rounded space-y-4"
+            className="mt-4 p-4 bg-hbf-yellow/5 border-l-4 border-hbf-yellow rounded"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Lyrics */}
-            {lyrics && (
-              <div>
-                <p className="text-sm font-semibold text-hbf-charcoal mb-3">
-                  가사
-                </p>
-                <div className="max-h-64 overflow-y-auto text-sm text-hbf-charcoal-light leading-relaxed whitespace-pre-wrap font-watermelon">
-                  {lyrics}
-                </div>
-              </div>
-            )}
-
-            {/* Divider */}
-            {lyrics && producersNote && (
-              <div className="border-t border-hbf-charcoal/10" />
-            )}
-
-            {/* Producer's Note */}
-            {producersNote && (
-              <div>
-                <p className="text-sm font-semibold text-hbf-charcoal mb-2">
-                  Producer&apos;s Note
-                </p>
-                <p className="text-sm text-hbf-charcoal-light leading-relaxed">
-                  {producersNote}
-                </p>
-              </div>
-            )}
+            <p className="text-sm font-semibold text-hbf-charcoal mb-3">
+              가사
+            </p>
+            <div className="max-h-64 overflow-y-auto text-sm text-hbf-charcoal-light leading-relaxed whitespace-pre-wrap font-watermelon">
+              {lyrics}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
