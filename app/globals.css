@@ -118,6 +118,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* Enhanced text wrapping for better readability */
+p, span, div {
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* 스크롤바 커스텀 */

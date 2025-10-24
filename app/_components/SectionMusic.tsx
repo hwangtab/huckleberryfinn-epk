@@ -39,16 +39,16 @@ export default function SectionMusic() {
         </div>
 
         <motion.div
-          className="text-center mt-16 space-y-4"
+          className="text-center mt-16 space-y-4 px-4 max-w-2xl mx-auto"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          <p className="text-sm text-hbf-charcoal-light">
+          <p className="text-sm text-hbf-charcoal-light leading-relaxed break-words">
             💿 전곡 듣기는 각 음원 스트리밍 플랫폼에서 10월 28일 공개됩니다.
           </p>
-          <div className="flex justify-center gap-4 text-xs text-hbf-charcoal-light">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-hbf-charcoal-light">
             <span>Melon</span>
             <span>•</span>
             <span>Spotify</span>

@@ -37,7 +37,7 @@ export default function SectionConcert() {
 
           {/* Content */}
           <motion.div
-            className="w-full md:w-1/2 space-y-6"
+            className="w-full md:w-1/2 space-y-6 max-w-2xl"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -49,7 +49,7 @@ export default function SectionConcert() {
               Yellow Concert
             </Heading>
 
-            <p className="text-lg text-hbf-white/90 leading-relaxed">
+            <p className="text-lg text-hbf-white/90 leading-relaxed break-words">
               2004년부터 이어진 허클베리핀의 단독 브랜드 공연 &apos;옐로우 콘서트&apos;.
               <br />
               스물한 번째의 무대는 새롭게 태어난 2집 &apos;나를 닮은 사내&apos;의 첫 라이브와 함께합니다.
