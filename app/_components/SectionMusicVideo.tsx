@@ -37,7 +37,7 @@ export default function SectionMusicVideo() {
   }
 
   return (
-    <section className="bg-hbf-charcoal text-hbf-white py-16 md:py-24 px-6">
+    <section className="bg-hbf-white py-16 md:py-24 px-6">
       <div className="max-w-4xl mx-auto">
         {/* Section Title */}
         <motion.div
@@ -47,7 +47,7 @@ export default function SectionMusicVideo() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
         >
-          <Heading level="h2" className="text-hbf-white mb-4">
+          <Heading level="h2" className="text-hbf-charcoal mb-4">
             Music Video
           </Heading>
         </motion.div>
