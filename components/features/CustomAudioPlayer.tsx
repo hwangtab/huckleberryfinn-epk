@@ -171,9 +171,6 @@ export default function CustomAudioPlayer({
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <p className="text-sm font-semibold text-hbf-charcoal mb-3">
-              가사
-            </p>
             <div className="max-h-64 overflow-y-auto text-sm text-hbf-charcoal-light leading-relaxed whitespace-pre-wrap font-watermelon">
               {lyrics}
             </div>
