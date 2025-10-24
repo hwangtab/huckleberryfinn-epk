@@ -1,3 +1,5 @@
+import { lyricsData } from './lyricsData';
+
 export interface Track {
   number: number;
   title: string;
@@ -7,7 +9,7 @@ export interface Track {
   lyrics?: string;
 }
 
-export const tracks: Track[] = [
+const baseTrackData = [
   {
     number: 1,
     title: '사막',
@@ -67,3 +69,9 @@ export const tracks: Track[] = [
     src: '/audio/11.Silver.mp3',
   },
 ];
+
+// Merge lyrics data with track data
+export const tracks: Track[] = baseTrackData.map(track => ({
+  ...track,
+  lyrics: lyricsData[track.number],
+}));
