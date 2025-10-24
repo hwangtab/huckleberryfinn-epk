@@ -1,6 +1,7 @@
 import SectionIntro from './_components/SectionIntro';
 import SectionNarrative from './_components/SectionNarrative';
 import SectionProfile from './_components/SectionProfile';
+import SectionMusicVideo from './_components/SectionMusicVideo';
 import SectionMusic from './_components/SectionMusic';
 import SectionConcert from './_components/SectionConcert';
 // import SectionFuture from './_components/SectionFuture'; // 청년 프로젝트 섹션 - 추후 복원 예정
@@ -15,6 +16,7 @@ export default function Home() {
         <SectionIntro />
         <SectionNarrative />
         <SectionProfile />
+        <SectionMusicVideo />
         <SectionMusic />
         <SectionConcert />
         {/* <SectionFuture /> */}
