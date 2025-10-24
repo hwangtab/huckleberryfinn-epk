@@ -99,12 +99,20 @@ export default function SectionIntro() {
             못다 한 이야기가 다시 시작됩니다.
           </motion.p>
 
-          <motion.h1
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-hbf-white mb-6 sm:mb-8 font-cucumber-salad tracking-wide"
+          <motion.div
+            className="mb-6 sm:mb-8"
             variants={item}
           >
-            Huckleberryfinn
-          </motion.h1>
+            <Image
+              src="/images/logo/white_logo.png"
+              alt="Huckleberryfinn"
+              width={1104}
+              height={264}
+              className="w-56 sm:w-72 md:w-96 lg:w-[28rem] h-auto object-contain mx-auto"
+              priority
+              quality={90}
+            />
+          </motion.div>
 
           <motion.p
             className="text-sm sm:text-base md:text-lg lg:text-xl text-hbf-yellow font-watermelon font-semibold"
