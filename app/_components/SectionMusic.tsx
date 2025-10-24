@@ -33,7 +33,8 @@ export default function SectionMusic() {
               key={track.number}
               src={track.src}
               title={`${track.number}. ${track.title}${track.titleEn ? ` (${track.titleEn})` : ''}`}
-              producersNote={track.producersNote || ''}
+              producersNote={track.producersNote}
+              lyrics={track.lyrics}
             />
           ))}
         </div>

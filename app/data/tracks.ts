@@ -4,6 +4,7 @@ export interface Track {
   titleEn?: string;
   src: string;
   producersNote?: string;
+  lyrics?: string;
 }
 
 export const tracks: Track[] = [

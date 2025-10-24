@@ -9,21 +9,30 @@ interface CustomAudioPlayerProps {
   src: string;
   title: string;
   producersNote?: string;
+  lyrics?: string;
 }
 
 export default function CustomAudioPlayer({
   src,
   title,
   producersNote,
+  lyrics,
 }: CustomAudioPlayerProps) {
   const { playingSrc, setPlayingSrc } = useAudioPlayer();
   const isPlaying = playingSrc === src;
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [showNote, setShowNote] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-expand when playing
+  useEffect(() => {
+    if (isPlaying && (lyrics || producersNote)) {
+      setShowDetails(true);
+    }
+  }, [isPlaying, lyrics, producersNote]);
 
   // Context의 playingSrc 변경에 따라 재생/정지
   useEffect(() => {
@@ -97,11 +106,12 @@ export default function CustomAudioPlayer({
 
   return (
     <motion.div
-      className="bg-hbf-white border-2 border-hbf-charcoal/10 rounded-lg p-6 max-w-2xl mx-auto"
+      className="bg-hbf-white border-2 border-hbf-charcoal/10 rounded-lg p-6 max-w-2xl mx-auto cursor-pointer transition-all hover:border-hbf-charcoal/20"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
+      onClick={() => (lyrics || producersNote) && setShowDetails(!showDetails)}
     >
       <audio ref={audioRef} src={src} preload="metadata" />
 
@@ -119,14 +129,10 @@ export default function CustomAudioPlayer({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-2 gap-2">
             <h4 className="text-sm md:text-base lg:text-lg font-bold text-hbf-charcoal truncate">{title}</h4>
-            {producersNote && (
-              <button
-                onClick={() => setShowNote(!showNote)}
-                className="text-hbf-charcoal-light hover:text-hbf-yellow transition-colors flex-shrink-0"
-                aria-label="프로듀서 노트 보기"
-              >
-                <FaInfoCircle size={16} className="md:w-5 md:h-5" />
-              </button>
+            {(lyrics || producersNote) && (
+              <span className="text-xs text-hbf-charcoal-light flex-shrink-0">
+                {showDetails ? '▼' : '▶'}
+              </span>
             )}
           </div>
 
@@ -155,22 +161,44 @@ export default function CustomAudioPlayer({
         </div>
       </div>
 
-      {/* Producer's Note */}
+      {/* Lyrics & Producer's Note */}
       <AnimatePresence>
-        {showNote && producersNote && (
+        {showDetails && (lyrics || producersNote) && (
           <motion.div
-            className="mt-4 p-4 bg-hbf-yellow/10 border-l-4 border-hbf-yellow rounded"
+            className="mt-4 p-4 bg-hbf-yellow/5 border-l-4 border-hbf-yellow rounded space-y-4"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <p className="text-sm font-semibold text-hbf-charcoal mb-2">
-              Producer&apos;s Note
-            </p>
-            <p className="text-sm text-hbf-charcoal-light leading-relaxed">
-              {producersNote}
-            </p>
+            {/* Lyrics */}
+            {lyrics && (
+              <div>
+                <p className="text-sm font-semibold text-hbf-charcoal mb-3">
+                  가사
+                </p>
+                <div className="max-h-64 overflow-y-auto text-sm text-hbf-charcoal-light leading-relaxed whitespace-pre-wrap font-watermelon">
+                  {lyrics}
+                </div>
+              </div>
+            )}
+
+            {/* Divider */}
+            {lyrics && producersNote && (
+              <div className="border-t border-hbf-charcoal/10" />
+            )}
+
+            {/* Producer's Note */}
+            {producersNote && (
+              <div>
+                <p className="text-sm font-semibold text-hbf-charcoal mb-2">
+                  Producer&apos;s Note
+                </p>
+                <p className="text-sm text-hbf-charcoal-light leading-relaxed">
+                  {producersNote}
+                </p>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
