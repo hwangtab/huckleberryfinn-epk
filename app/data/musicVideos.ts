@@ -9,7 +9,11 @@ export const musicVideos: MusicVideo[] = [
     videoId: 'IU50se1zi9A',
   },
   {
-    title: 'em',
-    videoId: null, // To be added later
+    title: 'Em',
+    videoId: 'nrN261--NoA',
+  },
+  {
+    title: 'Somebody To Love',
+    videoId: 'N2mwjLu15o0',
   },
 ];
