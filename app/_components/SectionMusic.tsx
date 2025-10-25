@@ -34,6 +34,7 @@ export default function SectionMusic() {
               src={track.src}
               title={`${track.number}. ${track.title}${track.titleEn ? ` (${track.titleEn})` : ''}`}
               lyrics={track.lyrics}
+              songNote={track.songNote}
             />
           ))}
         </div>

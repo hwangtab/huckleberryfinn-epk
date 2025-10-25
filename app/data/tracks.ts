@@ -1,4 +1,5 @@
 import { lyricsData } from './lyricsData';
+import { songNotes } from './songNotes';
 
 export interface Track {
   number: number;
@@ -7,6 +8,7 @@ export interface Track {
   src: string;
   producersNote?: string;
   lyrics?: string;
+  songNote?: string;
 }
 
 const baseTrackData = [
@@ -70,8 +72,9 @@ const baseTrackData = [
   },
 ];
 
-// Merge lyrics data with track data
+// Merge lyrics and song notes data with track data
 export const tracks: Track[] = baseTrackData.map(track => ({
   ...track,
   lyrics: lyricsData[track.number],
+  songNote: songNotes[track.number],
 }));

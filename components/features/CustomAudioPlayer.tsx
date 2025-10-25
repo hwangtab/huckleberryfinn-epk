@@ -9,12 +9,14 @@ interface CustomAudioPlayerProps {
   src: string;
   title: string;
   lyrics?: string;
+  songNote?: string;
 }
 
 export default function CustomAudioPlayer({
   src,
   title,
   lyrics,
+  songNote,
 }: CustomAudioPlayerProps) {
   const { playingSrc, setPlayingSrc } = useAudioPlayer();
   const isPlaying = playingSrc === src;
@@ -189,6 +191,26 @@ export default function CustomAudioPlayer({
           >
             <div className="max-h-64 overflow-y-auto text-sm text-hbf-charcoal-light leading-relaxed whitespace-pre-wrap font-watermelon">
               {lyrics}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Song Note */}
+      <AnimatePresence>
+        {showDetails && songNote && (
+          <motion.div
+            className="mt-4 p-4 bg-hbf-charcoal/5 border-l-4 border-hbf-charcoal rounded"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
+            <h5 className="text-sm font-bold text-hbf-charcoal mb-2">
+              🎵 Song Note - 이기용
+            </h5>
+            <div className="text-sm text-hbf-charcoal-light leading-relaxed italic">
+              {songNote}
             </div>
           </motion.div>
         )}
