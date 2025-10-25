@@ -58,9 +58,15 @@ export default function SectionProfile() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <Heading level="h2" className="text-hbf-white mb-4">
-            Huckleberryfinn
-          </Heading>
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/images/logo/white_logo.png"
+              alt="Huckleberryfinn"
+              width={300}
+              height={80}
+              className="h-auto"
+            />
+          </div>
           <p className="text-lg text-hbf-white leading-relaxed max-w-2xl mx-auto">
             한국 인디 1세대 밴드, 허클베리핀.
             <br />
