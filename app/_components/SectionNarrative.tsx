@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Heading from '@/components/ui/Heading';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -10,6 +10,7 @@ import { narrativeImages } from '@/app/data/narrativeImages';
 export default function SectionNarrative() {
   const sectionRef = useRef<HTMLElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [prevImageIndex, setPrevImageIndex] = useState(0);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // 자동재생 타이머 리셋 함수
@@ -18,7 +19,10 @@ export default function SectionNarrative() {
       clearInterval(autoplayTimerRef.current);
     }
     autoplayTimerRef.current = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
+      setCurrentImageIndex((prev) => {
+        setPrevImageIndex(prev);
+        return (prev + 1) % narrativeImages.length;
+      });
     }, 5000);
   };
 
@@ -35,14 +39,18 @@ export default function SectionNarrative() {
 
   // 네비게이션 핸들러
   const handlePrev = () => {
-    setCurrentImageIndex(
-      (prev) => (prev - 1 + narrativeImages.length) % narrativeImages.length
-    );
+    setCurrentImageIndex((prev) => {
+      setPrevImageIndex(prev);
+      return (prev - 1 + narrativeImages.length) % narrativeImages.length;
+    });
     resetAutoplay();
   };
 
   const handleNext = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
+    setCurrentImageIndex((prev) => {
+      setPrevImageIndex(prev);
+      return (prev + 1) % narrativeImages.length;
+    });
     resetAutoplay();
   };
 
@@ -58,26 +66,42 @@ export default function SectionNarrative() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            {/* 이미지 슬라이더 */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentImageIndex}
-                className="absolute inset-0"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Image
-                  src={narrativeImages[currentImageIndex]}
-                  alt={`Huckleberryfinn past photo ${currentImageIndex + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  loading="lazy"
-                />
-              </motion.div>
-            </AnimatePresence>
+            {/* 이미지 슬라이더 - 크로스페이드 */}
+            {/* 이전 이미지 레이어 (페이드 아웃) */}
+            <motion.div
+              key={`prev-${prevImageIndex}`}
+              className="absolute inset-0"
+              animate={{ opacity: prevImageIndex !== currentImageIndex ? 0 : 1 }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+            >
+              <Image
+                src={narrativeImages[prevImageIndex]}
+                alt={`Huckleberryfinn past photo ${prevImageIndex + 1}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                loading="lazy"
+              />
+            </motion.div>
+
+            {/* 현재 이미지 레이어 (페이드 인) */}
+            <motion.div
+              key={`current-${currentImageIndex}`}
+              className="absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+            >
+              <Image
+                src={narrativeImages[currentImageIndex]}
+                alt={`Huckleberryfinn past photo ${currentImageIndex + 1}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                loading="lazy"
+                priority={currentImageIndex === 0}
+              />
+            </motion.div>
 
             {/* 좌 네비게이션 버튼 */}
             <motion.button
