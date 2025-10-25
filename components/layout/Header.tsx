@@ -10,7 +10,7 @@ const navLinks = [
   { href: '#profile', label: 'Profile' },
   { href: '#music', label: 'Music' },
   { href: '#video', label: 'Video' },
-  { href: '#producer-note', label: 'Producer' },
+  { href: '#producer-note', label: 'Note' },
   { href: '#concert', label: 'Concert' },
   { href: '#presskit', label: 'Press Kit' },
 ];
