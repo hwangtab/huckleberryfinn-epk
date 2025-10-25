@@ -7,7 +7,7 @@ import { tracks } from '@/app/data/tracks';
 
 export default function SectionMusic() {
   return (
-    <section id="music" className="bg-gradient-to-b from-hbf-yellow-light to-hbf-yellow py-16 md:py-24 px-6">
+    <section id="music" className="bg-gradient-to-b from-hbf-yellow-light to-hbf-yellow py-16 md:py-24 px-6 scroll-mt-16 md:scroll-mt-20">
       <div className="max-w-5xl mx-auto">
         <motion.div
           className="text-center mb-16"

@@ -29,7 +29,7 @@ const item: Variants = {
 
 export default function SectionProducerNote() {
   return (
-    <section className="bg-hbf-white py-16 md:py-24 px-6">
+    <section id="producer-note" className="bg-hbf-white py-16 md:py-24 px-6 scroll-mt-16 md:scroll-mt-20">
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
         <motion.div
