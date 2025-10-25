@@ -30,7 +30,7 @@ const itemVariants: Variants = {
 
 export default function SectionProfile() {
   return (
-    <section className="bg-hbf-charcoal py-16 md:py-24 px-6">
+    <section id="profile" className="bg-hbf-charcoal py-16 md:py-24 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Band Photo */}
         <motion.div

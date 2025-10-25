@@ -37,7 +37,7 @@ export default function SectionMusicVideo() {
   }
 
   return (
-    <section className="bg-hbf-white py-16 md:py-24 px-6">
+    <section id="video" className="bg-hbf-white py-16 md:py-24 px-6">
       <div className="max-w-4xl mx-auto">
         {/* Section Title */}
         <motion.div

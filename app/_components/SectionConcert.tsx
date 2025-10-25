@@ -7,7 +7,7 @@ import Button from '@/components/ui/Button';
 
 export default function SectionConcert() {
   return (
-    <section className="bg-hbf-charcoal text-hbf-white py-16 md:py-24 px-6">
+    <section id="concert" className="bg-hbf-charcoal text-hbf-white py-16 md:py-24 px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="flex flex-col md:flex-row items-center gap-8 md:gap-12"
