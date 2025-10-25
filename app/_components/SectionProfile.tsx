@@ -47,7 +47,6 @@ export default function SectionProfile() {
             height={675}
             className="w-full h-auto object-cover aspect-video"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 100%"
-            priority
           />
         </motion.div>
 

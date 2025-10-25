@@ -12,15 +12,19 @@ export default function SectionNarrative() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // 자동재생 타이머 리셋 함수
+  const resetAutoplay = () => {
+    if (autoplayTimerRef.current) {
+      clearInterval(autoplayTimerRef.current);
+    }
+    autoplayTimerRef.current = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
+    }, 5000);
+  };
+
   // 자동 전환 기능 (5초마다)
   useEffect(() => {
-    const startAutoplay = () => {
-      autoplayTimerRef.current = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
-      }, 5000);
-    };
-
-    startAutoplay();
+    resetAutoplay();
 
     return () => {
       if (autoplayTimerRef.current) {
@@ -34,24 +38,12 @@ export default function SectionNarrative() {
     setCurrentImageIndex(
       (prev) => (prev - 1 + narrativeImages.length) % narrativeImages.length
     );
-    // 타이머 리셋
-    if (autoplayTimerRef.current) {
-      clearInterval(autoplayTimerRef.current);
-    }
-    autoplayTimerRef.current = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
-    }, 5000);
+    resetAutoplay();
   };
 
   const handleNext = () => {
     setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
-    // 타이머 리셋
-    if (autoplayTimerRef.current) {
-      clearInterval(autoplayTimerRef.current);
-    }
-    autoplayTimerRef.current = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % narrativeImages.length);
-    }, 5000);
+    resetAutoplay();
   };
 
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, MouseEvent } from 'react';
+import { useState, useRef, useEffect, MouseEvent, KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPlay, FaPause, FaInfoCircle } from 'react-icons/fa';
 import { useAudioPlayer } from '@/app/contexts/AudioPlayerContext';
@@ -76,7 +76,8 @@ export default function CustomAudioPlayer({
     };
   }, [setPlayingSrc]);
 
-  const togglePlay = () => {
+  const togglePlay = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     if (isPlaying) {
       setPlayingSrc(null);
     } else {
@@ -85,6 +86,7 @@ export default function CustomAudioPlayer({
   };
 
   const handleProgressClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     const container = progressContainerRef.current;
     const audio = audioRef.current;
     if (!container || !audio || !audio.duration) return;
@@ -104,6 +106,15 @@ export default function CustomAudioPlayer({
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (lyrics) {
+        setShowDetails(!showDetails);
+      }
+    }
+  };
+
   return (
     <motion.div
       className="bg-hbf-white border-2 border-hbf-charcoal/10 rounded-lg p-6 max-w-2xl mx-auto cursor-pointer transition-all hover:border-hbf-charcoal/20"
@@ -112,6 +123,11 @@ export default function CustomAudioPlayer({
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
       onClick={() => lyrics && setShowDetails(!showDetails)}
+      onKeyDown={handleKeyDown}
+      role={lyrics ? "button" : undefined}
+      tabIndex={lyrics ? 0 : undefined}
+      aria-expanded={lyrics ? showDetails : undefined}
+      aria-label={lyrics ? `${title} 가사 ${showDetails ? '닫기' : '열기'}` : undefined}
     >
       <audio ref={audioRef} src={src} preload="metadata" />
 

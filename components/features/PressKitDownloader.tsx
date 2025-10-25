@@ -17,9 +17,12 @@ export default function PressKitDownloader({ items }: PressKitDownloaderProps) {
   return (
     <div className="space-y-4 mb-8">
       {items.map((item, index) => (
-        <motion.div
+        <motion.a
           key={index}
-          className="flex items-start gap-4 p-6 bg-hbf-white border-2 border-hbf-charcoal/10 rounded-lg hover:border-hbf-yellow/30 hover:bg-hbf-yellow/2 transition-all duration-300"
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-start gap-4 p-6 bg-hbf-white border-2 border-hbf-charcoal/10 rounded-lg hover:border-hbf-yellow/30 hover:bg-hbf-yellow/5 transition-all duration-300 no-underline cursor-pointer"
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -32,7 +35,7 @@ export default function PressKitDownloader({ items }: PressKitDownloaderProps) {
             </h4>
             <p className="text-sm text-hbf-charcoal-light">{item.type}</p>
           </div>
-        </motion.div>
+        </motion.a>
       ))}
     </div>
   );
