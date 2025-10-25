@@ -13,7 +13,9 @@ export default function Heading({
 }: HeadingProps) {
   const Tag = level;
 
-  const baseStyles = 'font-bold tracking-tight font-headline';
+  const baseStyles = level === 'h2'
+    ? 'font-watermelon tracking-normal'
+    : 'font-bold tracking-tight font-headline';
 
   const sizeStyles = {
     h1: 'text-4xl md:text-5xl lg:text-6xl',
