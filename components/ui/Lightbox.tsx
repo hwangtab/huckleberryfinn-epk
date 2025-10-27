@@ -56,7 +56,7 @@ export default function Lightbox({ src, alt, width, height, onClose }: LightboxP
       onClick={onClose}
     >
       <motion.div
-        className="relative w-full max-w-none flex justify-center"
+        className="relative flex justify-center"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
