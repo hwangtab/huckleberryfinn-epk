@@ -44,14 +44,26 @@ export default function SectionProfile() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
         >
-          <Image
-            src="/images/profile/허클베리핀 3.webp"
-            alt="Huckleberryfinn band photo"
-            width={1200}
-            height={675}
-            className="w-full h-auto object-cover aspect-video"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 100%"
-          />
+          <button
+            type="button"
+            onClick={() =>
+              setLightboxImage({
+                src: '/images/profile/허클베리핀 3.webp',
+                alt: 'Huckleberryfinn band photo'
+              })
+            }
+            className="relative block w-full focus:outline-none focus:ring-2 focus:ring-hbf-yellow/60 focus:ring-offset-2 focus:ring-offset-hbf-charcoal"
+            aria-label="밴드 사진 확대"
+          >
+            <Image
+              src="/images/profile/허클베리핀 3.webp"
+              alt="Huckleberryfinn band photo"
+              width={1200}
+              height={675}
+              className="w-full h-auto object-cover aspect-video cursor-zoom-in"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 100%"
+            />
+          </button>
         </motion.div>
 
         {/* Band Title and Description */}
