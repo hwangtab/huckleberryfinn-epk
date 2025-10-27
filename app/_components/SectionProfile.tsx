@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import Image from 'next/image';
 import Heading from '@/components/ui/Heading';
+import Lightbox from '@/components/ui/Lightbox';
 import { members } from '@/app/data/members';
 
 const containerVariants: Variants = {
@@ -29,6 +31,8 @@ const itemVariants: Variants = {
 };
 
 export default function SectionProfile() {
+  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null);
+
   return (
     <section id="profile" className="bg-hbf-charcoal py-16 md:py-24 px-6 scroll-mt-16 md:scroll-mt-20">
       <div className="max-w-6xl mx-auto">
@@ -94,7 +98,17 @@ export default function SectionProfile() {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               >
-                <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-hbf-yellow">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setLightboxImage({
+                      src: member.image,
+                      alt: `${member.name} 프로필 사진`
+                    })
+                  }
+                  className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-hbf-yellow cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-hbf-yellow/60 focus:ring-offset-2 focus:ring-offset-hbf-charcoal"
+                  aria-label={`${member.name} 이미지 확대`}
+                >
                   <Image
                     src={member.image}
                     alt={member.name}
@@ -102,7 +116,7 @@ export default function SectionProfile() {
                     className="object-cover"
                     sizes="160px"
                   />
-                </div>
+                </button>
               </motion.div>
 
               {/* Member Info */}
@@ -116,6 +130,14 @@ export default function SectionProfile() {
           ))}
         </motion.div>
       </div>
+
+      {lightboxImage && (
+        <Lightbox
+          src={lightboxImage.src}
+          alt={lightboxImage.alt}
+          onClose={() => setLightboxImage(null)}
+        />
+      )}
     </section>
   );
 }
