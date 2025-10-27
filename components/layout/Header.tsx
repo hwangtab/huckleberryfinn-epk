@@ -11,6 +11,7 @@ const navLinks = [
   { href: '#music', label: 'Music' },
   { href: '#video', label: 'Video' },
   { href: '#producer-note', label: 'Note' },
+  { href: '#reviews', label: 'Endorsements' },
   { href: '#concert', label: 'Concert' },
   { href: '#presskit', label: 'Press Kit' },
 ];

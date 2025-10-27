@@ -30,7 +30,7 @@ const item: Variants = {
 export default function SectionReviews() {
   return (
     <section id="reviews" className="bg-hbf-charcoal/5 py-16 md:py-24 px-6 scroll-mt-16 md:scroll-mt-20">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -47,7 +47,7 @@ export default function SectionReviews() {
         </motion.div>
 
         <motion.div
-          className="grid gap-8 md:gap-10"
+          className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-12"
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -57,7 +57,7 @@ export default function SectionReviews() {
             <motion.article
               key={review.author}
               variants={item}
-              className="bg-white/80 backdrop-blur-sm border border-hbf-bluegray/20 rounded-2xl p-6 md:p-8 shadow-sm"
+              className="bg-white/80 backdrop-blur-sm border border-hbf-bluegray/20 rounded-2xl p-6 md:p-8 shadow-sm h-full flex flex-col"
             >
               <header className="mb-6">
                 <h3 className="text-xl md:text-2xl font-semibold text-hbf-charcoal">
@@ -68,14 +68,9 @@ export default function SectionReviews() {
                 </p>
               </header>
 
-              <div className="space-y-4">
+              <div className="space-y-4 text-base leading-relaxed text-hbf-charcoal-light flex-1">
                 {review.content.map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="text-base leading-relaxed text-hbf-charcoal-light"
-                  >
-                    {paragraph}
-                  </p>
+                  <p key={index}>{paragraph}</p>
                 ))}
               </div>
             </motion.article>
