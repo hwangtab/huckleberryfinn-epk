@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
+import Lightbox from '@/components/ui/Lightbox';
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -39,6 +41,8 @@ const albumVariant: Variants = {
 };
 
 export default function SectionIntro() {
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
   return (
     <section className="relative flex flex-col justify-center items-center min-h-screen overflow-hidden">
       {/* Blurred background */}
@@ -65,7 +69,12 @@ export default function SectionIntro() {
           initial="hidden"
           animate="show"
         >
-          <div className="rounded-lg overflow-hidden shadow-2xl">
+          <button
+            type="button"
+            onClick={() => setIsLightboxOpen(true)}
+            className="block rounded-lg overflow-hidden shadow-2xl focus:outline-none focus:ring-2 focus:ring-hbf-yellow/60 focus:ring-offset-2 focus:ring-offset-black/50 cursor-zoom-in"
+            aria-label="앨범 커버 확대"
+          >
             <Image
               src="/images/2th_album/album_art.webp"
               alt="나를 닮은 사내 앨범 아트"
@@ -75,7 +84,7 @@ export default function SectionIntro() {
               priority
               quality={85}
             />
-          </div>
+          </button>
         </motion.div>
 
         {/* Text content */}
@@ -134,6 +143,16 @@ export default function SectionIntro() {
           <div className="w-1 h-3 bg-hbf-white rounded-full mt-2"></div>
         </div>
       </motion.div>
+
+      {isLightboxOpen && (
+        <Lightbox
+          src="/images/2th_album/album_art.webp"
+          alt="나를 닮은 사내 앨범 아트"
+          width={1500}
+          height={1500}
+          onClose={() => setIsLightboxOpen(false)}
+        />
+      )}
     </section>
   );
 }
