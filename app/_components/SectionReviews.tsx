@@ -42,7 +42,7 @@ export default function SectionReviews() {
             Artist Endorsements
           </Heading>
           <p className="text-lg text-hbf-charcoal-light">
-            동료 음악인과 평론가가 건네는 재녹음 추천사
+            동료들이 건네는 재녹음 추천사
           </p>
         </motion.div>
 
