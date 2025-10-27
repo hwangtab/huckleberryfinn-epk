@@ -42,7 +42,7 @@ export default function Lightbox({ src, alt, onClose }: LightboxProps) {
       onClick={onClose}
     >
       <motion.div
-        className="relative max-w-4xl w-full"
+        className="relative w-full max-w-6xl"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
@@ -56,13 +56,13 @@ export default function Lightbox({ src, alt, onClose }: LightboxProps) {
         >
           <HiX size={32} />
         </button>
-        <div className="relative w-full h-[60vh] max-h-[80vh] rounded-xl overflow-hidden shadow-2xl border border-hbf-white/20 bg-black">
+        <div className="relative w-full h-[75vh] max-h-[90vh] rounded-xl overflow-hidden shadow-2xl border border-hbf-white/20 bg-black">
           <Image
             src={src}
             alt={alt}
             fill
             className="object-contain"
-            sizes="(max-width: 768px) 90vw, 70vw"
+            sizes="(max-width: 768px) 100vw, 80vw"
             priority
           />
         </div>
