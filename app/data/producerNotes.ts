@@ -5,12 +5,20 @@ export interface ProducerNote {
   author: string;
   role: string;
   content: string[];
+  image?: {
+    src: string;
+    alt: string;
+  };
 }
 
 export const producerNotes: ProducerNote[] = [
   {
     author: "이기용",
     role: "허클베리핀 리더 / 기타 / 작사 / 작곡 / 프로듀싱",
+    image: {
+      src: "/images/profile/이기용.webp",
+      alt: "허클베리핀 리더 이기용 프로필 사진"
+    },
     content: [
       "사실 이 음반의 컨셉은 1집 18일의 수요일 활동 당시 이미 어느 정도 구상되어 있었다. 스트레이트한 그런지 록으로 가득했던 1집을 만들면서, 다음 앨범은 록을 기반으로 하되 어쿠스틱한 감성이 더 많이 녹아든 음악을 해보고 싶었다.",
 
@@ -30,6 +38,10 @@ export const producerNotes: ProducerNote[] = [
   {
     author: "성장규",
     role: "기타 / 신스 / 드럼 / 프로그래밍 / 믹싱 / 마스터링",
+    image: {
+      src: "/images/profile/성장규.webp",
+      alt: "허클베리핀 멤버 성장규 프로필 사진"
+    },
     content: [
       "작업을 하게 되면서 오랜만에 예전 2집을 천천히 정주행해봤어요. 다시 들어보니 새롭게 느껴지는 곡들도 있었고, 마치 오래된 보물상자를 여는 기분이더라고요. 그런데 지금 들어보면 사운드적으로 아쉬운 부분이 많았어요. 멤버들도 아마 그런 점이 가장 마음에 남았던 것 같아요. 그래서 결국 다시 만들기로 했죠.",
 
