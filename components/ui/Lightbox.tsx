@@ -9,10 +9,12 @@ import { HiX } from 'react-icons/hi';
 interface LightboxProps {
   src: string;
   alt: string;
+  width?: number;
+  height?: number;
   onClose: () => void;
 }
 
-export default function Lightbox({ src, alt, onClose }: LightboxProps) {
+export default function Lightbox({ src, alt, width, height, onClose }: LightboxProps) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -34,6 +36,18 @@ export default function Lightbox({ src, alt, onClose }: LightboxProps) {
     return null;
   }
 
+  const ratio = width && height ? width / height : null;
+  const ratioValue = ratio ? Number(ratio.toFixed(4)) : null;
+  const frameStyle = ratioValue
+    ? {
+        width: `min(90vw, calc(90vh * ${ratioValue}))`,
+        height: `min(90vh, calc(90vw / ${ratioValue}))`,
+      }
+    : {
+        width: '90vw',
+        height: '90vh',
+      };
+
   return createPortal(
     <div
       className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
@@ -42,7 +56,7 @@ export default function Lightbox({ src, alt, onClose }: LightboxProps) {
       onClick={onClose}
     >
       <motion.div
-        className="relative w-full max-w-6xl"
+        className="relative w-full max-w-none flex justify-center"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
@@ -56,13 +70,16 @@ export default function Lightbox({ src, alt, onClose }: LightboxProps) {
         >
           <HiX size={32} />
         </button>
-        <div className="relative w-full h-[75vh] max-h-[90vh] rounded-xl overflow-hidden shadow-2xl border border-hbf-white/20 bg-black">
+        <div
+          className="relative rounded-xl overflow-hidden shadow-2xl border border-hbf-white/20 bg-black"
+          style={frameStyle}
+        >
           <Image
             src={src}
             alt={alt}
             fill
             className="object-contain"
-            sizes="(max-width: 768px) 100vw, 80vw"
+            sizes="100vw"
             priority
           />
         </div>

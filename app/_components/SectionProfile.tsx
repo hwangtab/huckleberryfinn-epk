@@ -30,8 +30,15 @@ const itemVariants: Variants = {
   }
 };
 
+type LightboxState = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+};
+
 export default function SectionProfile() {
-  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<LightboxState | null>(null);
 
   return (
     <section id="profile" className="bg-hbf-charcoal py-16 md:py-24 px-6 scroll-mt-16 md:scroll-mt-20">
@@ -49,7 +56,9 @@ export default function SectionProfile() {
             onClick={() =>
               setLightboxImage({
                 src: '/images/profile/허클베리핀 3.webp',
-                alt: 'Huckleberryfinn band photo'
+                alt: 'Huckleberryfinn band photo',
+                width: 1920,
+                height: 1280,
               })
             }
             className="relative block w-full focus:outline-none focus:ring-2 focus:ring-hbf-yellow/60 focus:ring-offset-2 focus:ring-offset-hbf-charcoal"
@@ -115,7 +124,9 @@ export default function SectionProfile() {
                   onClick={() =>
                     setLightboxImage({
                       src: member.image,
-                      alt: `${member.name} 프로필 사진`
+                      alt: `${member.name} 프로필 사진`,
+                      width: 638,
+                      height: 850,
                     })
                   }
                   className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-hbf-yellow cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-hbf-yellow/60 focus:ring-offset-2 focus:ring-offset-hbf-charcoal"
@@ -147,6 +158,8 @@ export default function SectionProfile() {
         <Lightbox
           src={lightboxImage.src}
           alt={lightboxImage.alt}
+          width={lightboxImage.width}
+          height={lightboxImage.height}
           onClose={() => setLightboxImage(null)}
         />
       )}

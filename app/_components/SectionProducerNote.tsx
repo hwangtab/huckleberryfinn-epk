@@ -30,8 +30,15 @@ const item: Variants = {
   }
 };
 
+type LightboxState = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+};
+
 export default function SectionProducerNote() {
-  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<LightboxState | null>(null);
 
   return (
     <section id="producer-note" className="bg-hbf-white py-16 md:py-24 px-6 scroll-mt-16 md:scroll-mt-20">
@@ -78,12 +85,14 @@ export default function SectionProducerNote() {
                     <div className="flex-shrink-0 mb-6 md:mb-0">
                       <button
                         type="button"
-                        onClick={() =>
-                          setLightboxImage({
-                            src: portrait.src,
-                            alt: portrait.alt
-                          })
-                        }
+                      onClick={() =>
+                        setLightboxImage({
+                          src: portrait.src,
+                          alt: portrait.alt,
+                          width: 638,
+                          height: 850,
+                        })
+                      }
                         className="relative h-28 w-28 rounded-full overflow-hidden border-4 border-white/70 shadow-md cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-hbf-yellow/40 focus:ring-offset-2 focus:ring-offset-hbf-white"
                         aria-label={`${note.author} 이미지 확대`}
                       >
@@ -132,6 +141,8 @@ export default function SectionProducerNote() {
         <Lightbox
           src={lightboxImage.src}
           alt={lightboxImage.alt}
+          width={lightboxImage.width}
+          height={lightboxImage.height}
           onClose={() => setLightboxImage(null)}
         />
       )}
