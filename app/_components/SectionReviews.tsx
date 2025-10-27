@@ -39,10 +39,10 @@ export default function SectionReviews() {
           transition={{ duration: 0.8 }}
         >
           <Heading level="h2" className="text-hbf-charcoal mb-4">
-            Critical Reception
+            Artist Endorsements
           </Heading>
           <p className="text-lg text-hbf-charcoal-light">
-            동료 음악인과 평론가가 전하는 재녹음의 울림
+            동료 음악인과 평론가가 건네는 재녹음 추천사
           </p>
         </motion.div>
 
