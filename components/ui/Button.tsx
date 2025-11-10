@@ -18,7 +18,7 @@ export default function Button({
   onClick,
   className = ''
 }: ButtonProps) {
-  const baseStyles = 'px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 inline-block';
+  const baseStyles = 'px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 inline-flex items-center justify-center gap-2 text-center';
 
   const variantStyles = {
     primary: 'bg-hbf-charcoal text-hbf-white hover:bg-hbf-charcoal-light',
