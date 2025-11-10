@@ -13,6 +13,9 @@ export default function SectionGallery() {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const total = galleryMoments.length;
   const currentMoment = galleryMoments[activeIndex];
+  const years = galleryMoments.map((moment) => Number(moment.year));
+  const minYear = Math.min(...years);
+  const maxYear = Math.max(...years);
   const scrollToIndex = (index: number) => {
     const target = slideRefs.current[index];
     if (target) {
@@ -97,7 +100,7 @@ export default function SectionGallery() {
                 <div className="relative h-96">
                   <Image
                     src={moment.src}
-                    alt={`Huckleberryfinn archive ${index + 1}`}
+                    alt={`${moment.year}년 기록 ${index + 1}`}
                     fill
                     className="object-cover"
                     sizes="85vw"
@@ -132,7 +135,7 @@ export default function SectionGallery() {
           <div className="md:col-span-3 relative aspect-[4/5] rounded-[32px] overflow-hidden bg-hbf-charcoal/5">
             <Image
               src={currentMoment.src}
-              alt="Huckleberryfinn archive spotlight"
+              alt={`${currentMoment.year}년 아카이브 메인 이미지`}
               fill
               className="object-cover"
               sizes="(max-width: 1280px) 60vw, 720px"
@@ -140,7 +143,7 @@ export default function SectionGallery() {
             />
             <div className="absolute top-6 left-6 space-y-2 text-hbf-white drop-shadow">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/50 text-xs font-semibold uppercase tracking-[0.2em]">
-                {currentMoment.phase === 'past' ? 'PAST ERA' : 'PRESENT ERA'}
+                Archive
               </span>
               <div>
                 <p className="text-4xl font-bold">{currentMoment.year}</p>
@@ -171,18 +174,18 @@ export default function SectionGallery() {
             <div className="space-y-4">
               <p className="text-xs uppercase tracking-[0.4em] text-hbf-charcoal-light">Timeline</p>
               <div className="flex items-center gap-4">
-                <span className={`text-sm font-semibold ${currentMoment.phase === 'past' ? 'text-hbf-charcoal' : 'text-hbf-charcoal/40'}`}>2001</span>
+                <span className="text-sm font-semibold text-hbf-charcoal">{minYear}</span>
                 <div className="flex-1 h-px bg-hbf-charcoal/10 relative">
                   <div
                     className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-hbf-yellow"
                     style={{ left: `${(activeIndex / (total - 1)) * 100}%` }}
                   />
                 </div>
-                <span className={`text-sm font-semibold ${currentMoment.phase === 'present' ? 'text-hbf-charcoal' : 'text-hbf-charcoal/40'}`}>2025</span>
+                <span className="text-sm font-semibold text-hbf-charcoal">{maxYear}</span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[520px] overflow-y-auto pr-2">
               {galleryMoments.map((moment, index) => (
                 <button
                   key={moment.id}
@@ -191,11 +194,11 @@ export default function SectionGallery() {
                   className={`relative aspect-[4/3] rounded-2xl overflow-hidden border transition-all ${
                     activeIndex === index ? 'border-hbf-yellow shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'
                   }`}
-                  aria-label={`${moment.year} 사진`}
+                  aria-label={`${moment.year}년 사진 ${index + 1}`}
                 >
                   <Image
                     src={moment.src}
-                    alt={`Huckleberryfinn archive thumbnail ${index + 1}`}
+                    alt={`${moment.year}년 소장 사진 ${index + 1}`}
                     fill
                     className="object-cover"
                     sizes="200px"
