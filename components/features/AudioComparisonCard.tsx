@@ -22,25 +22,9 @@ export default function AudioComparisonCard({ track, index }: AudioComparisonCar
     >
       <header className="mb-6 space-y-3">
         <p className="text-xs uppercase tracking-[0.3em] text-hbf-yellow/80">Comparison {String(index + 1).padStart(2, '0')}</p>
-        <div>
-          <h3 className="text-2xl sm:text-3xl font-bold text-hbf-white">
-            {track.title}
-            {track.titleEn && (
-              <span className="ml-2 text-base text-hbf-white/60">
-                ({track.titleEn})
-              </span>
-            )}
-          </h3>
-          <p className="text-base text-hbf-white/80 mt-2">{track.comparisonPoint}</p>
-        </div>
-        <p className="text-sm text-hbf-white/70">{track.detail}</p>
-        <ul className="flex flex-wrap gap-2">
-          {track.tags.map(tag => (
-            <li key={tag} className="px-3 py-1 text-xs uppercase tracking-wide rounded-full bg-hbf-white/10 text-hbf-white/80 border border-hbf-white/10">
-              {tag}
-            </li>
-          ))}
-        </ul>
+        <h3 className="text-2xl sm:text-3xl font-bold text-hbf-white">
+          {track.title}
+        </h3>
       </header>
 
       <div className="space-y-4">
@@ -161,11 +145,6 @@ function AudioComparisonVariantPlayer({ variant }: AudioComparisonVariantPlayerP
           {variant.yearLabel}
         </span>
         <p className="text-sm font-semibold tracking-tight">{variant.versionLabel}</p>
-        {variant.badge && (
-          <span className="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full border border-current opacity-70">
-            {variant.badge}
-          </span>
-        )}
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
@@ -194,8 +173,6 @@ function AudioComparisonVariantPlayer({ variant }: AudioComparisonVariantPlayerP
           </div>
         </div>
       </div>
-
-      <p className="text-sm leading-relaxed opacity-80">{variant.description}</p>
     </div>
   );
 }
