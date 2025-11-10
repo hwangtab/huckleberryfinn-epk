@@ -13,10 +13,21 @@ export default function SectionGallery() {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const total = galleryMoments.length;
   const currentMoment = galleryMoments[activeIndex];
-  const years = useMemo(() => galleryMoments.map((moment) => Number(moment.year)), []);
+  const years = useMemo(() => galleryMoments.map((moment) => Number(moment.year)), [galleryMoments]);
   const minYear = Math.min(...years);
   const maxYear = Math.max(...years);
-  const getImageSrc = (path: string) => encodeURI(path);
+  const groupedByYear = useMemo(() => {
+    const map = new Map<string, { year: string; items: Array<{ moment: (typeof galleryMoments)[number]; index: number }> }>();
+    galleryMoments.forEach((moment, index) => {
+      const existing = map.get(moment.year);
+      if (existing) {
+        existing.items.push({ moment, index });
+      } else {
+        map.set(moment.year, { year: moment.year, items: [{ moment, index }] });
+      }
+    });
+    return Array.from(map.values()).sort((a, b) => Number(a.year) - Number(b.year));
+  }, [galleryMoments]);
   const scrollToIndex = (index: number) => {
     const target = slideRefs.current[index];
     if (target) {
@@ -100,7 +111,7 @@ export default function SectionGallery() {
               >
                 <div className="relative h-96">
                     <Image
-                      src={getImageSrc(moment.src)}
+                      src={moment.src}
                       alt={`${moment.year}년 기록 ${index + 1}`}
                       fill
                       className="object-cover"
@@ -133,9 +144,9 @@ export default function SectionGallery() {
 
         {/* Desktop layout */}
         <div className="hidden md:grid md:grid-cols-[3fr_2fr] gap-10 items-start">
-          <div className="md:col-span-3 relative aspect-[4/5] rounded-[32px] overflow-hidden bg-hbf-charcoal/5">
+          <div className="md:col-span-3 relative aspect-[4/5] rounded-[32px] overflow-hidden bg-hbf-charcoal/5 shadow-xl">
             <Image
-              src={getImageSrc(currentMoment.src)}
+              src={currentMoment.src}
               alt={`${currentMoment.year}년 아카이브 메인 이미지`}
               fill
               className="object-cover"
@@ -186,29 +197,35 @@ export default function SectionGallery() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[420px] overflow-y-auto pr-2">
-              {galleryMoments.map((moment, index) => (
-                <button
-                  key={moment.id}
-                  type="button"
-                  onClick={() => setActiveIndex(index)}
-                  className={`relative aspect-[4/3] rounded-2xl overflow-hidden border transition-all ${
-                    activeIndex === index ? 'border-hbf-yellow shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'
-                  }`}
-                  aria-label={`${moment.year}년 사진 ${index + 1}`}
-                >
-                  <Image
-                    src={getImageSrc(moment.src)}
-                    alt={`${moment.year}년 소장 사진 ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="200px"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent p-3 text-left">
-                    <p className="text-xs text-hbf-white/70">{moment.year}</p>
-                    <p className="text-sm font-semibold text-hbf-white">{moment.year}</p>
+            <div className="flex flex-col gap-6">
+              {groupedByYear.map(({ year, items }) => (
+                <div key={year} className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-hbf-charcoal">{year}</p>
+                    <span className="text-[11px] text-hbf-charcoal/50 uppercase tracking-[0.3em]">Swipe</span>
                   </div>
-                </button>
+                  <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    {items.map(({ moment, index: globalIndex }) => (
+                      <button
+                        key={`${moment.id}-${globalIndex}`}
+                        type="button"
+                        onClick={() => setActiveIndex(globalIndex)}
+                        className={`relative w-28 h-28 rounded-2xl overflow-hidden border snap-start transition-all ${
+                          activeIndex === globalIndex ? 'border-hbf-yellow shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'
+                        }`}
+                        aria-label={`${moment.year}년 사진`}
+                      >
+                        <Image
+                          src={moment.src}
+                          alt={`${moment.year}년 썸네일`}
+                          fill
+                          className="object-cover"
+                          sizes="112px"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
