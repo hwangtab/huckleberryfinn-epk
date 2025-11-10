@@ -24,6 +24,5 @@ export const narrativeImages = [
   '2001-08.gif',
   '2001-09.gif',
   '2001-10.gif',
-  '2000-17.gif',
   '2000-16.gif',
 ].map(filename => `${basePath}${filename}`);

@@ -23,7 +23,6 @@ export const galleryYears: GalleryYear[] = [
       '/images/2th_album/old/2000-14.jpg',
       '/images/2th_album/old/2000-15.jpg',
       '/images/2th_album/old/2000-16.gif',
-      '/images/2th_album/old/2000-17.gif',
     ],
   },
   {
