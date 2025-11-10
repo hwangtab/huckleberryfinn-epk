@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -13,9 +13,10 @@ export default function SectionGallery() {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const total = galleryMoments.length;
   const currentMoment = galleryMoments[activeIndex];
-  const years = galleryMoments.map((moment) => Number(moment.year));
+  const years = useMemo(() => galleryMoments.map((moment) => Number(moment.year)), []);
   const minYear = Math.min(...years);
   const maxYear = Math.max(...years);
+  const getImageSrc = (path: string) => encodeURI(path);
   const scrollToIndex = (index: number) => {
     const target = slideRefs.current[index];
     if (target) {
@@ -98,11 +99,11 @@ export default function SectionGallery() {
                 className="snap-center shrink-0 w-[85vw] bg-hbf-white border border-hbf-charcoal/10 rounded-3xl overflow-hidden shadow-[0_20px_35px_-30px_rgba(0,0,0,0.8)]"
               >
                 <div className="relative h-96">
-                  <Image
-                    src={moment.src}
-                    alt={`${moment.year}년 기록 ${index + 1}`}
-                    fill
-                    className="object-cover"
+                    <Image
+                      src={getImageSrc(moment.src)}
+                      alt={`${moment.year}년 기록 ${index + 1}`}
+                      fill
+                      className="object-cover"
                     sizes="85vw"
                     priority={index === 0}
                   />
@@ -131,10 +132,10 @@ export default function SectionGallery() {
         </div>
 
         {/* Desktop layout */}
-        <div className="hidden md:grid md:grid-cols-5 gap-10 items-start">
+        <div className="hidden md:grid md:grid-cols-[3fr_2fr] gap-10 items-start">
           <div className="md:col-span-3 relative aspect-[4/5] rounded-[32px] overflow-hidden bg-hbf-charcoal/5">
             <Image
-              src={currentMoment.src}
+              src={getImageSrc(currentMoment.src)}
               alt={`${currentMoment.year}년 아카이브 메인 이미지`}
               fill
               className="object-cover"
@@ -185,7 +186,7 @@ export default function SectionGallery() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[520px] overflow-y-auto pr-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[420px] overflow-y-auto pr-2">
               {galleryMoments.map((moment, index) => (
                 <button
                   key={moment.id}
@@ -197,7 +198,7 @@ export default function SectionGallery() {
                   aria-label={`${moment.year}년 사진 ${index + 1}`}
                 >
                   <Image
-                    src={moment.src}
+                    src={getImageSrc(moment.src)}
                     alt={`${moment.year}년 소장 사진 ${index + 1}`}
                     fill
                     className="object-cover"
