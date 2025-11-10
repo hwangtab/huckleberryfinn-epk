@@ -191,7 +191,7 @@ export default function SectionGallery() {
                   className={`relative aspect-[4/3] rounded-2xl overflow-hidden border transition-all ${
                     activeIndex === index ? 'border-hbf-yellow shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'
                   }`}
-                  aria-label={`${moment.year} ${moment.title}`}
+                  aria-label={`${moment.year} 사진`}
                 >
                   <Image
                     src={moment.src}
