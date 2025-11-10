@@ -97,7 +97,7 @@ export default function SectionGallery() {
                 <div className="relative h-96">
                   <Image
                     src={moment.src}
-                    alt={moment.title}
+                    alt={`Huckleberryfinn archive ${index + 1}`}
                     fill
                     className="object-cover"
                     sizes="85vw"
@@ -107,11 +107,9 @@ export default function SectionGallery() {
                     {moment.year}
                   </div>
                 </div>
-                <div className="p-5 space-y-2">
-                  <p className="text-xs uppercase tracking-[0.2em] text-hbf-charcoal-light">{moment.location}</p>
-                  <h3 className="text-xl font-bold text-hbf-charcoal">{moment.title}</h3>
-                  <p className="text-sm text-hbf-charcoal-light leading-relaxed">{moment.description}</p>
-                </div>
+                  <div className="p-5">
+                    <p className="text-base font-semibold text-hbf-charcoal">{moment.year}</p>
+                  </div>
               </div>
             ))}
           </div>
@@ -134,7 +132,7 @@ export default function SectionGallery() {
           <div className="md:col-span-3 relative aspect-[4/5] rounded-[32px] overflow-hidden bg-hbf-charcoal/5">
             <Image
               src={currentMoment.src}
-              alt={currentMoment.title}
+              alt="Huckleberryfinn archive spotlight"
               fill
               className="object-cover"
               sizes="(max-width: 1280px) 60vw, 720px"
@@ -145,13 +143,11 @@ export default function SectionGallery() {
                 {currentMoment.phase === 'past' ? 'PAST ERA' : 'PRESENT ERA'}
               </span>
               <div>
-                <p className="text-sm text-hbf-white/80">{currentMoment.location}</p>
                 <p className="text-4xl font-bold">{currentMoment.year}</p>
               </div>
             </div>
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-hbf-white space-y-1">
-              <h3 className="text-2xl font-semibold">{currentMoment.title}</h3>
-              <p className="text-sm text-hbf-white/80 leading-relaxed">{currentMoment.description}</p>
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-hbf-white">
+              <p className="text-sm text-hbf-white/80 leading-relaxed">{currentMoment.year}</p>
             </div>
             <button
               type="button"
@@ -199,14 +195,14 @@ export default function SectionGallery() {
                 >
                   <Image
                     src={moment.src}
-                    alt={moment.title}
+                    alt={`Huckleberryfinn archive thumbnail ${index + 1}`}
                     fill
                     className="object-cover"
                     sizes="200px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent p-3 text-left">
                     <p className="text-xs text-hbf-white/70">{moment.year}</p>
-                    <p className="text-sm font-semibold text-hbf-white">{moment.title}</p>
+                    <p className="text-sm font-semibold text-hbf-white">{moment.year}</p>
                   </div>
                 </button>
               ))}
