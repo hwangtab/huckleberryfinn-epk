@@ -143,13 +143,13 @@ export default function SectionGallery() {
         </div>
 
         {/* Desktop layout */}
-        <div className="hidden md:grid md:grid-cols-[3fr_2fr] gap-10 items-start">
-          <div className="md:col-span-3 relative aspect-[4/5] rounded-[32px] overflow-hidden bg-hbf-charcoal/5 shadow-xl">
+        <div className="hidden md:grid md:grid-cols-1 lg:grid-cols-[2.2fr_1fr] gap-10 items-start">
+          <div className="w-full max-w-[640px] lg:max-w-none md:mx-auto relative aspect-[3/4] lg:aspect-[4/5] max-h-[460px] lg:max-h-[520px] rounded-[32px] overflow-hidden bg-hbf-charcoal/5 shadow-xl">
             <Image
               src={currentMoment.src}
               alt={`${currentMoment.year}년 아카이브 메인 이미지`}
               fill
-              className="object-cover"
+              className="object-contain bg-black"
               sizes="(max-width: 1280px) 60vw, 720px"
               priority
             />
@@ -182,7 +182,7 @@ export default function SectionGallery() {
             </button>
           </div>
 
-          <div className="md:col-span-2 space-y-8">
+          <div className="space-y-8">
             <div className="space-y-4">
               <p className="text-xs uppercase tracking-[0.4em] text-hbf-charcoal-light">Timeline</p>
               <div className="flex items-center gap-4">
