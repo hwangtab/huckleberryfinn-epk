@@ -65,7 +65,7 @@ export default function Lightbox({ src, alt, width, height, onClose }: LightboxP
         <button
           type="button"
           onClick={onClose}
-          className="absolute -top-16 right-0 text-hbf-white hover:text-hbf-yellow transition-colors duration-150 p-2 bg-black/50 rounded-full"
+          className="absolute -top-12 right-4 text-hbf-white hover:text-hbf-yellow transition-colors duration-150 p-2 bg-black/50 rounded-full"
           aria-label="이미지 닫기"
         >
           <HiX size={28} />
