@@ -7,12 +7,24 @@ import Heading from '@/components/ui/Heading';
 import Lightbox from '@/components/ui/Lightbox';
 import { galleryYears } from '@/app/data/galleryImages';
 
+const makePhotoKey = (year: string, src: string) => `${year}-${src}`;
+
 export default function SectionGallery() {
-  const [lightbox, setLightbox] = useState<{ src: string; year: string } | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const flatPhotos = useMemo(
-    () => galleryYears.flatMap(({ year, photos }) => photos.map((src) => ({ year, src }))),
+    () =>
+      galleryYears.flatMap(({ year, photos }) =>
+        photos.map((src) => ({ year, src }))
+      ),
     []
   );
+  const photoIndexMap = useMemo(() => {
+    const map = new Map<string, number>();
+    flatPhotos.forEach((photo, index) => {
+      map.set(makePhotoKey(photo.year, photo.src), index);
+    });
+    return map;
+  }, [flatPhotos]);
   const totalPhotos = flatPhotos.length;
   const firstYear = galleryYears[0]?.year ?? '';
   const lastYear = galleryYears[galleryYears.length - 1]?.year ?? firstYear;
@@ -41,42 +53,56 @@ export default function SectionGallery() {
           <div className="text-center text-sm uppercase tracking-[0.4em] text-hbf-charcoal-light">
             {firstYear} — {lastYear} · 총 {totalPhotos}컷
           </div>
-          {galleryYears.map(({ year, photos }) => (
-            <div key={year} className="space-y-3">
+      {galleryYears.map(({ year, photos }) => (
+        <div key={year} className="space-y-3">
               <div className="flex items-center gap-3">
                 <span className="text-xl font-semibold text-hbf-charcoal">{year}</span>
                 <span className="text-xs uppercase tracking-[0.3em] text-hbf-charcoal/50">{photos.length} Photos</span>
                 <span className="hidden md:block flex-1 h-px bg-hbf-charcoal/10" />
               </div>
               <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-                {photos.map((src, index) => (
-                  <button
-                    key={`${year}-${src}`}
-                    type="button"
-                    onClick={() => setLightbox({ src, year })}
-                    className="relative aspect-square rounded-2xl overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-hbf-yellow/70 border border-hbf-charcoal/5 hover:border-hbf-yellow/40 transition"
-                    aria-label={`${year}년 사진 ${index + 1}`}
-                  >
-                    <Image
-                      src={src}
-                      alt={`${year}년 아카이브 ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 33vw, (max-width: 1024px) 20vw, 12vw"
-                      loading="lazy"
-                    />
-                  </button>
-                ))}
+                {photos.map((src, index) => {
+                  const photoKey = makePhotoKey(year, src);
+                  const globalIndex = photoIndexMap.get(photoKey) ?? 0;
+                  return (
+                    <button
+                      key={`${year}-${src}`}
+                      type="button"
+                      onClick={() => setLightboxIndex(globalIndex)}
+                      className="relative aspect-square rounded-2xl overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-hbf-yellow/70 border border-hbf-charcoal/5 hover:border-hbf-yellow/40 transition"
+                      aria-label={`${year}년 사진 ${index + 1}`}
+                    >
+                      <Image
+                        src={src}
+                        alt={`${year}년 아카이브 ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 33vw, (max-width: 1024px) 20vw, 12vw"
+                        loading="lazy"
+                      />
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ))}
         </div>
       </div>
-      {lightbox && (
+      {lightboxIndex !== null && flatPhotos[lightboxIndex] && (
         <Lightbox
-          src={lightbox.src}
-          alt={`${lightbox.year}년 아카이브 확대 이미지`}
-          onClose={() => setLightbox(null)}
+          src={flatPhotos[lightboxIndex].src}
+          alt={`${flatPhotos[lightboxIndex].year}년 아카이브 확대 이미지`}
+          onClose={() => setLightboxIndex(null)}
+          onPrev={() =>
+            setLightboxIndex((prev) =>
+              prev === null ? null : (prev - 1 + flatPhotos.length) % flatPhotos.length
+            )
+          }
+          onNext={() =>
+            setLightboxIndex((prev) =>
+              prev === null ? null : (prev + 1) % flatPhotos.length
+            )
+          }
         />
       )}
     </section>

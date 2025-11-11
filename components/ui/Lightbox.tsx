@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { HiX } from 'react-icons/hi';
+import { HiX, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
 interface LightboxProps {
   src: string;
@@ -12,13 +12,19 @@ interface LightboxProps {
   width?: number;
   height?: number;
   onClose: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
 }
 
-export default function Lightbox({ src, alt, width, height, onClose }: LightboxProps) {
+export default function Lightbox({ src, alt, width, height, onClose, onPrev, onNext }: LightboxProps) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
+      } else if (event.key === 'ArrowLeft' && onPrev) {
+        onPrev();
+      } else if (event.key === 'ArrowRight' && onNext) {
+        onNext();
       }
     };
 
@@ -70,18 +76,41 @@ export default function Lightbox({ src, alt, width, height, onClose }: LightboxP
         >
           <HiX size={28} />
         </button>
-        <div
-          className="relative rounded-xl overflow-hidden shadow-2xl border border-hbf-white/20 bg-black"
-          style={frameStyle}
-        >
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            className="object-contain"
-            sizes="100vw"
-            priority
-          />
+        <div className="relative" style={frameStyle}>
+          <div className="absolute inset-y-0 -left-12 hidden lg:flex items-center">
+            {onPrev && (
+              <button
+                type="button"
+                onClick={onPrev}
+                className="p-3 rounded-full bg-black/50 text-hbf-white hover:text-hbf-yellow transition"
+                aria-label="이전 이미지"
+              >
+                <HiChevronLeft size={28} />
+              </button>
+            )}
+          </div>
+          <div className="absolute inset-y-0 -right-12 hidden lg:flex items-center">
+            {onNext && (
+              <button
+                type="button"
+                onClick={onNext}
+                className="p-3 rounded-full bg-black/50 text-hbf-white hover:text-hbf-yellow transition"
+                aria-label="다음 이미지"
+              >
+                <HiChevronRight size={28} />
+              </button>
+            )}
+          </div>
+          <div className="relative rounded-xl overflow-hidden shadow-2xl border border-hbf-white/20 bg-black w-full h-full">
+            <Image
+              src={src}
+              alt={alt}
+              fill
+              className="object-contain"
+              sizes="100vw"
+              priority
+            />
+          </div>
         </div>
       </motion.div>
     </div>,
