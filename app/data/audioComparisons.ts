@@ -14,25 +14,6 @@ export interface AudioComparisonTrack {
 
 export const audioComparisonTracks: AudioComparisonTrack[] = [
   {
-    id: 'a',
-    title: 'A',
-    variants: [
-      {
-        id: 'a-original',
-        yearLabel: '2001',
-        versionLabel: 'Original Session',
-        audioSrc: '/audio/old/A/A-OLD.mp3',
-      },
-      {
-        id: 'a-remaster',
-        yearLabel: '2025',
-        versionLabel: 'Re-recorded & Remastered',
-        audioSrc: '/audio/old/A/A-NEW.mp3',
-        accent: 'remaster',
-      },
-    ],
-  },
-  {
     id: 'em',
     title: 'Em',
     variants: [
@@ -52,6 +33,25 @@ export const audioComparisonTracks: AudioComparisonTrack[] = [
     ],
   },
   {
+    id: 'a',
+    title: 'A',
+    variants: [
+      {
+        id: 'a-original',
+        yearLabel: '2001',
+        versionLabel: 'Original Session',
+        audioSrc: '/audio/old/A/A-OLD.mp3',
+      },
+      {
+        id: 'a-remaster',
+        yearLabel: '2025',
+        versionLabel: 'Re-recorded & Remastered',
+        audioSrc: '/audio/old/A/A-NEW.mp3',
+        accent: 'remaster',
+      },
+    ],
+  },
+  {
     id: 'cat',
     title: '고양이',
     variants: [
@@ -59,13 +59,13 @@ export const audioComparisonTracks: AudioComparisonTrack[] = [
         id: 'cat-original',
         yearLabel: '2001',
         versionLabel: 'Original Session',
-        audioSrc: '/audio/old/고양이/고양이-OLD.mp3',
+        audioSrc: '/audio/old/cat/cat-OLD.mp3',
       },
       {
         id: 'cat-remaster',
         yearLabel: '2025',
         versionLabel: 'Re-recorded & Remastered',
-        audioSrc: '/audio/old/고양이/고양이-NEW.mp3',
+        audioSrc: '/audio/old/cat/cat-NEW.mp3',
         accent: 'remaster',
       },
     ],
@@ -78,13 +78,13 @@ export const audioComparisonTracks: AudioComparisonTrack[] = [
         id: 'walk-original',
         yearLabel: '2001',
         versionLabel: 'Original Session',
-        audioSrc: '/audio/old/길을 걷다/길을 걷다-OLD.mp3',
+        audioSrc: '/audio/old/walk/walk-OLD.mp3',
       },
       {
         id: 'walk-remaster',
         yearLabel: '2025',
         versionLabel: 'Remastered Version',
-        audioSrc: '/audio/old/길을 걷다/길을 걷다-NEW.mp3',
+        audioSrc: '/audio/old/walk/walk-NEW.mp3',
         accent: 'remaster',
       },
     ],
