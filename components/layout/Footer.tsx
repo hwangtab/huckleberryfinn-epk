@@ -13,24 +13,12 @@ export default function Footer() {
               <span className="font-semibold">Label:</span> {contactInfo.label}
             </p>
             <p>
-              <span className="font-semibold">Contact:</span> {contactInfo.contact}
-            </p>
-            <p>
               <span className="font-semibold">Email:</span>{' '}
               <a
                 href={`mailto:${contactInfo.email}`}
                 className="hover:text-hbf-yellow transition-colors"
               >
                 {contactInfo.email}
-              </a>
-            </p>
-            <p>
-              <span className="font-semibold">Phone:</span>{' '}
-              <a
-                href={`tel:${contactInfo.phone}`}
-                className="hover:text-hbf-yellow transition-colors"
-              >
-                {contactInfo.phone.replace(/^\+82-/, '0')}
               </a>
             </p>
           </div>

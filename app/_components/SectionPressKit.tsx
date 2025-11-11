@@ -85,12 +85,9 @@ export default function SectionPressKit() {
           </div>
 
           <div className="space-y-2 text-sm text-hbf-white">
-            <p className="font-semibold">{contactInfo.label} · {contactInfo.contact}</p>
+            <p className="font-semibold">{contactInfo.label}</p>
             <p>
               Email: <a href={`mailto:${contactInfo.email}`} className="underline decoration-hbf-yellow/60 decoration-2 underline-offset-4">{contactInfo.email}</a>
-            </p>
-            <p>
-              Phone: <a href={`tel:${contactInfo.phone}`} className="underline decoration-hbf-yellow/60 decoration-2 underline-offset-4">{contactInfo.phone}</a>
             </p>
           </div>
 
