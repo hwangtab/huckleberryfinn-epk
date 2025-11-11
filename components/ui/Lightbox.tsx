@@ -71,7 +71,7 @@ export default function Lightbox({ src, alt, width, height, onClose, onPrev, onN
         <button
           type="button"
           onClick={onClose}
-          className="absolute -top-12 right-4 text-hbf-white hover:text-hbf-yellow transition-colors duration-150 p-2 bg-black/50 rounded-full"
+          className="absolute -top-12 right-4 text-hbf-white hover:text-hbf-yellow transition-colors duration-150"
           aria-label="이미지 닫기"
         >
           <HiX size={28} />
@@ -82,7 +82,7 @@ export default function Lightbox({ src, alt, width, height, onClose, onPrev, onN
               <button
                 type="button"
                 onClick={onPrev}
-                className="p-3 rounded-full bg-black/50 text-hbf-white hover:text-hbf-yellow transition"
+                className="text-hbf-white hover:text-hbf-yellow transition"
                 aria-label="이전 이미지"
               >
                 <HiChevronLeft size={28} />
@@ -94,7 +94,7 @@ export default function Lightbox({ src, alt, width, height, onClose, onPrev, onN
               <button
                 type="button"
                 onClick={onNext}
-                className="p-3 rounded-full bg-black/50 text-hbf-white hover:text-hbf-yellow transition"
+                className="text-hbf-white hover:text-hbf-yellow transition"
                 aria-label="다음 이미지"
               >
                 <HiChevronRight size={28} />
