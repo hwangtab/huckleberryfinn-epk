@@ -59,8 +59,8 @@ function AudioComparisonVariantPlayer({ variant }: AudioComparisonVariantPlayerP
       setCurrentTime(audio.currentTime);
     };
 
-    const handleLoaded = () => {
-      if (!isNaN(audio.duration)) {
+    const updateDuration = () => {
+      if (!Number.isNaN(audio.duration) && audio.duration > 0) {
         setDuration(audio.duration);
       }
     };
@@ -72,12 +72,18 @@ function AudioComparisonVariantPlayer({ variant }: AudioComparisonVariantPlayerP
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
-    audio.addEventListener('loadedmetadata', handleLoaded);
+    audio.addEventListener('loadedmetadata', updateDuration);
+    audio.addEventListener('loadeddata', updateDuration);
+    audio.addEventListener('durationchange', updateDuration);
     audio.addEventListener('ended', handleEnded);
+
+    updateDuration();
 
     return () => {
       audio.removeEventListener('timeupdate', handleTimeUpdate);
-      audio.removeEventListener('loadedmetadata', handleLoaded);
+      audio.removeEventListener('loadedmetadata', updateDuration);
+      audio.removeEventListener('loadeddata', updateDuration);
+      audio.removeEventListener('durationchange', updateDuration);
       audio.removeEventListener('ended', handleEnded);
     };
   }, [setPlayingSrc]);
