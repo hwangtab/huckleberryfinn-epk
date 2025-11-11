@@ -26,8 +26,8 @@ export default function SectionConcert() {
           >
             <div className="relative aspect-[9/16] max-w-md mx-auto">
               <Image
-                src="/images/yellowconcert/포스터.webp"
-                alt="Yellow Concert 21 포스터"
+                src="/images/yellowconcert/poster-seoul.webp"
+                alt="Yellow Concert 21 서울 포스터"
                 fill
                 className="object-cover rounded-lg"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -54,15 +54,10 @@ export default function SectionConcert() {
               <br />
               스물한 번째의 무대는 새롭게 태어난 2집 &apos;나를 닮은 사내&apos;의 첫 라이브와 함께합니다.
               <br />
-              과거와 현재가 공존하는 특별한 밤, 10년 만에 다시 찾는 대구 클럽 헤비와 서울 롤링홀에서 오랜 팬들과의 뜨거운 만남을 기다립니다.
+              과거와 현재가 공존하는 특별한 밤, 서울 롤링홀에서 오랜 팬들과의 뜨거운 만남을 기다립니다.
             </p>
 
             <div className="space-y-4 pt-6">
-              <div className="border-l-4 border-hbf-yellow pl-6">
-                <p className="text-xl font-bold mb-2">대구 공연</p>
-                <p className="text-hbf-white/80">2025. 11. 01 (Sat) @ Club Heavy</p>
-              </div>
-
               <div className="border-l-4 border-hbf-yellow pl-6">
                 <p className="text-xl font-bold mb-2">서울 공연</p>
                 <p className="text-hbf-white/80">
