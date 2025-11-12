@@ -120,6 +120,7 @@ body {
   overflow-wrap: break-word;
   word-break: keep-all;
   hyphens: auto;
+  overflow-x: hidden;
 }
 
 /* Enhanced text wrapping for better readability */
@@ -150,6 +151,7 @@ p, span, div {
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  overflow-x: hidden;
 }
 
 @media (min-width: 768px) {
