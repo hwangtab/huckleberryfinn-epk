@@ -67,7 +67,7 @@ export default function SectionConcert() {
             </div>
 
             <div className="pt-8">
-              <Button variant="secondary" href="https://booking.naver.com/booking/5/bizes/1491878" className="border-hbf-yellow text-hbf-yellow hover:bg-hbf-yellow hover:text-hbf-charcoal">
+              <Button variant="secondary" href="https://m.smartstore.naver.com/shalabel/products/12411589546" className="border-hbf-yellow text-hbf-yellow hover:bg-hbf-yellow hover:text-hbf-charcoal">
                 예매하기
               </Button>
             </div>
