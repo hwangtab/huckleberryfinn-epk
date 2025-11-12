@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { motion, useInView } from 'framer-motion';
 import Image from 'next/image';
 import Heading from '@/components/ui/Heading';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -9,14 +9,24 @@ import { narrativeImages } from '@/app/data/narrativeImages';
 
 export default function SectionNarrative() {
   const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, {
+    amount: 0.4,
+    margin: '-20% 0px',
+  });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [prevImageIndex, setPrevImageIndex] = useState(0);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 자동재생 타이머 리셋 함수
-  const resetAutoplay = () => {
+  const stopAutoplay = useCallback(() => {
     if (autoplayTimerRef.current) {
       clearInterval(autoplayTimerRef.current);
+      autoplayTimerRef.current = null;
+    }
+  }, []);
+
+  const startAutoplay = useCallback(() => {
+    if (autoplayTimerRef.current || !isInView) {
+      return;
     }
     autoplayTimerRef.current = setInterval(() => {
       setCurrentImageIndex((prev) => {
@@ -24,18 +34,24 @@ export default function SectionNarrative() {
         return (prev + 1) % narrativeImages.length;
       });
     }, 5000);
-  };
+  }, [isInView]);
 
-  // 자동 전환 기능 (5초마다)
+  const restartAutoplay = useCallback(() => {
+    stopAutoplay();
+    startAutoplay();
+  }, [startAutoplay, stopAutoplay]);
+
   useEffect(() => {
-    resetAutoplay();
+    if (isInView) {
+      startAutoplay();
+    } else {
+      stopAutoplay();
+    }
 
     return () => {
-      if (autoplayTimerRef.current) {
-        clearInterval(autoplayTimerRef.current);
-      }
+      stopAutoplay();
     };
-  }, []);
+  }, [isInView, startAutoplay, stopAutoplay]);
 
   // 네비게이션 핸들러
   const handlePrev = () => {
@@ -43,7 +59,7 @@ export default function SectionNarrative() {
       setPrevImageIndex(prev);
       return (prev - 1 + narrativeImages.length) % narrativeImages.length;
     });
-    resetAutoplay();
+    restartAutoplay();
   };
 
   const handleNext = () => {
@@ -51,7 +67,7 @@ export default function SectionNarrative() {
       setPrevImageIndex(prev);
       return (prev + 1) % narrativeImages.length;
     });
-    resetAutoplay();
+    restartAutoplay();
   };
 
   return (

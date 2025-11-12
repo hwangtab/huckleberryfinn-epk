@@ -36,7 +36,7 @@ export default function Lightbox({ src, alt, width, height, onClose, onPrev, onN
       document.body.style.overflow = originalOverflow;
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onClose]);
+  }, [onClose, onNext, onPrev]);
 
   if (typeof window === 'undefined') {
     return null;
@@ -53,6 +53,9 @@ export default function Lightbox({ src, alt, width, height, onClose, onPrev, onN
         width: '90vw',
         height: '90vh',
       };
+
+  const imageProps = width && height ? { width, height } : { fill: true as const };
+  const responsiveSizes = '(max-width: 768px) 90vw, 70vw';
 
   return createPortal(
     <div
@@ -105,10 +108,9 @@ export default function Lightbox({ src, alt, width, height, onClose, onPrev, onN
             <Image
               src={src}
               alt={alt}
-              fill
-              className="object-contain"
-              sizes="100vw"
-              priority
+              {...imageProps}
+              className="object-contain w-full h-full"
+              sizes={responsiveSizes}
             />
           </div>
         </div>

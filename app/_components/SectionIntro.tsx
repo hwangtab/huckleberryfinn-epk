@@ -81,7 +81,6 @@ export default function SectionIntro() {
               width={300}
               height={300}
               className="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-88 lg:h-88 xl:w-112 xl:h-112 object-cover"
-              priority
               quality={85}
             />
           </button>
@@ -118,7 +117,6 @@ export default function SectionIntro() {
               width={1104}
               height={264}
               className="w-56 sm:w-72 md:w-96 lg:w-[28rem] h-auto object-contain mx-auto"
-              priority
               quality={90}
             />
           </motion.div>
