@@ -11,6 +11,7 @@ const makePhotoKey = (year: string, src: string) => `${year}-${src}`;
 
 export default function SectionGallery() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [expandedYears, setExpandedYears] = useState<Record<string, boolean>>({});
   const flatPhotos = useMemo(
     () =>
       galleryYears.flatMap(({ year, photos }) =>
@@ -25,7 +26,6 @@ export default function SectionGallery() {
     });
     return map;
   }, [flatPhotos]);
-  const totalPhotos = flatPhotos.length;
   const firstYear = galleryYears[0]?.year ?? '';
   const lastYear = galleryYears[galleryYears.length - 1]?.year ?? firstYear;
 
@@ -48,13 +48,67 @@ export default function SectionGallery() {
           </p>
         </motion.div>
 
-        {/* Full gallery */}
-        <div className="space-y-10">
+        {/* Mobile gallery with collapsible groups */}
+        <div className="space-y-8 md:hidden">
+          {galleryYears.map(({ year, photos }) => {
+            const maxPreview = 4;
+            const isExpanded = expandedYears[year] ?? false;
+            const visiblePhotos = isExpanded ? photos : photos.slice(0, maxPreview);
+
+            return (
+              <div key={year} className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-lg font-semibold text-hbf-charcoal">{year}</p>
+                    <p className="text-xs text-hbf-charcoal/60">{photos.length}컷</p>
+                  </div>
+                  {photos.length > maxPreview && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpandedYears(prev => ({ ...prev, [year]: !isExpanded }))
+                      }
+                      className="text-xs px-3 py-1 rounded-full border border-hbf-charcoal/20 text-hbf-charcoal hover:border-hbf-yellow hover:text-hbf-yellow transition"
+                    >
+                      {isExpanded ? '접기' : '더 보기'}
+                    </button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {visiblePhotos.map((src, index) => {
+                    const globalIndex = photoIndexMap.get(makePhotoKey(year, src)) ?? 0;
+                    return (
+                      <button
+                        key={`${year}-${src}`}
+                        type="button"
+                        onClick={() => setLightboxIndex(globalIndex)}
+                        className="relative aspect-square rounded-xl overflow-hidden border border-hbf-charcoal/5 hover:border-hbf-yellow/40 transition"
+                        aria-label={`${year}년 사진 ${index + 1}`}
+                      >
+                        <Image
+                          src={src}
+                          alt={`${year}년 아카이브 ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 45vw"
+                          loading="lazy"
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop gallery */}
+        <div className="hidden md:block space-y-10">
           <div className="text-center text-sm uppercase tracking-[0.4em] text-hbf-charcoal-light">
-            {firstYear} — {lastYear} · 총 {totalPhotos}컷
+            {firstYear} — {lastYear} · 총 {flatPhotos.length}컷
           </div>
-      {galleryYears.map(({ year, photos }) => (
-        <div key={year} className="space-y-3">
+          {galleryYears.map(({ year, photos }) => (
+            <div key={year} className="space-y-3">
               <div className="flex items-center gap-3">
                 <span className="text-xl font-semibold text-hbf-charcoal">{year}</span>
                 <span className="text-xs uppercase tracking-[0.3em] text-hbf-charcoal/50">{photos.length} Photos</span>
