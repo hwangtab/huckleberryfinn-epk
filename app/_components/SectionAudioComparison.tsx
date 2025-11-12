@@ -1,11 +1,23 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Heading from '@/components/ui/Heading';
 import AudioComparisonCard from '@/components/features/AudioComparisonCard';
 import { audioComparisonTracks } from '@/app/data/audioComparisons';
 
 export default function SectionAudioComparison() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 640px)');
+    const handleChange = () => setIsMobile(mq.matches);
+    handleChange();
+    mq.addEventListener('change', handleChange);
+    return () => mq.removeEventListener('change', handleChange);
+  }, []);
+
   return (
     <section id="comparison" className="bg-hbf-charcoal py-20 md:py-28 px-6 scroll-mt-16 md:scroll-mt-20">
       <div className="max-w-6xl mx-auto space-y-12">
@@ -28,9 +40,9 @@ export default function SectionAudioComparison() {
           </p>
         </motion.div>
 
-        <div className="space-y-10">
+        <div className="space-y-6 md:space-y-10">
           {audioComparisonTracks.map((track, index) => (
-            <AudioComparisonCard key={track.id} track={track} index={index} />
+            <AudioComparisonCard key={track.id} track={track} index={index} isMobile={isMobile} />
           ))}
         </div>
       </div>

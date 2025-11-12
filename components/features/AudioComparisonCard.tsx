@@ -9,9 +9,34 @@ import { useAudioPlayer } from '@/app/contexts/AudioPlayerContext';
 interface AudioComparisonCardProps {
   track: AudioComparisonTrack;
   index: number;
+  isMobile?: boolean;
 }
 
-export default function AudioComparisonCard({ track, index }: AudioComparisonCardProps) {
+export default function AudioComparisonCard({ track, index, isMobile = false }: AudioComparisonCardProps) {
+  const comparisonLabel = `Comparison ${String(index + 1).padStart(2, '0')}`;
+
+  const variantsList = (
+    <div className="space-y-4">
+      {track.variants.map(variant => (
+        <AudioComparisonVariantPlayer key={variant.id} variant={variant} isMobile={isMobile} />
+      ))}
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <details className="bg-hbf-white/5 backdrop-blur rounded-2xl border border-hbf-white/10 p-4 text-left text-hbf-white" open={index === 0}>
+        <summary className="flex items-center justify-between gap-4 cursor-pointer text-base font-semibold list-none">
+          <span>{track.title}</span>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-hbf-yellow/80">{comparisonLabel}</span>
+        </summary>
+        <div className="mt-4 space-y-3">
+          {variantsList}
+        </div>
+      </details>
+    );
+  }
+
   return (
     <motion.article
       className="bg-hbf-white/5 backdrop-blur rounded-3xl border border-hbf-white/10 p-6 sm:p-8"
@@ -21,26 +46,23 @@ export default function AudioComparisonCard({ track, index }: AudioComparisonCar
       transition={{ duration: 0.8, delay: index * 0.1 }}
     >
       <header className="mb-6 space-y-3">
-        <p className="text-xs uppercase tracking-[0.3em] text-hbf-yellow/80">Comparison {String(index + 1).padStart(2, '0')}</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-hbf-yellow/80">{comparisonLabel}</p>
         <h3 className="text-2xl sm:text-3xl font-bold text-hbf-white">
           {track.title}
         </h3>
       </header>
 
-      <div className="space-y-4">
-        {track.variants.map(variant => (
-          <AudioComparisonVariantPlayer key={variant.id} variant={variant} />
-        ))}
-      </div>
+      {variantsList}
     </motion.article>
   );
 }
 
 interface AudioComparisonVariantPlayerProps {
   variant: AudioComparisonVariant;
+  isMobile?: boolean;
 }
 
-function AudioComparisonVariantPlayer({ variant }: AudioComparisonVariantPlayerProps) {
+function AudioComparisonVariantPlayer({ variant, isMobile = false }: AudioComparisonVariantPlayerProps) {
   const { playingSrc, setPlayingSrc } = useAudioPlayer();
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressContainerRef = useRef<HTMLDivElement>(null);
@@ -144,7 +166,7 @@ function AudioComparisonVariantPlayer({ variant }: AudioComparisonVariantPlayerP
   const progressFill = variant.accent === 'remaster' ? 'bg-hbf-charcoal' : 'bg-hbf-yellow';
 
   return (
-    <div className={`rounded-2xl p-5 shadow-[0_15px_45px_-25px_rgba(0,0,0,0.6)] ${containerClasses}`}>
+    <div className={`rounded-2xl ${isMobile ? 'p-4' : 'p-5'} shadow-[0_15px_45px_-25px_rgba(0,0,0,0.6)] ${containerClasses}`}>
       <audio ref={audioRef} src={variant.audioSrc} preload="metadata" />
       <div className="flex flex-wrap items-center gap-3 mb-4">
         <span className="px-3 py-1 text-xs font-bold rounded-full bg-black/10 uppercase tracking-wide">
@@ -157,7 +179,7 @@ function AudioComparisonVariantPlayer({ variant }: AudioComparisonVariantPlayerP
         <motion.button
           type="button"
           onClick={handleToggle}
-          className={`w-14 h-14 rounded-full flex items-center justify-center transition-colors ${variant.accent === 'remaster' ? 'bg-hbf-charcoal text-hbf-yellow' : 'bg-hbf-yellow text-hbf-charcoal'}`}
+          className={`rounded-full flex items-center justify-center transition-colors ${variant.accent === 'remaster' ? 'bg-hbf-charcoal text-hbf-yellow' : 'bg-hbf-yellow text-hbf-charcoal'} ${isMobile ? 'w-12 h-12' : 'w-14 h-14'}`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           aria-label={isPlaying ? '일시정지' : '재생'}
