@@ -77,24 +77,24 @@ export default function Lightbox({ src, alt, width, height, onClose, onPrev, onN
           <HiX size={28} />
         </button>
         <div className="relative" style={frameStyle}>
-          <div className="absolute inset-y-0 -left-12 hidden lg:flex items-center">
+          <div className="absolute inset-y-0 left-2 lg:-left-12 flex items-center z-10">
             {onPrev && (
               <button
                 type="button"
                 onClick={onPrev}
-                className="text-hbf-white hover:text-hbf-yellow transition"
+                className="text-hbf-white hover:text-hbf-yellow transition bg-black/30 lg:bg-transparent rounded-full p-2 lg:p-0 backdrop-blur-sm"
                 aria-label="이전 이미지"
               >
                 <HiChevronLeft size={28} />
               </button>
             )}
           </div>
-          <div className="absolute inset-y-0 -right-12 hidden lg:flex items-center">
+          <div className="absolute inset-y-0 right-2 lg:-right-12 flex items-center z-10">
             {onNext && (
               <button
                 type="button"
                 onClick={onNext}
-                className="text-hbf-white hover:text-hbf-yellow transition"
+                className="text-hbf-white hover:text-hbf-yellow transition bg-black/30 lg:bg-transparent rounded-full p-2 lg:p-0 backdrop-blur-sm"
                 aria-label="다음 이미지"
               >
                 <HiChevronRight size={28} />
