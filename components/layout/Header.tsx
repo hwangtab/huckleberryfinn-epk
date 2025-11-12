@@ -7,9 +7,10 @@ import { HiMenu, HiX } from 'react-icons/hi';
 
 const navLinks = [
   { href: '#narrative', label: 'Narrative' },
+  { href: '#gallery', label: 'Gallery' },
   { href: '#profile', label: 'Profile' },
-  { href: '#music', label: 'Music' },
   { href: '#video', label: 'Video' },
+  { href: '#comparison', label: 'Comparison' },
   { href: '#producer-note', label: 'Note' },
   { href: '#reviews', label: 'Endorsements' },
   { href: '#concert', label: 'Concert' },
