@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import Image from 'next/image';
 import { HiMenu, HiX } from 'react-icons/hi';
@@ -33,15 +33,28 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   };
 
-  // Prevent body scroll when mobile menu is open
+  // Prevent body scroll when mobile menu is open without overriding global overflow-x settings
+  const originalOverflowY = useRef<string>('');
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+    if (typeof document === 'undefined') {
+      return undefined;
     }
+
+    if (isMobileMenuOpen) {
+      if (originalOverflowY.current === '') {
+        originalOverflowY.current = document.body.style.overflowY;
+      }
+      document.body.style.overflowY = 'hidden';
+    } else if (originalOverflowY.current !== '') {
+      document.body.style.overflowY = originalOverflowY.current;
+      originalOverflowY.current = '';
+    }
+
     return () => {
-      document.body.style.overflow = 'unset';
+      if (originalOverflowY.current !== '') {
+        document.body.style.overflowY = originalOverflowY.current;
+        originalOverflowY.current = '';
+      }
     };
   }, [isMobileMenuOpen]);
 
