@@ -1,4 +1,4 @@
-import { FaYoutube, FaInstagram, FaFacebook } from 'react-icons/fa';
+import { FaYoutube, FaInstagram, FaFacebook, FaExternalLinkAlt } from 'react-icons/fa';
 import { contactInfo } from '@/app/data/contact';
 
 export default function Footer() {
@@ -29,9 +29,20 @@ export default function Footer() {
 
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-sm text-hbf-white/60">
-            © 2025 Huckleberryfinn. All rights reserved.
-          </p>
+          <div className="flex flex-col items-center md:items-start gap-2">
+            <p className="text-sm text-hbf-white/60">
+              © 2026 Huckleberryfinn. All rights reserved.
+            </p>
+            <a
+              href={contactInfo.tumblbug}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-hbf-yellow hover:text-hbf-yellow-light transition-colors flex items-center gap-1.5"
+            >
+              <FaExternalLinkAlt size={11} />
+              텀블벅 펀딩 페이지
+            </a>
+          </div>
 
           {/* SNS Icons */}
           <div className="flex gap-6">

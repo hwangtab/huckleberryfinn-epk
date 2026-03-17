@@ -1,4 +1,5 @@
 import SectionIntro from './_components/SectionIntro';
+import SectionFunding from './_components/SectionFunding';
 import SectionNarrative from './_components/SectionNarrative';
 import SectionGallery from './_components/SectionGallery';
 import SectionProfile from './_components/SectionProfile';
@@ -16,6 +17,7 @@ export default function Home() {
     <AudioPlayerProvider>
       <main className="min-h-screen">
         <SectionIntro />
+        <SectionFunding />
         <SectionNarrative />
         <SectionGallery />
         <SectionProfile />

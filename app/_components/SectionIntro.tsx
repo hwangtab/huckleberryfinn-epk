@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 import Lightbox from '@/components/ui/Lightbox';
+import Button from '@/components/ui/Button';
+import { fundingInfo } from '@/app/data/funding';
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -97,14 +99,14 @@ export default function SectionIntro() {
             className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-hbf-white mb-4 sm:mb-6 font-watermelon"
             variants={item}
           >
-            24년의 시간을 넘어,
+            24년의 노래가, LP로 돌아옵니다.
           </motion.p>
 
           <motion.p
             className="text-base sm:text-lg md:text-2xl lg:text-3xl text-hbf-white/90 mb-8 sm:mb-12 font-watermelon"
             variants={item}
           >
-            못다 한 이야기가 다시 시작됩니다.
+            14년 만의 단독 콘서트 &apos;봄의 피로&apos;와 함께.
           </motion.p>
 
           <motion.div
@@ -122,11 +124,21 @@ export default function SectionIntro() {
           </motion.div>
 
           <motion.p
-            className="text-sm sm:text-base md:text-lg lg:text-xl text-hbf-yellow font-watermelon font-semibold"
+            className="text-sm sm:text-base md:text-lg lg:text-xl text-hbf-yellow font-watermelon font-semibold mb-6 sm:mb-8"
             variants={item}
           >
-            2025 Re-Recording: 나를 닮은 사내
+            500매 한정 LP | 텀블벅 펀딩 진행 중
           </motion.p>
+
+          <motion.div variants={item}>
+            <Button
+              variant="primary"
+              href={fundingInfo.tumblbugUrl}
+              className="bg-hbf-yellow text-hbf-charcoal hover:bg-hbf-yellow-light border-0"
+            >
+              텀블벅에서 후원하기
+            </Button>
+          </motion.div>
         </motion.div>
       </div>
 

@@ -6,7 +6,8 @@ import Image from 'next/image';
 import { HiMenu, HiX } from 'react-icons/hi';
 
 const navLinks = [
-  { href: '#narrative', label: 'Narrative' },
+  { href: '#funding', label: 'Funding' },
+  { href: '#narrative', label: 'Story' },
   { href: '#gallery', label: 'Gallery' },
   { href: '#profile', label: 'Profile' },
   { href: '#video', label: 'Video' },
@@ -14,7 +15,6 @@ const navLinks = [
   { href: '#producer-note', label: 'Note' },
   { href: '#reviews', label: 'Endorsements' },
   { href: '#concert', label: 'Concert' },
-  { href: '#presskit', label: 'Press Kit' },
 ];
 
 export default function Header() {

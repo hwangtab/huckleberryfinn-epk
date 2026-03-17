@@ -12,12 +12,12 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://huckleberryfinn.vercel.app'),
-  title: 'Huckleberryfinn - 나를 닮은 사내 (2025 Re-Recording)',
-  description: '24년의 시간을 넘어, 못다 한 이야기가 다시 시작됩니다. 허클베리핀 2집 재녹음 프로젝트.',
-  keywords: ['허클베리핀', 'Huckleberryfinn', '나를 닮은 사내', '인디 록', 'Korean indie rock', '옐로우 콘서트'],
+  title: '허클베리핀 - 나를 닮은 사내 LP + 단독 콘서트 봄의 피로',
+  description: '허클베리핀 2집 나를 닮은 사내 500매 한정 LP + 14년 만의 단독 콘서트 봄의 피로. 텀블벅 펀딩 진행 중.',
+  keywords: ['허클베리핀', 'Huckleberryfinn', '나를 닮은 사내', '인디 록', 'Korean indie rock', 'LP', '바이닐', '봄의 피로', '텀블벅', '크라우드펀딩'],
   openGraph: {
-    title: 'Huckleberryfinn - 나를 닮은 사내 (2025 Re-Recording)',
-    description: '24년의 시간을 넘어, 못다 한 이야기가 다시 시작됩니다. 허클베리핀 2집 재녹음 프로젝트.',
+    title: '허클베리핀 - 나를 닮은 사내 LP + 단독 콘서트 봄의 피로',
+    description: '허클베리핀 2집 나를 닮은 사내 500매 한정 LP + 14년 만의 단독 콘서트 봄의 피로. 텀블벅 펀딩 진행 중.',
     type: 'website',
     locale: 'ko_KR',
     siteName: 'Huckleberryfinn EPK',
@@ -26,14 +26,14 @@ export const metadata: Metadata = {
         url: '/images/2th_album/og-image.webp',
         width: 1200,
         height: 630,
-        alt: 'Huckleberryfinn - 나를 닮은 사내',
+        alt: '허클베리핀 - 나를 닮은 사내 LP',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Huckleberryfinn - 나를 닮은 사내 (2025 Re-Recording)',
-    description: '24년의 시간을 넘어, 못다 한 이야기가 다시 시작됩니다.',
+    title: '허클베리핀 - 나를 닮은 사내 LP + 단독 콘서트 봄의 피로',
+    description: '허클베리핀 2집 나를 닮은 사내 500매 한정 LP + 14년 만의 단독 콘서트 봄의 피로. 텀블벅 펀딩 진행 중.',
     images: ['/images/2th_album/og-image.webp'],
   },
 };
