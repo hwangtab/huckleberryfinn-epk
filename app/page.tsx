@@ -1,34 +1,27 @@
-import SectionIntro from './_components/SectionIntro';
-import SectionFunding from './_components/SectionFunding';
-import SectionNarrative from './_components/SectionNarrative';
-import SectionGallery from './_components/SectionGallery';
-import SectionProfile from './_components/SectionProfile';
-import SectionMusicVideo from './_components/SectionMusicVideo';
-import SectionAudioComparison from './_components/SectionAudioComparison';
-import SectionProducerNote from './_components/SectionProducerNote';
-import SectionConcert from './_components/SectionConcert';
-// import SectionFuture from './_components/SectionFuture'; // 청년 프로젝트 섹션 - 추후 복원 예정
-import SectionReviews from './_components/SectionReviews';
+import SectionHero from './_components/album8/SectionHero';
+import Ticker from './_components/album8/Ticker';
+import SectionSingles from './_components/album8/SectionSingles';
+import SectionStory from './_components/album8/SectionStory';
+import SectionAlbum from './_components/album8/SectionAlbum';
+import SectionConcert from './_components/album8/SectionConcert';
+import SectionFunding from './_components/album8/SectionFunding';
+import SectionBand from './_components/album8/SectionBand';
+import SectionPress from './_components/album8/SectionPress';
 import Footer from '@/components/layout/Footer';
-import { AudioPlayerProvider } from './contexts/AudioPlayerContext';
 
 export default function Home() {
   return (
-    <AudioPlayerProvider>
-      <main className="min-h-screen">
-        <SectionIntro />
-        <SectionFunding />
-        <SectionNarrative />
-        <SectionGallery />
-        <SectionProfile />
-        <SectionMusicVideo />
-        <SectionAudioComparison />
-        <SectionProducerNote />
-        <SectionReviews />
-        <SectionConcert />
-        {/* <SectionFuture /> */}
-        <Footer />
-      </main>
-    </AudioPlayerProvider>
+    <main className="min-h-screen bg-ink text-cream">
+      <SectionHero />
+      <Ticker />
+      <SectionSingles />
+      <SectionStory />
+      <SectionAlbum />
+      <SectionConcert />
+      <SectionFunding />
+      <SectionBand />
+      <SectionPress />
+      <Footer />
+    </main>
   );
 }

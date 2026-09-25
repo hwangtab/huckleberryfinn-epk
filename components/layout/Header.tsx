@@ -4,17 +4,16 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import Image from 'next/image';
 import { HiMenu, HiX } from 'react-icons/hi';
+import { TUMBLBUG_URL } from '@/app/data/album8';
 
 const navLinks = [
-  { href: '#funding', label: 'Funding' },
-  { href: '#narrative', label: 'Story' },
-  { href: '#gallery', label: 'Gallery' },
-  { href: '#profile', label: 'Profile' },
-  { href: '#video', label: 'Video' },
-  { href: '#comparison', label: 'Comparison' },
-  { href: '#producer-note', label: 'Note' },
-  { href: '#reviews', label: 'Endorsements' },
+  { href: '#singles', label: 'Singles' },
+  { href: '#story', label: 'Story' },
+  { href: '#album', label: 'Album' },
   { href: '#concert', label: 'Concert' },
+  { href: '#funding', label: 'Funding' },
+  { href: '#band', label: 'Band' },
+  { href: '#press', label: 'Press' },
 ];
 
 export default function Header() {
@@ -22,23 +21,17 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
 
-  // Detect scroll position to show/hide header
-  useMotionValueEvent(scrollY, "change", (latest) => {
+  useMotionValueEvent(scrollY, 'change', (latest) => {
     const heroHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
     setIsVisible(latest > heroHeight * 0.8);
   });
 
-  // Close mobile menu when clicking a link
-  const handleLinkClick = () => {
-    setIsMobileMenuOpen(false);
-  };
+  const handleLinkClick = () => setIsMobileMenuOpen(false);
 
-  // Prevent body scroll when mobile menu is open without overriding global overflow-x settings
+  // Lock vertical scroll while the mobile menu is open, without touching overflow-x.
   const originalOverflowY = useRef<string>('');
   useEffect(() => {
-    if (typeof document === 'undefined') {
-      return undefined;
-    }
+    if (typeof document === 'undefined') return undefined;
 
     if (isMobileMenuOpen) {
       if (originalOverflowY.current === '') {
@@ -61,48 +54,56 @@ export default function Header() {
   return (
     <>
       <motion.header
-        className="fixed top-0 left-0 right-0 z-50"
+        className="fixed left-0 right-0 top-0 z-50"
         initial={{ opacity: 0, y: -100 }}
-        animate={{
-          opacity: isVisible ? 1 : 0,
-          y: isVisible ? 0 : -100,
-        }}
+        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -100 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
+        aria-hidden={!isVisible}
       >
-        <nav className="bg-hbf-charcoal/80 backdrop-blur-md border-b border-hbf-white/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16 md:h-20">
-              {/* Logo */}
-              <a href="#" className="flex-shrink-0" onClick={handleLinkClick}>
+        <nav className="border-b border-cream/10 bg-ink/70 backdrop-blur-md">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex h-16 items-center justify-between md:h-20">
+              <a href="#top" className="flex shrink-0 items-center gap-3" onClick={handleLinkClick} tabIndex={isVisible ? 0 : -1}>
                 <Image
                   src="/images/logo/white_logo.png"
                   alt="Huckleberryfinn"
                   width={150}
                   height={36}
-                  className="h-8 md:h-10 w-auto"
+                  className="h-7 w-auto md:h-9"
                   priority
                 />
+                <span className="hidden font-serif-kr text-sm font-bold text-cream/70 lg:inline">모두가 아는 이야기</span>
               </a>
 
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex md:items-center md:space-x-8">
+              <div className="hidden md:flex md:items-center md:gap-7">
                 {navLinks.map((link) => (
                   <a
                     key={link.href}
                     href={link.href}
-                    className="text-hbf-white hover:text-hbf-yellow transition-colors duration-200 text-sm lg:text-base font-medium relative group"
+                    tabIndex={isVisible ? 0 : -1}
+                    className="group relative text-xs font-semibold uppercase tracking-[0.2em] text-cream/80 transition-colors hover:text-bulb focus-visible:outline-none focus-visible:text-bulb"
                   >
                     {link.label}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-hbf-yellow transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute -bottom-1 left-0 h-px w-0 bg-bulb transition-all duration-300 group-hover:w-full" />
                   </a>
                 ))}
+                <a
+                  href={TUMBLBUG_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  tabIndex={isVisible ? 0 : -1}
+                  className="rounded-full bg-bulb px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-ink transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                >
+                  Support
+                </a>
               </div>
 
-              {/* Mobile menu button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden text-hbf-white hover:text-hbf-yellow transition-colors duration-200 p-2"
-                aria-label="Toggle menu"
+                tabIndex={isVisible ? 0 : -1}
+                className="p-2 text-cream transition-colors hover:text-bulb md:hidden"
+                aria-label={isMobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+                aria-expanded={isMobileMenuOpen}
               >
                 {isMobileMenuOpen ? <HiX size={28} /> : <HiMenu size={28} />}
               </button>
@@ -111,7 +112,6 @@ export default function Header() {
         </nav>
       </motion.header>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -121,54 +121,47 @@ export default function Header() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Backdrop */}
             <motion.div
-              className="absolute inset-0 bg-hbf-charcoal/95 backdrop-blur-lg"
+              className="absolute inset-0 bg-ink/95 backdrop-blur-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            {/* Menu Content */}
-            <motion.div
-              className="relative h-full flex flex-col items-center justify-center space-y-8 px-6"
-              initial={{ scale: 0.9, opacity: 0 }}
+            <motion.nav
+              className="relative flex h-full flex-col items-center justify-center gap-7 px-6"
+              initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.96, opacity: 0 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
+              aria-label="모바일 메뉴"
             >
               {navLinks.map((link, index) => (
                 <motion.a
                   key={link.href}
                   href={link.href}
                   onClick={handleLinkClick}
-                  className="text-hbf-white hover:text-hbf-yellow transition-colors duration-200 text-3xl font-watermelon relative group"
+                  className="font-serif-kr text-3xl font-bold text-cream transition-colors hover:text-bulb"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  transition={{ delay: index * 0.07, duration: 0.3 }}
                 >
                   {link.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-1 bg-hbf-yellow transition-all duration-300 group-hover:w-full" />
                 </motion.a>
               ))}
-
-              {/* Logo in mobile menu */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.3 }}
-                className="mt-12"
+              <motion.a
+                href={TUMBLBUG_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 rounded-full bg-bulb px-6 py-3 text-sm font-bold uppercase tracking-[0.15em] text-ink"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.07, duration: 0.3 }}
               >
-                <Image
-                  src="/images/logo/white_logo.png"
-                  alt="Huckleberryfinn"
-                  width={240}
-                  height={60}
-                  className="w-60 h-auto opacity-50"
-                />
-              </motion.div>
-            </motion.div>
+                텀블벅 후원하기
+              </motion.a>
+            </motion.nav>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,5 +1,6 @@
 /* Web Fonts and Tailwind */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Instrument+Serif:ital@0;1&display=swap");
 @import 'tailwindcss';
 
 /* Watermelon from Noonnu CDN */
@@ -106,7 +107,21 @@
   --color-hbf-bluegray: #8B9AAB;
   --color-hbf-white: #FDFBF6;
 
+  /* 8th album palette — from the cover art (cobalt / teal / coral / bulb) */
+  --color-ink: #0A0D14;
+  --color-ink-2: #111726;
+  --color-ink-3: #1A2236;
+  --color-cobalt: #2F5DA8;
+  --color-cobalt-deep: #1B3A6B;
+  --color-teal: #4AA8B4;
+  --color-coral: #D95C4E;
+  --color-bulb: #F5C56A;
+  --color-bulb-hot: #FFE3A3;
+  --color-cream: #F1E8D6;
+
   /* Font Families */
+  --font-serif-kr: 'Nanum Myeongjo', 'Apple SD Gothic Neo', serif;
+  --font-serif-latin: 'Instrument Serif', 'Times New Roman', serif;
   --font-display: 'ONE Mobile Title', sans-serif;
   --font-headline: 'Pretendard', sans-serif;
 }
@@ -190,4 +205,110 @@ summary::-webkit-details-marker {
 .font-cucumber-salad {
   font-family: 'CucumberSalad', sans-serif;
   font-weight: normal;
+}
+
+
+/* ===================== 8th album: 모두가 아는 이야기 ===================== */
+.font-serif-kr {
+  font-family: 'Nanum Myeongjo', 'Apple SD Gothic Neo', serif;
+  letter-spacing: -0.02em;
+}
+
+.font-serif-latin {
+  font-family: 'Instrument Serif', 'Times New Roman', serif;
+}
+
+.text-glow-bulb {
+  text-shadow: 0 0 24px rgba(245, 197, 106, 0.45), 0 0 64px rgba(245, 197, 106, 0.2);
+}
+
+/* Film grain overlay */
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.6s steps(6) infinite;
+  mix-blend-mode: overlay;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -4%); }
+  60% { transform: translate(-4%, -1%); }
+  80% { transform: translate(3%, 3%); }
+}
+
+/* Marquee ticker */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 38s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* 124 BPM pulse (60 / 124 = 0.4839s) */
+@keyframes bpm-pulse {
+  0% { transform: scale(0.85); opacity: 0.9; }
+  30% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.85); opacity: 0.9; }
+}
+
+@keyframes bpm-ring {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+.bpm-dot {
+  animation: bpm-pulse 0.4839s ease-out infinite;
+}
+
+.bpm-ring {
+  animation: bpm-ring 0.9678s ease-out infinite;
+}
+
+/* Filament flicker for the light-bulb glow */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  8% { opacity: 0.86; }
+  10% { opacity: 1; }
+  47% { opacity: 0.92; }
+  52% { opacity: 1; }
+  73% { opacity: 0.88; }
+  80% { opacity: 1; }
+}
+
+.animate-flicker {
+  animation: flicker 6s ease-in-out infinite;
+}
+
+/* Horizontal snap rail */
+.snap-rail {
+  scrollbar-width: none;
+}
+
+.snap-rail::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain::before,
+  .animate-marquee,
+  .bpm-dot,
+  .bpm-ring,
+  .animate-flicker {
+    animation: none;
+  }
 }

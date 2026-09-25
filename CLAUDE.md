@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an EPK (Electronic Press Kit) website for Huckleberryfinn, a legendary Korean indie rock band. The site showcases their 2025 re-recording of their 2001 second album "나를 닮은 사내" (The Man Who Resembles Me), along with information about their 21st Yellow Concert and a mentorship project for emerging musicians.
+This is an EPK (Electronic Press Kit) website for Huckleberryfinn, a legendary Korean indie rock band.
+
+**Current site (since 2026-09): 정규 8집 〈모두가 아는 이야기〉** — released 2026-10-23 12:00 KST. Two pre-release singles: 〈박쥐〉 (A Bat In The Sun, 2026-08-21, MV on YouTube) and 〈멜랑콜리아〉 (Melancholia, 2026-09-29 12:00 KST, 124 bpm). Tied to a Tumblbug campaign (https://tumblbug.com/hbf8th, 2026-09-17 ~ 10-11) and the 22th Yellow Concert (Seoul 상상마당 10-31, Busan 오방가르드 12-05). Source material lives in `docs/8집/`.
+
+**Legacy:** the previous site promoted the 2025 re-recording of the 2001 second album "나를 닮은 사내". Those sections (`app/_components/Section*.tsx`, `app/data/tracks.ts` etc.) are kept in the repo but are no longer mounted from `app/page.tsx`.
 
 ## Tech Stack
 
@@ -55,36 +59,43 @@ npm run lint
 - **Headlines:** Cafe24 Ssurround (display font)
 - Fonts should be loaded via `next/font/local` from `public/fonts/`
 
+### 8th-album palette & type (in `app/globals.css` `@theme`)
+- `ink / ink-2 / ink-3`: near-black navy backgrounds
+- `cobalt / teal / coral`: colour fields from the album art
+- `bulb / bulb-hot`: warm accent for primary CTAs and highlights
+- `cream`: text on dark
+- Display: Nanum Myeongjo (`.font-serif-kr`). Latin accents: Instrument Serif (`.font-serif-latin`). Body: Pretendard.
+
 ### Component Structure
 
 ```
 /app
-  /_components/          # Section components
-    section-intro.js
-    section-narrative.js
-    section-music.js
-    section-concert.js
-    section-future.js
-    section-presskit.js
-  layout.js              # Root layout with font loading
-  page.js                # Main landing page
+  /_components/album8/   # 8집 sections, mounted in app/page.tsx
+    SectionHero.tsx      # title reveal, 3D-tilt cover, dual countdowns
+    Ticker.tsx           # marquee of key dates
+    SectionSingles.tsx   # 박쥐 (MV facade) / 멜랑콜리아 (BPM pulse, lyrics, countdown)
+    SectionStory.tsx     # scroll-linked word reveal + sticky crossfading photos
+    SectionAlbum.tsx     # CSS jewel case + spinning disc from cover, specs, 9-slot tracklist
+    SectionConcert.tsx   # 22th Yellow Concert Seoul / Busan
+    SectionFunding.tsx   # Tumblbug reward rail
+    SectionBand.tsx      # B&W-to-colour band photo, member cards
+    SectionPress.tsx     # downloadable assets, copyable press text, contact
+  /_components/Section*.tsx   # legacy 2집 sections (unmounted)
+  /data/album8.ts        # all 8집 copy, dates, rewards, assets
+  layout.tsx             # metadata, fonts, grain overlay, CursorGlow
+  page.tsx
   globals.css
 
 /components
-  /ui/                   # Reusable UI components
-    Heading.js
-    Button.js
-  /features/             # Feature-specific components
-    CustomAudioPlayer.js
-    PressKitDownloader.js
-  /layout/
-    Footer.js
+  /ui/        SectionLabel, Lightbox, Heading, Button
+  /features/  Countdown, CursorGlow, TiltCard, ScrambleText, RevealText, ...
+  /layout/    Header, Footer
 
-/public
-  /images/               # Optimized images (use next/image)
-  /audio/                # Audio files for music section
-  /fonts/                # Local font files (.woff2)
-  /presskit/             # Downloadable press kit files (.zip)
+/public/images/8th_album/   cover.jpg (official 3000px art, also used as the 멜랑콜리아 single cover),
+                            single-bat.jpg, story photos, og-image.jpg.
+                            cd-mockup.jpg is the outdated lightbulb draft and is not used.
+/public/images/yellowconcert/poster-2026.jpg
+/public/images/profile/     ASCII-named copies (band-3, lee-kiyong, ...). next/image fails on Korean/space filenames.
 ```
 
 ## Key Implementation Details
