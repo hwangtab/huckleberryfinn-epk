@@ -1,5 +1,4 @@
 /* Web Fonts and Tailwind */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import 'tailwindcss';
 
 /* Landscape phones and other very short viewports */
@@ -121,18 +120,21 @@
   --color-bulb-hot: #FFE3A3;
   --color-cream: #F1E8D6;
   --color-thread: #E2482F;
+  --color-thread-deep: #D0412A; /* white text passes 4.5:1 */
 
   /* Font Families */
+  /* System Korean sans: no web-font download or relayout cost (a web font here cost ~7s of main-thread work on throttled mobile). */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
   --font-serif-kr: var(--font-nanum-myeongjo), 'AppleMyungjo', serif;
   --font-serif-latin: var(--font-instrument-serif), 'Times New Roman', serif;
   --font-display: 'ONE Mobile Title', sans-serif;
-  --font-headline: 'Pretendard', sans-serif;
+  --font-headline: var(--font-sans);
 }
 
 body {
   background-color: var(--color-hbf-white);
   color: var(--color-hbf-charcoal);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-wrap: break-word;
@@ -193,7 +195,7 @@ summary::-webkit-details-marker {
 }
 
 .font-headline {
-  font-family: 'Pretendard', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   letter-spacing: -0.01em;
 }
@@ -223,19 +225,36 @@ summary::-webkit-details-marker {
   text-shadow: 0 0 24px rgba(245, 197, 106, 0.45), 0 0 64px rgba(245, 197, 106, 0.2);
 }
 
-/* Film grain overlay */
+/* =========================================================================
+   Motion system
+   -------------------------------------------------------------------------
+   Two kinds of CSS animation exist on this site:
+   - one-shot (hero intro): always run to completion, never paused, removed
+     entirely under "reduce motion";
+   - loops (class .motion-loop): paused by the site-wide pause switch
+     (html[data-motion="paused"], lib/motionPrefs.ts) and switched off under
+     "reduce motion".
+   JS-driven motion reads the same switches through useMotionPrefs().
+   ========================================================================= */
+
+/* Film grain: a slightly oversized fixed layer (1.4x viewport area instead of 4x) jittered at 10fps.
+   Static on touch devices to save battery. */
 .grain::before {
   content: '';
   position: fixed;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
+  inset: -10%;
   pointer-events: none;
   z-index: 60;
   opacity: 0.06;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain 0.6s steps(6) infinite;
   mix-blend-mode: overlay;
+}
+
+@media (pointer: coarse) {
+  .grain::before {
+    animation: none;
+  }
 }
 
 @keyframes grain {
@@ -295,6 +314,26 @@ summary::-webkit-details-marker {
   animation: flicker 6s ease-in-out infinite;
 }
 
+/* Spinning disc (Album section) */
+.animate-disc {
+  animation: spin 14s linear infinite;
+}
+
+/* Scroll-linked word reveal (components/features/RevealText.tsx).
+   --p = paragraph scroll progress 0..1, --n = word count, --i = word index.
+   Without JS (or with reduce motion) --p is unset, so the fallback of 1 shows every word. */
+.reveal-text .reveal-word {
+  --w: clamp(0, calc(var(--p, 1) * var(--n) - var(--i)), 1);
+  display: inline-block;
+  opacity: calc(0.12 + 0.88 * var(--w));
+  transform: translateY(calc((1 - var(--w)) * 6px));
+}
+
+/* Programmatic focus targets (AnchorScroll) should not draw a ring around whole sections. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
 /* Horizontal snap rail */
 .snap-rail {
   scrollbar-width: none;
@@ -302,16 +341,6 @@ summary::-webkit-details-marker {
 
 .snap-rail::-webkit-scrollbar {
   display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .grain::before,
-  .animate-marquee,
-  .bpm-dot,
-  .bpm-ring,
-  .animate-flicker {
-    animation: none;
-  }
 }
 
 
@@ -326,11 +355,11 @@ summary::-webkit-details-marker {
   }
 }
 
-/* Rest crop before hydration (matches the JS camera at progress 0). */
-@media (min-aspect-ratio: 3/2) {
-  .hero-artbox {
-    transform: translateY(13%);
-  }
+/* Rest crop before hydration — the exact CSS form of camAt(0) in hero/index.tsx, so nothing moves
+   when JS takes over. Landscape rests at painting y=0.37 (clamped to keep the art covering the
+   stage); portrait rests centred, where the second term is 0. */
+.hero-artbox {
+  transform: translateY(min(13cqw, calc((max(100cqw, 100cqh) - 100cqh) / 2)));
 }
 
 @keyframes hero-lid-top {
@@ -359,13 +388,13 @@ summary::-webkit-details-marker {
 }
 
 @keyframes hero-char-in {
-  from { opacity: 0; transform: translateY(0.35em); filter: blur(6px); }
-  to { opacity: 1; transform: none; filter: none; }
+  from { opacity: 0; transform: translateY(0.35em); }
+  to { opacity: 1; transform: none; }
 }
 
 .hero-char {
   display: inline-block;
-  animation: hero-char-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: hero-char-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(0.15s + var(--i, 0) * 35ms);
 }
 
@@ -375,7 +404,7 @@ summary::-webkit-details-marker {
 }
 
 .hero-fade {
-  animation: hero-fade-up 0.6s ease-out both;
+  animation: hero-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--d, 0.5s);
 }
 
@@ -399,23 +428,26 @@ summary::-webkit-details-marker {
   animation: hero-cue 2.4s ease-in-out infinite;
 }
 
-.hero-paused *,
-.hero-paused *::before,
-.hero-paused *::after {
+
+/* ===================== Motion switches ===================== */
+/* Site-wide pause: loops only. One-shot entrances always finish, so pausing can never leave the
+   hero half-open or text half-faded. */
+html[data-motion='paused'] .motion-loop,
+html[data-motion='paused'] .grain::before {
   animation-play-state: paused !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .motion-loop,
+  .grain::before,
+  .hero-thread-draw,
+  .hero-char,
+  .hero-fade {
+    animation: none !important;
+  }
+
   .hero-lid-top,
   .hero-lid-bottom {
     display: none;
-  }
-
-  .hero-thread-draw,
-  .hero-char,
-  .hero-fade,
-  .hero-breathe,
-  .hero-cue {
-    animation: none;
   }
 }

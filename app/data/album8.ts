@@ -10,17 +10,17 @@ export const album = {
   title: '모두가 아는 이야기',
   titleLatin: 'Huckleberryfinn — 8th Studio Album',
   releaseAt: '2026-10-23T12:00:00+09:00',
-  releaseLabel: '2026. 10. 23 FRI 12:00 PM',
+  releaseLabel: '2026. 10. 23 (금) 12:00 KST',
   releaseShort: '10.23 (금) 낮 12시',
   trackCount: 9,
-  format: 'Jewel Case CD · 8 Page Booklet',
+  format: 'Jewel Case CD · 8p 북클릿 (예정)',
   label: '샤 레이블 (Sha Label)',
-  cover: '/images/8th_album/cover.jpg',
+  cover: '/images/8th_album/album-cover.jpg',
   cdMockup: '/images/8th_album/cd-mockup.jpg',
-  ogImage: '/images/8th_album/og-image.jpg',
+  ogImage: '/images/8th_album/og-album.jpg',
   tagline: '내 안에서 낯설어진 존재들을 다시 부르는 노래',
   notes: [
-    '8집에는 총 9곡이 수록될 예정이며, 각 곡의 제목과 수록 순서는 확정 후 공개됩니다.',
+    '8집에는 총 9곡이 수록될 예정이며, 각 곡의 제목과 수록 순서는 확정되는 대로 안내됩니다.',
     '정규 앨범 발매 전 디지털 싱글 2곡을 선공개합니다. 8월 21일 〈박쥐〉, 9월 29일 〈멜랑콜리아〉.',
     '실물 CD 패키지의 세부 디자인은 제작 과정에서 달라질 수 있습니다.',
   ],
@@ -52,7 +52,7 @@ export const singles: Single[] = [
     title: '박쥐',
     titleLatin: 'A Bat In The Sun',
     releaseAt: '2026-08-21T12:00:00+09:00',
-    releaseLabel: '2026. 08. 21',
+    releaseLabel: '2026. 08. 21 (금)',
     cover: '/images/8th_album/single-bat.jpg',
     videoId: 'E9INqyPgvEs',
     videoThumb: '/images/8th_album/bat-mv-thumb.jpg',
@@ -70,7 +70,7 @@ export const singles: Single[] = [
     title: '멜랑콜리아',
     titleLatin: 'Melancholia',
     releaseAt: '2026-09-29T12:00:00+09:00',
-    releaseLabel: '2026. 09. 29 TUE 12:00 PM',
+    releaseLabel: '2026. 09. 29 (화) 12:00 KST',
     cover: '/images/8th_album/single-melancholia.jpg',
     videoId: null,
     bpm: 124,
@@ -163,7 +163,9 @@ export const concert = {
   description:
     '정규 8집 발매 후 첫 단독 공연. 8집에 수록된 신곡들을 라이브로 처음 선보이는 무대인 동시에, 지난 1년 동안 성장하고 변화하며 쌓아올린 허클베리핀만의 에너지와 감성을 보여드리는 공연입니다.',
   filmingNotice:
-    '본 공연은 영상 촬영이 진행되며, 촬영 동의 여부를 공연 당일 티켓 수령처에서 받습니다. 비동의 시 마스크를 착용하고 관람하실 수 있습니다.',
+    '본 공연은 영상 촬영이 진행되며, 촬영 동의 여부를 공연 당일 티켓 수령처에서 받습니다. 비동의 시 지급해드리는 마스크를 착용하고 관람해주시기 바라며, 이로 인한 환불은 불가합니다.',
+  ticketNotice:
+    '티켓은 배송되지 않으며 공연 당일 현장에서 수령합니다. 텀블벅 후원 번호로 본인 확인을 진행하니 미리 확인해 주세요.',
   shows: [
     {
       id: 'seoul',
@@ -215,7 +217,7 @@ export const funding = {
   creditNote:
     '8집 앨범이 포함된 선물을 후원하신 모든 분의 성함 혹은 닉네임을 앨범 크레딧에 기명합니다.',
   rewards: [
-    { id: 1, name: '선물 없이 후원하기', price: 1000, includes: ['텀블벅 후원자 크레딧'] },
+    { id: 1, name: '선물 없이 후원하기', price: 1000, includes: ['선물 없음'] },
     {
       id: 2,
       name: '허클 정규 8집',
@@ -265,10 +267,10 @@ export const funding = {
       includes: [
         '정규 8집 CD',
         '서울 티켓 2매 + 부산 티켓 2매',
-        '8집 발매 기념 한정판 티셔츠 · 맨투맨',
+        '8집 발매 기념 한정판 티셔츠 · 맨투맨 각 1벌',
         '1~8집 앨범 자켓 마그네틱 세트',
-        '무릎 담요 · 박쥐 쿠션 · 키캡 키링',
-        '크레딧 Special Thanks To 기명',
+        '무릎 담요 · 박쥐 쿠션 · 키캡 키링 각 1개',
+        '8집 크레딧 Special Thanks To 기명',
       ],
     },
     {
@@ -279,9 +281,9 @@ export const funding = {
         '허클베리핀 정규 앨범 CD 패키지 (총 11장)',
         '서울 티켓 2매 + 부산 티켓 2매',
         '한정판 티셔츠 · 맨투맨 각 2벌',
-        '마그네틱 세트 · 담요 · 쿠션 · 키링',
-        '8집 커버 고급 인화 액자 (50×50cm)',
-        '크레딧 Special Thanks To 기명',
+        '마그네틱 세트 · 무릎 담요 · 박쥐 쿠션 · 키캡 키링 각 1개',
+        '8집 커버 고급 인화 액자 (50×50cm) 1개',
+        '8집 크레딧 Special Thanks To 기명',
       ],
     },
     {
@@ -289,10 +291,14 @@ export const funding = {
       name: 'Special Thanks Package',
       price: 1000000,
       includes: [
-        '정규 앨범 CD 패키지 (총 11장)',
-        '서울 · 부산 티켓 각 2매',
-        '한정판 굿즈 풀 세트',
-        '크레딧 Special Thanks To 기명',
+        '허클베리핀 멤버들과의 식사권',
+        '허클베리핀 정규 앨범 CD 패키지 (총 11장)',
+        '서울 티켓 2매 + 부산 티켓 2매',
+        '한정판 티셔츠 · 맨투맨 각 2벌',
+        '마그네틱 세트 · 무릎 담요 각 1개',
+        '박쥐 쿠션 · 키캡 키링 각 2개',
+        '8집 커버 고급 인화 액자 (50×50cm) 2개',
+        '8집 크레딧 Special Thanks To 기명',
       ],
     },
   ] as Reward[],
@@ -322,9 +328,9 @@ export interface PressAsset {
 }
 
 export const pressAssets: PressAsset[] = [
-  { title: '8집 앨범 커버', spec: 'JPG · 3000×3000', href: '/images/8th_album/cover.jpg', preview: '/images/8th_album/cover.jpg' },
-  { title: '〈박쥐〉 싱글 커버', spec: 'JPG · 1000×1000', href: '/images/8th_album/single-bat.jpg', preview: '/images/8th_album/single-bat.jpg' },
+  { title: '정규 8집 앨범 커버', spec: 'JPG · 1254×1254', href: '/images/8th_album/album-cover.jpg', preview: '/images/8th_album/album-cover.jpg' },
   { title: '〈멜랑콜리아〉 싱글 커버', spec: 'JPG · 3000×3000', href: '/images/8th_album/single-melancholia.jpg', preview: '/images/8th_album/single-melancholia.jpg' },
+  { title: '〈박쥐〉 싱글 커버', spec: 'JPG · 1000×1000', href: '/images/8th_album/single-bat.jpg', preview: '/images/8th_album/single-bat.jpg' },
   { title: '2026 Yellow Concert 포스터', spec: 'JPG · 1061×1500', href: '/images/yellowconcert/poster-2026.jpg', preview: '/images/yellowconcert/poster-2026.jpg' },
   { title: '밴드 프로필 사진', spec: 'JPG · 6000×4000', href: '/images/profile/band-3.jpg', preview: '/images/profile/band-3.webp' },
   { title: '멤버 프로필 — 이기용', spec: 'JPG · 638×850', href: '/images/profile/lee-kiyong.jpg', preview: '/images/profile/lee-kiyong.webp' },

@@ -1,15 +1,7 @@
 /**
- * Date-aware hero copy. Everything is computed in KST-absolute timestamps so the
- * status is correct regardless of the visitor's timezone.
+ * Date-aware hero copy (see lib/timeline.ts for the dates).
  */
-
-const DAY = 86_400_000;
-
-export const DATES = {
-  melancholia: Date.parse('2026-09-29T12:00:00+09:00'),
-  fundingEnd: Date.parse('2026-10-11T23:59:59+09:00'),
-  release: Date.parse('2026-10-23T12:00:00+09:00'),
-} as const;
+import { DATES, dday, isFundingOpen, isReleased } from '@/lib/timeline';
 
 export interface HeroStatus {
   /** short visible line, e.g. "〈멜랑콜리아〉 D-4 · 09.29 12:00 KST" */
@@ -20,33 +12,24 @@ export interface HeroStatus {
   released: boolean;
 }
 
-function dday(target: number, now: number) {
-  const diff = target - now;
-  if (diff <= 0) return 'D-DAY';
-  const days = Math.floor(diff / DAY);
-  if (days === 0) {
-    const hours = Math.max(1, Math.ceil(diff / 3_600_000));
-    return `${hours}시간 전`;
-  }
-  return `D-${days}`;
-}
-
 export function getHeroStatus(now: number): HeroStatus {
-  const fundingOpen = now <= DATES.fundingEnd;
+  const fundingOpen = isFundingOpen(now);
 
   if (now < DATES.melancholia) {
+    const d = dday(DATES.melancholia, now);
     return {
-      line: `〈멜랑콜리아〉 ${dday(DATES.melancholia, now)} · 09.29 12:00 KST`,
-      sr: `두 번째 싱글 〈멜랑콜리아〉는 9월 29일 낮 12시에 공개됩니다.`,
+      line: d === 'D-DAY' ? '〈멜랑콜리아〉 오늘 12:00 KST 공개' : `〈멜랑콜리아〉 ${d} · 09.29 12:00 KST`,
+      sr: '두 번째 싱글 〈멜랑콜리아〉는 9월 29일 낮 12시에 공개됩니다.',
       fundingOpen,
       released: false,
     };
   }
 
-  if (now < DATES.release) {
+  if (!isReleased(now)) {
+    const d = dday(DATES.release, now);
     return {
-      line: `〈멜랑콜리아〉 Out now · 정규 8집 ${dday(DATES.release, now)}`,
-      sr: `두 번째 싱글 〈멜랑콜리아〉가 공개되었습니다. 정규 8집은 10월 23일 낮 12시에 발매됩니다.`,
+      line: d === 'D-DAY' ? '정규 8집 오늘 12:00 KST 발매' : `〈멜랑콜리아〉 Out now · 정규 8집 ${d}`,
+      sr: '두 번째 싱글 〈멜랑콜리아〉가 공개되었습니다. 정규 8집은 10월 23일 낮 12시에 발매됩니다.',
       fundingOpen,
       released: false,
     };

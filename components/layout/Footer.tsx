@@ -21,14 +21,14 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col gap-4 md:items-end">
-            <div className="flex gap-5 text-2xl">
-              <a href={contactInfo.youtube} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-bulb" aria-label="YouTube">
+            <div className="-mx-2.5 flex gap-1 text-2xl">
+              <a href={contactInfo.youtube} target="_blank" rel="noopener noreferrer" className="rounded-full p-2.5 transition-colors hover:text-bulb focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb" aria-label="YouTube">
                 <FaYoutube />
               </a>
-              <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-bulb" aria-label="Instagram">
+              <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="rounded-full p-2.5 transition-colors hover:text-bulb focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb" aria-label="Instagram">
                 <FaInstagram />
               </a>
-              <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-bulb" aria-label="Facebook">
+              <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="rounded-full p-2.5 transition-colors hover:text-bulb focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb" aria-label="Facebook">
                 <FaFacebook />
               </a>
             </div>
@@ -44,10 +44,10 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-cream/10 pt-6 text-xs text-cream/40 md:flex-row md:items-center md:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-cream/10 pt-6 text-xs text-cream/70 md:flex-row md:items-center md:justify-between">
           <p>
             {contactInfo.label} ·{' '}
-            <a href={`mailto:${contactInfo.email}`} className="hover:text-bulb">
+            <a href={`mailto:${contactInfo.email}`} className="inline-block py-2 hover:text-bulb">
               {contactInfo.email}
             </a>
           </p>

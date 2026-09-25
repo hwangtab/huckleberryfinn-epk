@@ -10,7 +10,7 @@ export type Frame = {
   mouseX: number; mouseY: number; velX: number; velY: number; // CSS px, canvas-relative
   force: number; fx: number; ambient: number;
 };
-export type CoverRenderer = { ready: Promise<void>; render(f: Frame): void; setSize(w: number, h: number): void; dispose(): void };
+export type CoverRenderer = { ready: Promise<void>; isLost(): boolean; render(f: Frame): void; setSize(w: number, h: number): void; dispose(): void };
 
 export function createCoverRenderer(
   canvas: HTMLCanvasElement,
@@ -103,6 +103,7 @@ export function createCoverRenderer(
 
   return {
     ready,
+    isLost: () => lost,
     setSize(w, h) { cssW = Math.max(1, w); cssH = Math.max(1, h); applySize(); },
     render(f) {
       if (!gl || lost || !image || disposed) return;

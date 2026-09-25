@@ -39,6 +39,7 @@ export default function HeroThread({ cam, size, progress, stageRef, live, intera
   const coreRef = useRef<SVGPathElement>(null);
   const beadRef = useRef<SVGGElement>(null);
   const pts = useRef<Pt[]>([]);
+  const lastYs = useRef<number[]>([]);
   const plucks = useRef<Pluck[]>([]);
   const ptr = useRef({ side: 0, ay: 0, has: false });
 
@@ -53,6 +54,7 @@ export default function HeroThread({ cam, size, progress, stageRef, live, intera
       out.push({ x: q.x, y: q.y });
     }
     pts.current = out;
+    lastYs.current = out.map((q) => q.y);
   }, []);
 
   const baseY = (x: number) => {
@@ -105,29 +107,34 @@ export default function HeroThread({ cam, size, progress, stageRef, live, intera
 
   useAnimationFrame((t) => {
     const p = pts.current;
-    if (!live || !active.current || p.length === 0) return;
-    const now = performance.now();
-    const time = t / 1000;
-    plucks.current = plucks.current.filter((k) => now - k.t0 < 2600);
-    const ks = plucks.current;
+    if (!active.current || p.length === 0) return;
 
-    const ys = new Array<number>(N);
-    let d = '';
-    for (let j = 0; j < N; j++) {
-      const i = N - 1 - j; // reversed: right → left
-      const { x, y } = p[i];
-      const pin = Math.min(1, Math.max(0, (x - 80) / 220));
-      let off = 3.2 * Math.sin((time * TAU) / LOOP + x * 0.011) * pin;
-      for (const k of ks) {
-        const dt = (now - k.t0) / 1000;
-        const dx = (x - k.x) / 120;
-        off += k.amp * Math.exp(-dt * 2.4) * Math.sin(dt * 26) * Math.exp(-dx * dx) * pin;
+    // Ambient sway + plucks only while motion is live; the bead below is scroll-driven and always follows.
+    if (live) {
+      const now = performance.now();
+      const time = t / 1000;
+      plucks.current = plucks.current.filter((k) => now - k.t0 < 2600);
+      const ks = plucks.current;
+      const ys = new Array<number>(N);
+      let d = '';
+      for (let j = 0; j < N; j++) {
+        const i = N - 1 - j; // reversed: right → left
+        const { x, y } = p[i];
+        const pin = Math.min(1, Math.max(0, (x - 80) / 220));
+        let off = 3.2 * Math.sin((time * TAU) / LOOP + x * 0.011) * pin;
+        for (const k of ks) {
+          const dt = (now - k.t0) / 1000;
+          const dx = (x - k.x) / 120;
+          off += k.amp * Math.exp(-dt * 2.4) * Math.sin(dt * 26) * Math.exp(-dx * dx) * pin;
+        }
+        ys[i] = y + off;
+        d += `${j === 0 ? 'M' : 'L'}${x.toFixed(1)} ${ys[i].toFixed(1)}`;
       }
-      ys[i] = y + off;
-      d += `${j === 0 ? 'M' : 'L'}${x.toFixed(1)} ${ys[i].toFixed(1)}`;
+      glowRef.current?.setAttribute('d', d);
+      coreRef.current?.setAttribute('d', d);
+      lastYs.current = ys;
     }
-    glowRef.current?.setAttribute('d', d);
-    coreRef.current?.setAttribute('d', d);
+    const ys = lastYs.current;
 
     // A warm bead travels the thread from the eyes to the edge during the pan beat.
     const bead = beadRef.current;

@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useMotionPrefs } from '@/lib/motionPrefs';
 
-const GLYPHS = '가나다라마바사아자차카타파하ㅁㅇㅅㄹㄷㄱㅂ·—?!';
+// Full-width Hangul syllables only, so the scrambled text never changes width (no jitter).
+const GLYPHS = '가나다라마바사아자차카타파하거너더러머버서어저처커터퍼허';
 
 interface ScrambleTextProps {
   text: string;
-  /** keep scrambling forever (for undisclosed track titles) */
+  /** keep scrambling (for undisclosed track titles) */
   loop?: boolean;
   intervalMs?: number;
   className?: string;
@@ -14,15 +16,25 @@ interface ScrambleTextProps {
 
 /**
  * Cycles random Hangul glyphs in place of each character.
- * With `loop`, it never settles — used for the not-yet-announced tracks.
+ * - The real text is kept as screen-reader / copy text; the scramble is decorative and unselectable.
+ * - Stops while off-screen, when motion is paused site-wide, and under prefers-reduced-motion.
  */
 export default function ScrambleText({ text, loop = false, intervalMs = 90, className = '' }: ScrambleTextProps) {
   const [display, setDisplay] = useState(text);
+  const [onScreen, setOnScreen] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  const { ambient } = useMotionPrefs();
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!ambient || !onScreen) {
       setDisplay(text);
       return;
     }
@@ -46,11 +58,14 @@ export default function ScrambleText({ text, loop = false, intervalMs = 90, clas
     }, intervalMs);
 
     return () => clearInterval(id);
-  }, [text, loop, intervalMs]);
+  }, [text, loop, intervalMs, ambient, onScreen]);
 
   return (
-    <span className={className} aria-label={text}>
-      <span aria-hidden="true">{display}</span>
+    <span ref={ref} className={className}>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true" className="select-none">
+        {display}
+      </span>
     </span>
   );
 }

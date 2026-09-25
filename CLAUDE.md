@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an EPK (Electronic Press Kit) website for Huckleberryfinn, a legendary Korean indie rock band.
 
-**Current site (since 2026-09): 정규 8집 〈모두가 아는 이야기〉** — released 2026-10-23 12:00 KST. Two pre-release singles: 〈박쥐〉 (A Bat In The Sun, 2026-08-21, MV on YouTube) and 〈멜랑콜리아〉 (Melancholia, 2026-09-29 12:00 KST, 124 bpm). Tied to a Tumblbug campaign (https://tumblbug.com/hbf8th, 2026-09-17 ~ 10-11) and the 22th Yellow Concert (Seoul 상상마당 10-31, Busan 오방가르드 12-05). Source material lives in `docs/8집/`.
+**Current site (since 2026-09): 정규 8집 〈모두가 아는 이야기〉** — release date 2026-10-23 12:00 KST. Two pre-release singles: 〈박쥐〉 (A Bat In The Sun, 2026-08-21, MV on YouTube) and 〈멜랑콜리아〉 (Melancholia, 2026-09-29 12:00 KST, 124 bpm). Tied to a Tumblbug campaign (https://tumblbug.com/hbf8th, 2026-09-17 ~ 10-11) and the 22nd Yellow Concert (the official poster spells it "22th") (Seoul 상상마당 10-31, Busan 오방가르드 12-05). Source material lives in `docs/8집/`.
 
 **Legacy:** the previous site promoted the 2025 re-recording of the 2001 second album "나를 닮은 사내". Those sections (`app/_components/Section*.tsx`, `app/data/tracks.ts` etc.) are kept in the repo but are no longer mounted from `app/page.tsx`.
 
@@ -55,7 +55,7 @@ npm run lint
 - **hbf-white:** #FDFBF6 (off-white background)
 
 ### Typography
-- **Body text:** Pretendard Variable (Korean web font)
+- **Body text:** system Korean sans stack (see Shared behaviours below)
 - **Headlines:** Cafe24 Ssurround (display font)
 - Fonts should be loaded via `next/font/local` from `public/fonts/`
 
@@ -65,6 +65,15 @@ npm run lint
 - `bulb / bulb-hot`: warm accent for primary CTAs and highlights
 - `cream`: text on dark
 - Display: Nanum Myeongjo (`.font-serif-kr`). Latin accents: Instrument Serif (`.font-serif-latin`). Body: Pretendard.
+
+### Date-dependent copy
+- All release/funding dates live in `lib/timeline.ts`. Components read the clock with `useNow()` (`lib/useNow.ts`), which renders the build time first so SSR and hydration always match, then switches to the real clock.
+- After 10-11 the funding CTAs, Tumblbug discount prices and "Support" button switch off automatically; after 09-29 / 10-23 the "Out now" copy switches on.
+
+### Shared behaviours
+- Scroll locks go through `lib/scrollLock.ts` (locks `<html>`, reference-counted). Never set `body.style.overflow` directly.
+- Motion preferences and the site-wide pause live in `lib/motionPrefs.ts` (see Animation Guidelines).
+- Fonts: body text uses the system Korean sans stack (a Korean web font cost ~7s of main-thread work on throttled mobile). Display serif is Nanum Myeongjo 700/800 only via next/font.
 
 ### Layout rules
 - `html`/`body` use `overflow-x: clip`, not `hidden`. `hidden` turns body into a scroll container and silently breaks every `position: sticky`.
@@ -87,7 +96,7 @@ npm run lint
     SectionSingles.tsx   # 박쥐 (MV facade) / 멜랑콜리아 (BPM pulse, lyrics, countdown)
     SectionStory.tsx     # scroll-linked word reveal + sticky crossfading photos
     SectionAlbum.tsx     # CSS jewel case + spinning disc from cover, specs, 9-slot tracklist
-    SectionConcert.tsx   # 22th Yellow Concert Seoul / Busan
+    SectionConcert.tsx   # 22nd Yellow Concert Seoul / Busan
     SectionFunding.tsx   # Tumblbug reward rail
     SectionBand.tsx      # B&W-to-colour band photo, member cards
     SectionPress.tsx     # downloadable assets, copyable press text, contact
@@ -100,12 +109,14 @@ npm run lint
 /components
   /ui/        SectionLabel, Lightbox, Heading, Button
   /features/  Countdown, CursorGlow, TiltCard, ScrambleText, RevealText, ...
+  /motion/    Reveal, AnchorScroll, MotionProvider
   /layout/    Header, Footer
 
-/public/images/8th_album/   cover.jpg (official 3000px art, also used as the 멜랑콜리아 single cover),
-                            single-bat.jpg, story photos, og-image.jpg.
-                            cd-mockup.jpg is the outdated lightbulb draft and is not used.
-/public/images/8th_album/hero/   cover-2400.jpg (next/image source), cover-tex-{2048,1600}.webp (WebGL textures)
+/public/images/8th_album/   album-cover.jpg = the ALBUM cover (light bulb, "모두가 아는 이야기", 1254px — Tumblbug's first story image).
+                            single-melancholia.jpg = the 〈멜랑콜리아〉 SINGLE cover (face with red thread, 3000px).
+                            single-bat.jpg, story photos, og-album.jpg (from the album cover), cd-mockup.jpg (unused).
+/public/images/8th_album/hero/   melancholia-2400.jpg + melancholia-tex-{2048,1600}.webp — the hero artwork is the
+                            〈멜랑콜리아〉 single cover, credited in the hero ("Artwork · 2nd Single 〈멜랑콜리아〉").
 /public/images/yellowconcert/poster-2026.jpg
 /public/images/profile/     ASCII-named copies (band-3, lee-kiyong, ...). next/image fails on Korean/space filenames.
 ```
@@ -169,14 +180,16 @@ npm run lint
 
 ## Animation Guidelines
 
-- Use Framer Motion for all animations
-- Common patterns:
-  - `whileInView` for scroll-triggered animations
-  - `AnimatePresence` for enter/exit animations (modals, tooltips)
-  - `useScroll` + `useTransform` for scroll-based effects
-  - `variants` for coordinated multi-element animations
-- Keep animations smooth (60fps target)
-- Use `ease: 'easeOut'` for natural motion
+All motion goes through one small system. Do not hand-roll `initial`/`whileInView`/`transition` in sections.
+
+- **Tokens** — `lib/motion.ts`: one easing (`EASE_OUT`, expo-out), three durations, one rise distance (24px), one stagger, one viewport trigger (`VIEWPORT`, once at 12%).
+- **Entrances** — `components/motion/Reveal.tsx`: `<Reveal>`, `<RevealGroup>` + `<RevealItem>`. Opacity + small vertical translate only (compositor-only). No horizontal slides, no blur filters.
+- **Preferences** — `lib/motionPrefs.ts` (`useMotionPrefs()`): `reduced` (live OS setting), `paused` (site-wide pause switch, mirrored to `html[data-motion="paused"]`), `fine` pointer. Derived: `ambient` (loops may run), `scrollFx` (decorative scroll motion may run), `pointerFx` (cursor effects may run). Every JS-driven effect reads these; `MotionConfig reducedMotion="user"` covers framer transforms.
+- **CSS loops** — add class `motion-loop` to any infinite CSS animation. The pause switch and reduced motion target that class only; one-shot entrances (hero intro) always finish and are never frozen.
+- **Anchors** — `components/motion/AnchorScroll.tsx` handles every `href="#…"`: jumps across the pinned hero instead of scrolling through it, instant under reduced motion, syncs the hash and focus.
+- **Scroll-linked text** — `RevealText` writes one CSS variable per paragraph (`--p`); words derive opacity in CSS (`.reveal-word`). Never give per-word elements `will-change` or their own motion values.
+- **Performance rules** — animate only `transform`/`opacity`; crossfade two layers instead of animating `filter`; measure rects on pointer-enter, not per move; use IntersectionObserver instead of scroll listeners that read layout.
+- **Hero** — the CSS rest crop (`.hero-artbox` in globals.css) is the exact CSS form of `camAt(0)`; keep them in sync if camera keyframes change.
 
 ## Bilingual Content
 

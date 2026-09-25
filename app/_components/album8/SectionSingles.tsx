@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaPlay } from 'react-icons/fa';
@@ -8,16 +8,23 @@ import SectionLabel from '@/components/ui/SectionLabel';
 import TiltCard from '@/components/features/TiltCard';
 import Countdown from '@/components/features/Countdown';
 import Lightbox from '@/components/ui/Lightbox';
+import { Reveal } from '@/components/motion/Reveal';
 import { singles, Single } from '@/app/data/album8';
+import { DURATION, EASE_OUT } from '@/lib/motion';
 
 function VideoFacade({ single }: { single: Single }) {
   const [playing, setPlaying] = useState(false);
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  useEffect(() => {
+    if (playing) frameRef.current?.focus();
+  }, [playing]);
   if (!single.videoId) return null;
 
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black ring-1 ring-cream/10">
       {playing ? (
         <iframe
+          ref={frameRef}
           className="h-full w-full"
           src={`https://www.youtube.com/embed/${single.videoId}?autoplay=1&rel=0`}
           title={`${single.title} 뮤직비디오`}
@@ -55,14 +62,14 @@ function VideoFacade({ single }: { single: Single }) {
 
 function BpmPulse({ bpm }: { bpm: number }) {
   return (
-    <div className="flex items-center gap-4" aria-label={`${bpm} BPM`}>
+    <div className="flex items-center gap-4" role="img" aria-label={`템포 ${bpm} BPM`}>
       <span className="relative flex h-10 w-10 items-center justify-center">
-        <span className="bpm-ring absolute inline-flex h-full w-full rounded-full border border-teal/70" />
-        <span className="bpm-dot inline-flex h-4 w-4 rounded-full bg-teal shadow-[0_0_20px_rgba(74,168,180,0.9)]" />
+        <span className="motion-loop bpm-ring absolute inline-flex h-full w-full rounded-full border border-teal/70" />
+        <span className="motion-loop bpm-dot inline-flex h-4 w-4 rounded-full bg-teal shadow-[0_0_20px_rgba(74,168,180,0.9)]" />
       </span>
       <div className="leading-tight">
         <p className="font-serif-latin text-3xl text-cream">{bpm} BPM</p>
-        <p className="text-xs text-cream/50">긴 밤길을 조금 빠른 걸음으로 걷는 속도</p>
+        <p className="text-xs text-cream/70">긴 밤길을 조금 빠른 걸음으로 걷는 속도</p>
       </div>
     </div>
   );
@@ -78,7 +85,7 @@ function Lyrics({ single }: { single: Single }) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex items-center gap-3 text-sm font-semibold tracking-[0.2em] uppercase text-bulb transition-colors hover:text-bulb-hot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb rounded"
+        className="-my-2 flex min-h-11 items-center gap-3 rounded py-2 text-sm font-semibold uppercase tracking-[0.2em] text-bulb transition-colors hover:text-bulb-hot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb"
       >
         <span className={`inline-block transition-transform ${open ? 'rotate-45' : ''}`} aria-hidden="true">
           +
@@ -92,12 +99,12 @@ function Lyrics({ single }: { single: Single }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            transition={{ duration: DURATION.fast * 1.4, ease: EASE_OUT }}
             className="overflow-hidden"
           >
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               {single.lyrics.map((stanza, i) => (
-                <div key={i} className="space-y-1.5 font-serif-kr text-[15px] leading-relaxed text-cream/75">
+                <div key={i} className="space-y-1.5 font-serif-kr text-[15px] font-bold leading-relaxed text-cream/80">
                   {stanza.map((line, j) => (
                     <p key={j} className={line.startsWith(single.keyLine ?? '\u0000') ? 'text-bulb' : ''}>
                       {line}
@@ -106,7 +113,6 @@ function Lyrics({ single }: { single: Single }) {
                 </div>
               ))}
             </div>
-            <p className="mt-6 text-xs text-cream/40">작사 · 작곡 허클베리핀 / 가사 전문은 발매 후 음원 사이트에서도 확인하실 수 있습니다.</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -122,13 +128,7 @@ function SinglePanel({ single, flip, onZoom }: { single: Single; flip: boolean; 
       aria-labelledby={`single-${single.id}-title`}
     >
       {/* Cover */}
-      <motion.div
-        className={`lg:col-span-5 ${flip ? 'lg:order-2' : ''}`}
-        initial={{ opacity: 0, x: flip ? 60 : -60 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      >
+      <Reveal className={`lg:col-span-5 ${flip ? 'lg:order-2' : ''}`}>
         <div className="lg:sticky lg:top-28">
           <TiltCard maxTilt={7} className="w-full">
             <button
@@ -146,21 +146,15 @@ function SinglePanel({ single, flip, onZoom }: { single: Single; flip: boolean; 
               />
             </button>
           </TiltCard>
-          <div className="mt-4 hidden items-center justify-between text-xs uppercase tracking-[0.25em] text-cream/50 lg:flex">
+          <div className="mt-4 hidden items-center justify-between text-xs uppercase tracking-[0.25em] text-cream/60 lg:flex">
             <span>{single.orderLabel}</span>
             <span>{single.releaseLabel}</span>
           </div>
         </div>
-      </motion.div>
+      </Reveal>
 
       {/* Copy */}
-      <motion.div
-        className={`space-y-8 lg:col-span-7 ${flip ? 'lg:order-1' : ''}`}
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-      >
+      <Reveal delay={0.1} className={`space-y-8 lg:col-span-7 ${flip ? 'lg:order-1' : ''}`}>
         <header>
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-bulb">
             {single.orderLabel} · {single.releaseLabel}
@@ -191,13 +185,13 @@ function SinglePanel({ single, flip, onZoom }: { single: Single; flip: boolean; 
           <VideoFacade single={single} />
         ) : (
           <div className="rounded-xl border border-teal/30 bg-teal/5 p-6">
-            <Countdown target={single.releaseAt} label={`〈${single.title}〉 음원 공개까지`} doneLabel="음원 공개 — 각 스트리밍 플랫폼에서 감상하세요" compact />
-            <p className="mt-4 text-xs text-cream/50">Melon · Spotify · Apple Music · YouTube Music · Bugs · Genie · FLO</p>
+            <Countdown target={single.releaseAt} label={`〈${single.title}〉 음원 공개까지`} doneLabel="음원 공개 — 음원 사이트에서 감상하세요" compact />
+            <p className="mt-4 text-xs text-cream/70">국내외 주요 음원 사이트에서 공개됩니다.</p>
           </div>
         )}
 
         <Lyrics single={single} />
-      </motion.div>
+      </Reveal>
     </article>
   );
 }
@@ -206,10 +200,11 @@ export default function SectionSingles() {
   const [zoom, setZoom] = useState<Single | null>(null);
 
   return (
-    <section id="singles" className="relative bg-ink py-24 text-cream scroll-mt-16 md:py-36 md:scroll-mt-20">
+    <section id="singles" aria-labelledby="singles-title" className="relative bg-ink py-24 text-cream scroll-mt-16 md:py-36 md:scroll-mt-20">
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-bulb/40 to-transparent" />
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <SectionLabel
+          id="singles-title"
           eyebrow="Singles"
           title={
             <>

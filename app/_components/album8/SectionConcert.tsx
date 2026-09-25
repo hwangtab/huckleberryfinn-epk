@@ -2,23 +2,22 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { Reveal } from '@/components/motion/Reveal';
 import SectionLabel from '@/components/ui/SectionLabel';
 import TiltCard from '@/components/features/TiltCard';
 import Lightbox from '@/components/ui/Lightbox';
 import { concert, ConcertShow, TUMBLBUG_URL } from '@/app/data/album8';
+import { useNow } from '@/lib/useNow';
+import { isFundingOpen } from '@/lib/timeline';
 
 const won = (n: number) => `${n.toLocaleString('ko-KR')}원`;
 
-function ShowCard({ show, index }: { show: ConcertShow; index: number }) {
+function ShowCard({ show, index, fundingOpen }: { show: ConcertShow; index: number; fundingOpen: boolean }) {
   const accent = show.id === 'seoul' ? 'from-cobalt/40 to-teal/20' : 'from-coral/40 to-bulb/10';
   return (
-    <motion.article
+    <Reveal as="article"
       className={`group relative overflow-hidden rounded-2xl border border-cream/10 bg-gradient-to-br ${accent} p-6 backdrop-blur-sm md:p-8`}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.8, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+      delay={index * 0.1}
       aria-labelledby={`show-${show.id}`}
     >
       <div
@@ -49,36 +48,40 @@ function ShowCard({ show, index }: { show: ConcertShow; index: number }) {
         </dl>
 
         <div className="mt-6 flex items-end justify-between border-t border-cream/10 pt-5">
-          <div>
-            <p className="text-xs text-cream/40 line-through">정가 {won(show.originalPrice)}</p>
-            <p className="font-serif-latin text-3xl text-bulb">
-              {won(show.discountPrice)}
-              <span className="ml-2 font-sans text-xs font-semibold text-cream/60">텀블벅 한정 {show.discount} 할인</span>
-            </p>
-          </div>
+          {fundingOpen ? (
+            <div>
+              <p className="text-xs text-cream/60 line-through">정가 {won(show.originalPrice)}</p>
+              <p className="font-serif-latin text-3xl text-bulb">{won(show.discountPrice)}</p>
+              <p className="mt-1 text-xs font-semibold text-cream/75">텀블벅 한정 {show.discount} 할인 · 10.11까지</p>
+            </div>
+          ) : (
+            <div>
+              <p className="font-serif-latin text-3xl text-bulb">
+                {won(show.originalPrice)}
+                <span className="ml-2 font-sans text-xs font-semibold text-cream/75">정가</span>
+              </p>
+            </div>
+          )}
         </div>
       </div>
-    </motion.article>
+    </Reveal>
   );
 }
 
 export default function SectionConcert() {
   const [open, setOpen] = useState(false);
+  const fundingOpen = isFundingOpen(useNow());
 
   return (
-    <section id="concert" className="relative bg-ink-2 py-24 text-cream scroll-mt-16 md:py-36 md:scroll-mt-20">
+    <section id="concert" aria-labelledby="concert-title" className="relative bg-ink-2 py-24 text-cream scroll-mt-16 md:py-36 md:scroll-mt-20">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-16">
           {/* Poster */}
-          <motion.div
+          <Reveal
             className="lg:col-span-5"
-            initial={{ opacity: 0, x: -60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="lg:sticky lg:top-28">
-              <TiltCard maxTilt={6} className="mx-auto w-full max-w-md lg:max-w-none">
+              <TiltCard maxTilt={6} className="mx-auto w-full max-w-md lg:max-w-[calc((100svh-9rem)*0.7073)]">
                 <button
                   type="button"
                   onClick={() => setOpen(true)}
@@ -95,12 +98,13 @@ export default function SectionConcert() {
                 </button>
               </TiltCard>
             </div>
-          </motion.div>
+          </Reveal>
 
           {/* Info */}
           <div className="lg:col-span-7">
             <SectionLabel
-              eyebrow={`${concert.edition}th Yellow Concert`}
+              id="concert-title"
+              eyebrow={`${concert.edition}nd Yellow Concert`}
               title={
                 <>
                   8집의 노래가 처음으로
@@ -113,27 +117,30 @@ export default function SectionConcert() {
 
             <div className="mt-12 grid gap-6 md:grid-cols-2">
               {concert.shows.map((show, i) => (
-                <ShowCard key={show.id} show={show} index={i} />
+                <ShowCard key={show.id} show={show} index={i} fundingOpen={fundingOpen} />
               ))}
             </div>
 
-            <motion.div
+            <Reveal
               className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <a
-                href={TUMBLBUG_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-bulb px-7 py-3.5 text-sm font-semibold text-ink transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb focus-visible:ring-offset-2 focus-visible:ring-offset-ink-2"
-              >
-                텀블벅에서 티켓 예매하기
-              </a>
-              <p className="text-xs leading-relaxed text-cream/40 sm:max-w-sm">{concert.filmingNotice}</p>
-            </motion.div>
+              {fundingOpen ? (
+                <a
+                  href={TUMBLBUG_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-bulb px-7 py-3.5 text-sm font-semibold text-ink transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb focus-visible:ring-offset-2 focus-visible:ring-offset-ink-2"
+                >
+                  텀블벅에서 티켓 예매하기
+                </a>
+              ) : (
+                <p className="shrink-0 text-sm font-semibold text-cream/85">텀블벅 펀딩이 종료되었습니다. 일반 예매 정보는 추후 공지됩니다.</p>
+              )}
+              <ul className="space-y-2 text-xs leading-relaxed text-cream/70 sm:max-w-sm">
+                <li>{concert.ticketNotice}</li>
+                <li>{concert.filmingNotice}</li>
+              </ul>
+            </Reveal>
           </div>
         </div>
       </div>

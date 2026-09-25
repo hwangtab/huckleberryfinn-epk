@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import {
@@ -15,15 +15,18 @@ import {
 import { FaPause, FaPlay } from 'react-icons/fa';
 import { clampCam, type Cam } from './art-space';
 import HeroThread from './HeroThread';
-import { DATES, getHeroStatus, type HeroStatus } from './heroStatus';
-import { COVER_BLUR } from './coverBlur';
+import { getHeroStatus, type HeroStatus } from './heroStatus';
+import { useNow } from '@/lib/useNow';
+import { setMotionPaused, useMotionPrefs } from '@/lib/motionPrefs';
+import { ART_BLUR } from './artBlur';
 import { TUMBLBUG_URL } from '@/app/data/album8';
 
 const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false });
 
-const COVER_SRC = '/images/8th_album/hero/cover-2400.jpg';
-const COVER_ALT =
-  '정규 8집 〈모두가 아는 이야기〉 커버: 붉은 실에 눈이 가려진 채 위를 올려다보는 얼굴, 달과 빈 의자가 있는 어두운 입체파풍 회화';
+const ART_SRC = '/images/8th_album/hero/melancholia-2400.jpg';
+// The hero artwork is the 〈멜랑콜리아〉 single cover (the album cover is the light-bulb image).
+const ART_ALT =
+  '두 번째 싱글 〈멜랑콜리아〉 커버 아트워크: 붉은 실에 눈이 가려진 채 위를 올려다보는 얼굴, 달과 빈 의자가 있는 어두운 입체파풍 회화';
 
 type Size = { W: number; H: number };
 
@@ -49,46 +52,27 @@ function camAt(p: number, { W, H }: Size): Cam {
   return clampCam({ x: transform(p, k.at, k.x), y: transform(p, k.at, k.y), z: transform(p, k.at, k.z) }, W, H);
 }
 
-interface Caps {
-  mounted: boolean;
-  reduced: boolean;
-  fine: boolean;
-  webgl: boolean;
-}
-
-function useCaps(): Caps {
-  const [caps, setCaps] = useState<Caps>({ mounted: false, reduced: false, fine: false, webgl: false });
+/**
+ * Whether this device should get the WebGL layer: desktop-class, precise pointer, good network.
+ * Decided once after mount; motion preferences are applied on top (see `webgl` below).
+ */
+function useCapableDevice(): boolean {
+  const [ok, setOk] = useState(false);
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const fine = window.matchMedia('(pointer: fine) and (hover: hover)').matches;
     const nav = navigator as Navigator & {
       connection?: { saveData?: boolean; effectiveType?: string };
       deviceMemory?: number;
     };
     const slowNet = !!nav.connection?.saveData || /2g|3g/.test(nav.connection?.effectiveType ?? '');
     const weak = (nav.hardwareConcurrency ?? 8) < 4 || (nav.deviceMemory ?? 8) < 4;
-    setCaps({
-      mounted: true,
-      reduced,
-      fine,
-      webgl: fine && !reduced && !slowNet && !weak && window.innerWidth >= 1024,
-    });
+    setOk(!slowNet && !weak && window.innerWidth >= 1024);
   }, []);
-  return caps;
+  return ok;
 }
 
-const BUILD_TIME = Number(process.env.NEXT_PUBLIC_BUILD_TIME) || DATES.melancholia - 1;
-
 function useHeroStatus(): HeroStatus {
-  // First render uses the build time (identical on server and client); the real clock takes over after mount.
-  const [status, setStatus] = useState<HeroStatus>(() => getHeroStatus(BUILD_TIME));
-  useEffect(() => {
-    const tick = () => setStatus(getHeroStatus(Date.now()));
-    tick();
-    const id = setInterval(tick, 60_000);
-    return () => clearInterval(id);
-  }, []);
-  return status;
+  // useNow renders the build time first (identical on server and client), then the real clock.
+  return getHeroStatus(useNow());
 }
 
 /* ---------- title ---------- */
@@ -155,15 +139,22 @@ function Beat({
 export default function SectionHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const caps = useCaps();
+  const prefs = useMotionPrefs();
+  const capable = useCapableDevice();
   const status = useHeroStatus();
-  const [paused, setPaused] = useState(false);
+  const { paused } = prefs;
   const [loadGL, setLoadGL] = useState(false);
   const [glReady, setGlReady] = useState(false);
-  const [texSrc, setTexSrc] = useState('/images/8th_album/hero/cover-tex-1600.webp');
+  const [texSrc, setTexSrc] = useState('/images/8th_album/hero/melancholia-tex-1600.webp');
 
-  const pinned = caps.mounted ? !caps.reduced : true;
-  const live = caps.mounted && !caps.reduced && !paused;
+  // Pinned scroll sequence unless the visitor prefers reduced motion (then: a static 100svh poster).
+  const pinned = !prefs.reduced;
+  // Ambient motion (thread sway, shader clock, moon breath) — off when reduced or paused.
+  const live = prefs.ambient;
+  const webgl = capable && prefs.fine && !prefs.reduced;
+  // The shader is on screen only while allowed AND ready; otherwise the <Image> poster shows.
+  const showGL = webgl && loadGL;
+  const glVisible = showGL && glReady;
 
   // ----- scroll → camera -----
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
@@ -200,13 +191,19 @@ export default function SectionHero() {
   const cueOpacity = useTransform(smooth, [0, 0.04], [1, 0]);
 
   // ----- stage size -----
-  useEffect(() => {
+  // Measured synchronously before the first client paint (layout effect), so the camera never
+  // renders a frame with a guessed size; the CSS rest crop covers the pre-hydration frames.
+  const [sized, setSized] = useState(false);
+  useLayoutEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
-    const ro = new ResizeObserver(([e]) => {
-      const { width, height } = e.contentRect;
+    const apply = (width: number, height: number) => {
       if (width > 0 && height > 0) size.set({ W: width, H: height });
-    });
+    };
+    const r = stage.getBoundingClientRect();
+    apply(r.width, r.height);
+    setSized(true);
+    const ro = new ResizeObserver(([e]) => apply(e.contentRect.width, e.contentRect.height));
     ro.observe(stage);
     return () => ro.disconnect();
   }, [size]);
@@ -240,9 +237,9 @@ export default function SectionHero() {
 
   // ----- WebGL is progressive enhancement: start after LCP, when idle -----
   useEffect(() => {
-    if (!caps.webgl) return;
+    if (!webgl) return;
     setTexSrc(
-      window.innerWidth >= 1280 ? '/images/8th_album/hero/cover-tex-2048.webp' : '/images/8th_album/hero/cover-tex-1600.webp'
+      window.innerWidth >= 1280 ? '/images/8th_album/hero/melancholia-tex-2048.webp' : '/images/8th_album/hero/melancholia-tex-1600.webp'
     );
     const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
     if (w.requestIdleCallback) {
@@ -251,15 +248,23 @@ export default function SectionHero() {
       const id = setTimeout(() => setLoadGL(true), 1200);
       return () => clearTimeout(id);
     }
-  }, [caps.webgl]);
+  }, [webgl]);
+
+  // A new canvas always starts hidden until its texture is ready.
+  useEffect(() => {
+    if (!showGL) setGlReady(false);
+  }, [showGL]);
 
   const onGlReady = useCallback(() => setGlReady(true), []);
+  const onGlLost = useCallback(() => setGlReady(false), []);
   const onGlFail = useCallback(() => {
     setGlReady(false);
     setLoadGL(false);
   }, []);
 
-  const boxStyle = caps.mounted && pinned ? { x: boxX, y: boxY, scale: boxS } : undefined;
+  // The camera only takes over the art box once the stage is measured; until then the CSS rest crop
+  // (.hero-artbox in globals.css) — which equals camAt(0) exactly — positions it.
+  const boxStyle = sized && pinned ? { x: boxX, y: boxY, scale: boxS } : undefined;
 
   return (
     <section
@@ -268,7 +273,7 @@ export default function SectionHero() {
       aria-labelledby="hero-title"
       className={`relative bg-ink text-cream ${
         pinned ? 'h-[200svh] md:h-[250svh] motion-reduce:h-svh md:motion-reduce:h-svh' : 'h-svh'
-      } ${paused ? 'hero-paused' : ''}`}
+      }`}
     >
       <div
         ref={stageRef}
@@ -281,21 +286,21 @@ export default function SectionHero() {
           style={{ width: 'max(100cqw, 100cqh)', ...boxStyle }}
         >
           <Image
-            src={COVER_SRC}
-            alt={COVER_ALT}
+            src={ART_SRC}
+            alt={ART_ALT}
             fill
             priority
             quality={45}
-            sizes="(max-aspect-ratio: 1/1) 60vh, 100vw"
+            sizes="(max-aspect-ratio: 1/1) 80vh, 100vw"
             placeholder="blur"
-            blurDataURL={COVER_BLUR}
-            className={`object-cover transition-opacity duration-700 ${glReady ? 'opacity-0' : 'opacity-100'}`}
+            blurDataURL={ART_BLUR}
+            className={`object-cover transition-opacity duration-700 ${glVisible ? 'opacity-0' : 'opacity-100'}`}
           />
-          {!glReady && (
+          {!glVisible && (
             <div aria-hidden="true">
               {/* moon breath */}
               <div
-                className="hero-breathe absolute rounded-full"
+                className="motion-loop hero-breathe absolute rounded-full"
                 style={{
                   left: '12.8%',
                   top: '11.3%',
@@ -308,7 +313,7 @@ export default function SectionHero() {
               />
               {/* doorway light */}
               <div
-                className="animate-flicker absolute"
+                className="motion-loop animate-flicker absolute"
                 style={{
                   left: '83.5%',
                   top: '24.5%',
@@ -323,18 +328,19 @@ export default function SectionHero() {
         </motion.div>
 
         {/* 2 — WebGL layer: painterly cubist displacement around the cursor */}
-        {loadGL && (
+        {showGL && (
           <div
             aria-hidden="true"
-            className={`absolute inset-0 transition-opacity duration-500 ${glReady ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute inset-0 transition-opacity duration-500 ${glVisible ? 'opacity-100' : 'opacity-0'}`}
           >
             <HeroCanvas
               src={texSrc}
               cam={cam}
-              finePointer={caps.fine}
+              finePointer={prefs.fine}
               active={active}
               frozen={frozen}
               onReady={onGlReady}
+              onLost={onGlLost}
               onFail={onGlFail}
             />
           </div>
@@ -352,7 +358,7 @@ export default function SectionHero() {
             progress={smooth}
             stageRef={stageRef}
             live={live}
-            interactive={caps.fine}
+            interactive={prefs.pointerFx}
             active={active}
           />
         </motion.div>
@@ -373,65 +379,77 @@ export default function SectionHero() {
 
         {/* 6 — scroll beats (lyrics & story lines, only approved copy) */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[3] h-svh">
-          <Beat opacity={beatA} className="left-6 right-6 top-[24%] md:left-[8%] md:right-auto md:top-[30%] md:max-w-2xl">
-            <p className="font-serif-kr text-[1.7rem] font-bold leading-snug text-cream sm:text-4xl md:text-5xl">
+          <Beat opacity={beatA} className="left-6 right-6 top-[24%] md:left-[8%] md:right-auto md:top-[30%] md:max-w-2xl short:top-[20%]">
+            <p className="font-serif-kr text-[1.7rem] font-bold leading-snug text-cream sm:text-4xl md:text-5xl short:text-3xl">
               사라졌다고 생각했던 그들은
               <br />
               정말 사라진 것일까요.
             </p>
           </Beat>
-          <Beat opacity={beatB} className="left-6 right-6 top-[18%] md:left-[8%] md:right-auto md:top-[26%] md:max-w-xl">
+          <Beat opacity={beatB} className="left-6 right-6 top-[18%] md:left-[8%] md:right-auto md:top-[26%] md:max-w-xl short:top-[18%]">
             <p className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.3em] text-bulb">〈멜랑콜리아〉 가사 중</p>
-            <p className="font-serif-kr text-[1.7rem] font-bold leading-snug text-cream sm:text-4xl md:text-5xl">
+            <p className="font-serif-kr text-[1.7rem] font-bold leading-snug text-cream sm:text-4xl md:text-5xl short:text-3xl">
               그것은 내게 속삭여 줬어
               <br />빈 의자를 내게 남겨뒀다고
             </p>
           </Beat>
-          <Beat opacity={beatC} className="inset-x-6 top-[26%] text-center md:top-[30%]">
-            <p className="font-serif-kr text-[2.3rem] font-extrabold leading-[1.1] text-cream sm:text-6xl md:text-8xl">
+          <Beat opacity={beatC} className="inset-x-6 top-[26%] text-center md:top-[30%] short:top-[16%]">
+            <p className="font-serif-kr text-[2.3rem] font-extrabold leading-[1.1] text-cream sm:text-6xl md:text-8xl short:text-4xl">
               나의 노래는
               <br />
               <span className="text-thread">나의 부적</span>
             </p>
-            <p className="mt-5 font-serif-latin text-xl italic text-cream/85 md:text-2xl">My song is my talisman</p>
+            <p className="mt-5 text-sm font-semibold tracking-[0.2em] text-cream/85 short:mt-2">— 〈멜랑콜리아〉 가사 중</p>
           </Beat>
         </div>
 
         {/* 7 — persistent chrome & info (always inside the small viewport) */}
         <div className="absolute inset-x-0 top-0 z-[4] flex h-svh flex-col justify-between px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-4 md:px-10 md:pb-9 md:pt-6">
           {/* top bar */}
-          <div className="flex items-center justify-between gap-3">
-            <a
-              href="#singles"
-              className="order-last inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-3 text-xs font-semibold uppercase tracking-[0.2em] text-cream/90 hover:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
-            >
-              <span className="sm:hidden">Skip ↓</span>
-              <span className="hidden sm:inline">Skip intro ↓</span>
-            </a>
-            <div className="flex items-center gap-3">
-              <Image src="/images/logo/white_logo.png" alt="Huckleberryfinn" width={150} height={36} className="h-6 w-auto md:h-8" priority />
-              <span className="hidden text-xs font-medium tracking-[0.2em] text-cream/75 sm:inline">허클베리핀 · 1997–</span>
-            </div>
-            <div className="ml-auto flex items-center gap-1">
+          <div>
+            <div className="flex items-center justify-between gap-3">
               <a
-                href="#press"
-                className="inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-3 text-xs font-semibold uppercase tracking-[0.2em] text-cream/90 hover:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                href="#singles"
+                className="sr-only rounded-full bg-ink px-4 py-2 text-sm font-semibold text-cream focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream"
               >
-                <span className="sm:hidden">Press</span>
-                <span className="hidden sm:inline">Press kit</span>
+                인트로 건너뛰기
               </a>
-              {caps.mounted && !caps.reduced && (
-                <button
-                  type="button"
-                  onClick={() => setPaused((v) => !v)}
-                  aria-pressed={paused}
-                  aria-label={paused ? '배경 애니메이션 재생' : '배경 애니메이션 일시정지'}
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full text-cream/80 hover:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+              <div className="flex items-center gap-3">
+                <Image src="/images/logo/white_logo.png" alt="Huckleberryfinn" width={150} height={36} className="h-6 w-auto md:h-8" priority />
+                <span className="hidden text-xs font-medium tracking-[0.2em] text-cream/75 sm:inline">허클베리핀 · 1997–</span>
+              </div>
+              <div className="ml-auto flex items-center gap-1">
+                <a
+                  href="#press"
+                  className="inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-3 text-xs font-semibold uppercase tracking-[0.2em] text-cream/90 hover:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
                 >
-                  {paused ? <FaPlay size={11} /> : <FaPause size={11} />}
-                </button>
-              )}
+                  <span className="sm:hidden">Press</span>
+                  <span className="hidden sm:inline">Press kit</span>
+                </a>
+                {!prefs.reduced && (
+                  <button
+                    type="button"
+                    onClick={() => setMotionPaused(!paused)}
+                    aria-pressed={paused}
+                    aria-label={paused ? '배경 애니메이션 재생' : '배경 애니메이션 일시정지'}
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full text-cream/80 hover:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                  >
+                    {paused ? <FaPlay size={11} /> : <FaPause size={11} />}
+                  </button>
+                )}
+                <a
+                  href="#singles"
+                  tabIndex={-1}
+                  className="inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-3 text-xs font-semibold uppercase tracking-[0.2em] text-cream/90 hover:text-cream"
+                >
+                  <span className="sm:hidden">Skip ↓</span>
+                  <span className="hidden sm:inline">Skip intro ↓</span>
+                </a>
+              </div>
             </div>
+            <p className="mt-1 text-right text-[11px] font-medium tracking-[0.18em] text-cream/75 md:mt-2 md:text-xs">
+              Artwork · 2nd Single 〈멜랑콜리아〉
+            </p>
           </div>
 
           {/* bottom */}
@@ -441,14 +459,14 @@ export default function SectionHero() {
                 <span className="hidden lg:inline">Huckleberryfinn · </span>8th Studio Album · 정규 8집
               </p>
               <HeroTitle spread={spread} />
-              <p lang="en" className="hero-fade mt-3 font-serif-latin text-xl italic text-cream/90 md:mt-4 md:text-3xl short:hidden" style={{ ['--d' as string]: '0.5s' }}>
-                A Story Everyone Knows
+              <p className="hero-fade mt-3 font-serif-kr text-lg font-bold text-cream/90 md:mt-4 md:text-2xl short:hidden" style={{ ['--d' as string]: '0.5s' }}>
+                내 안에서 낯설어진 존재들을 다시 부르는 노래
               </p>
               <p className="hero-fade mt-4 text-[15px] font-semibold tracking-[0.04em] text-cream md:text-base short:mt-2" style={{ ['--d' as string]: '0.6s' }}>
-                2026. 10. 23 FRI 12:00 KST <span className="font-medium text-cream/75">정규 8집 발매</span>
+                2026. 10. 23 (금) 12:00 KST <span className="font-medium text-cream/75">정규 8집 발매</span>
               </p>
               <p className="hero-fade mt-1.5 hidden text-sm font-medium text-cream/75 md:block short:hidden" style={{ ['--d' as string]: '0.7s' }}>
-                22th Yellow Concert — Seoul 10.31 · Busan 12.05
+                22nd Yellow Concert — Seoul 10.31 · Busan 12.05
               </p>
             </motion.div>
 
@@ -465,7 +483,7 @@ export default function SectionHero() {
               <div className="flex flex-wrap gap-2.5">
                 <a
                   href="#singles"
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-thread px-5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-thread-deep px-5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
                 >
                   싱글 듣기 <span aria-hidden="true">↓</span>
                 </a>
@@ -499,7 +517,7 @@ export default function SectionHero() {
             className="pointer-events-none absolute bottom-3 left-1/2 z-[4] hidden -translate-x-1/2 flex-col items-center gap-2 lg:flex short:hidden"
           >
             <span className="text-[10px] font-semibold uppercase tracking-[0.35em] text-cream/70">Scroll — follow the thread</span>
-            <span className="hero-cue h-8 w-px bg-gradient-to-b from-thread to-transparent" />
+            <span className="motion-loop hero-cue h-8 w-px bg-gradient-to-b from-thread to-transparent" />
           </motion.div>
         )}
       </div>

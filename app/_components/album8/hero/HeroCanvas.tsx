@@ -12,10 +12,11 @@ type Props = {
   active: React.RefObject<boolean>;   // section on screen && tab visible
   frozen: React.RefObject<boolean>;   // user paused ambient motion: keep rendering the camera, stop the clock
   onReady: () => void;                // crossfade canvas in over the <Image>
-  onFail: () => void;                 // stay on / return to the <Image>
+  onLost: () => void;                 // context lost: show the <Image>, keep the canvas mounted for restore
+  onFail: () => void;                 // WebGL unavailable: unmount the canvas
 };
 
-export default function HeroCanvas({ src, cam, finePointer, active, frozen, onReady, onFail }: Props) {
+export default function HeroCanvas({ src, cam, finePointer, active, frozen, onReady, onLost, onFail }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const r = useRef<CoverRenderer | null>(null);
   const p = useRef({ x: -1e4, y: -1e4, tx: -1e4, ty: -1e4, vx: 0, vy: 0, force: 0 });
@@ -25,14 +26,21 @@ export default function HeroCanvas({ src, cam, finePointer, active, frozen, onRe
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    let alive = true;
     const renderer = createCoverRenderer(canvas, src, {
       maxDpr: finePointer ? 1.5 : 1.25,
-      onLost: onFail,
-      onRestored: onReady,
+      onLost: () => alive && onLost(),
+      onRestored: () => alive && onReady(),
     });
     if (!renderer) { onFail(); return; }
     r.current = renderer;
-    renderer.ready.then(() => { readyAt.current = performance.now(); onReady(); }).catch(onFail);
+    renderer.ready
+      .then(() => {
+        if (!alive) return; // unmounted or disposed before the texture decoded
+        readyAt.current = performance.now();
+        if (!renderer.isLost()) onReady(); // if lost, webglcontextrestored will call onReady
+      })
+      .catch(() => alive && onFail());
 
     const ro = new ResizeObserver(([e]) => renderer.setSize(e.contentRect.width, e.contentRect.height));
     ro.observe(canvas);
@@ -46,6 +54,7 @@ export default function HeroCanvas({ src, cam, finePointer, active, frozen, onRe
     if (finePointer) window.addEventListener('pointermove', move, { passive: true });
 
     return () => {
+      alive = false;
       ro.disconnect();
       window.removeEventListener('pointermove', move);
       renderer.dispose();
