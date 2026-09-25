@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { FaPause, FaPlay } from 'react-icons/fa';
 import { TUMBLBUG_URL } from '@/app/data/album8';
@@ -31,6 +32,7 @@ export default function Header() {
   const { paused } = useMotionPrefs();
   const fundingOpen = isFundingOpen(useNow());
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
   const menuRef = useRef<HTMLElement>(null);
 
   // Show once the pinned hero has fully scrolled above the header line. The whole hero section is
@@ -102,6 +104,9 @@ export default function Header() {
   }, []);
 
   const tab = visible ? 0 : -1;
+
+  // The full-screen teaser has its own controls.
+  if (pathname?.startsWith('/teaser')) return null;
 
   return (
     <>

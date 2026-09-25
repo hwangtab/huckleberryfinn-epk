@@ -338,7 +338,3 @@ export const pressAssets: PressAsset[] = [
   { title: '멤버 프로필 — 성장규', spec: 'JPG · 638×850', href: '/images/profile/sung-janggyu.jpg', preview: '/images/profile/sung-janggyu.webp' },
   { title: '공식 로고 (White)', spec: 'PNG · 1104×264', href: '/images/logo/white_logo.png', preview: '/images/logo/white_logo.png' },
 ];
-
-export const pressReleaseText = `〈멜랑콜리아〉는 허클베리핀 8집의 두 번째 싱글이다.
-
-${singles[1].paragraphs.join('\n\n')}`;

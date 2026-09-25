@@ -417,15 +417,37 @@ summary::-webkit-details-marker {
   animation: hero-breathe 5.8s ease-in-out infinite;
 }
 
+/* A short dash drifting down the cue track (translate only → compositor). */
 @keyframes hero-cue {
-  0% { transform: scaleY(0); transform-origin: top; }
-  50% { transform: scaleY(1); transform-origin: top; }
-  51% { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
+  0% { transform: translateY(-100%); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(2rem); opacity: 0; }
 }
 
 .hero-cue {
-  animation: hero-cue 2.4s ease-in-out infinite;
+  animation: hero-cue 2.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Countdown digit roll-in (Countdown.tsx) — one-shot, compositor-only. */
+@keyframes countdown-digit {
+  from { transform: translateY(60%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.countdown-digit {
+  animation: countdown-digit 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Loops in a section that has scrolled out of view are paused (components/motion/LoopScope.tsx);
+   a paused CSS animation costs nothing. Visible loops get their own layer. */
+[data-loops='offscreen'] .motion-loop {
+  animation-play-state: paused !important;
+}
+
+.motion-loop {
+  will-change: transform, opacity;
 }
 
 
@@ -442,7 +464,8 @@ html[data-motion='paused'] .grain::before {
   .grain::before,
   .hero-thread-draw,
   .hero-char,
-  .hero-fade {
+  .hero-fade,
+  .countdown-digit {
     animation: none !important;
   }
 

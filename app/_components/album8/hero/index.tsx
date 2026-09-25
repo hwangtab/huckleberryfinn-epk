@@ -15,6 +15,7 @@ import {
 import { FaPause, FaPlay } from 'react-icons/fa';
 import { clampCam, type Cam } from './art-space';
 import HeroThread from './HeroThread';
+import LoopScope from '@/components/motion/LoopScope';
 import { getHeroStatus, type HeroStatus } from './heroStatus';
 import { useNow } from '@/lib/useNow';
 import { setMotionPaused, useMotionPrefs } from '@/lib/motionPrefs';
@@ -275,6 +276,7 @@ export default function SectionHero() {
         pinned ? 'h-[200svh] md:h-[250svh] motion-reduce:h-svh md:motion-reduce:h-svh' : 'h-svh'
       }`}
     >
+      <LoopScope />
       <div
         ref={stageRef}
         className="sticky top-0 isolate h-lvh w-full overflow-hidden motion-reduce:h-svh"
@@ -517,7 +519,9 @@ export default function SectionHero() {
             className="pointer-events-none absolute bottom-3 left-1/2 z-[4] hidden -translate-x-1/2 flex-col items-center gap-2 lg:flex short:hidden"
           >
             <span className="text-[10px] font-semibold uppercase tracking-[0.35em] text-cream/70">Scroll — follow the thread</span>
-            <span className="motion-loop hero-cue h-8 w-px bg-gradient-to-b from-thread to-transparent" />
+            <span className="relative block h-8 w-px overflow-hidden bg-cream/15">
+              <span className="motion-loop hero-cue absolute left-0 top-0 h-3 w-px bg-thread" />
+            </span>
           </motion.div>
         )}
       </div>

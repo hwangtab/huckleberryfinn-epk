@@ -1,0 +1,79 @@
+/**
+ * 〈멜랑콜리아〉 싱글 공개 보도자료.
+ * 사실관계 출처: docs/8집/ (곡 설명, 텀블벅 스토리·리워드), docs/press_release.md (밴드 소개).
+ * 원문 사본: docs/8집/press-release-melancholia.md — 수정 시 두 곳을 함께 고칠 것.
+ */
+import { band, TUMBLBUG_URL } from './album8';
+import { contactInfo } from './contact';
+
+export const SITE_URL = 'https://huckleberryfinn.vercel.app';
+
+export interface PressSection {
+  heading?: string;
+  paragraphs: string[];
+}
+
+export const pressRelease = {
+  kicker: '보도자료',
+  release: '배포 즉시 보도 가능 · 싱글 음원 공개 2026년 9월 29일(화) 낮 12시',
+  headline: '허클베리핀, 정규 8집 두 번째 싱글 〈멜랑콜리아〉 공개… “나의 노래는 나의 부적”',
+  subheadlines: [
+    '우울과 두려움 곁에서도 노래를 놓지 않는 음악가의 고백',
+    '10월 23일 정규 8집 〈모두가 아는 이야기〉 발매, 서울·부산에서 ‘2026 Yellow Concert’ 개최',
+  ],
+  sections: [
+    {
+      paragraphs: [
+        '한국 1세대 인디 록 밴드 허클베리핀(Huckleberryfinn)이 오는 9월 29일(화) 낮 12시, 정규 8집 〈모두가 아는 이야기〉의 두 번째 싱글 〈멜랑콜리아(Melancholia)〉를 국내외 주요 음원 사이트를 통해 공개한다. 지난 8월 21일 뮤직비디오와 함께 선보인 첫 번째 싱글 〈박쥐〉에 이은 두 번째 선공개곡이다.',
+        '〈멜랑콜리아〉는 음악을 만들며 살아가는 한 사람이 오랫동안 자신의 곁에 머물러온 두려움과 우울을 바라보며, 그 속에서도 노래를 놓지 않는 이야기를 담았다. 제목 ‘멜랑콜리아’는 단순한 슬픔이 아니라, 쉽게 사라지지 않는 쓸쓸함과 고독 안에서 자신과 세계를 오래 바라보는 상태를 가리킨다.',
+        '곡에서 어둠은 물리쳐야 할 대상이 아니다. 화자는 두려움이 사라지기를 기다리는 대신 그것과 함께 걸어간다. 그리고 그 시간을 견디게 한 것은 거창한 희망이나 확신이 아니라, 계속해서 만들고 불러온 자신의 노래였다고 말한다.',
+        '사운드는 기타를 중심으로 한 얼터너티브 인디 록이다. 서정적인 정서와 묵직하고 강렬한 밴드 사운드가 교차하고, 124bpm의 리듬은 긴 밤길을 조금 빠른 걸음으로 걷는 듯한 긴장감을 만든다. 절제된 벌스에서 쌓인 감정은 후렴에 이르러 기타와 리듬, 보컬이 한꺼번에 확장되며 터져 나온다.',
+        '곡의 중심에는 반복되는 후렴 “나의 노래는 나의 부적”이 있다. 록 음악 특유의 주문 같은 감각을 지닌 이 문장에서 노래는 불안과 두려움을 없애주는 존재가 아니라, 그 속에서도 한 사람이 계속 살아가도록 붙들어주는 작은 힘으로 그려진다.',
+        '〈멜랑콜리아〉는 우울을 극복한 사람의 이야기가 아니다. 두려움과 불안이 여전히 남아 있는 자리에서 노래를 부르고, 다시 걸어가는 사람의 이야기다. 오랜 시간 음악에 기대어 수많은 밤을 건너온 음악가의 내밀한 고백이자, 멜랑콜리아를 삶에서 지워내는 대신 하나의 노래로 바꾸어낸 곡이다.',
+      ],
+    },
+    {
+      heading: '정규 8집 〈모두가 아는 이야기〉 10월 23일 발매',
+      paragraphs: [
+        '〈멜랑콜리아〉가 수록될 정규 8집 〈모두가 아는 이야기〉는 10월 23일(금) 낮 12시에 발매된다. 총 9곡이 수록될 예정이며, 수록곡 제목과 순서는 확정되는 대로 공개된다.',
+        '‘내 안에서 낯설어진 존재들을 다시 부르는 노래’를 주제로 한 이번 앨범은 앞으로 나아가는 이야기보다, 먼저 뒤에 남겨둔 자신들을 다시 만나는 데서 시작한다. 앨범에는 박쥐와 거울 속의 얼굴, 뒷자리에 앉은 불안, 오래 헤어진 사람들, 그리고 자신을 지켜온 노래가 등장한다. 서로 다른 존재처럼 보이지만 모두 한 사람의 일부인 이들을 통해, 허클베리핀은 과거의 자신을 버리는 대신 데리고 가는 사람들, 두려움을 침묵시키는 대신 그 목소리보다 조금 더 크게 자신의 노래를 부르는 사람들의 이야기를 들려준다.',
+        '앞서 공개된 첫 번째 싱글 〈박쥐〉는 빛을 갈망하지만 어둠 속에서 살아온 몸을 버릴 수 없는 ‘박쥐’를 통해, 과거의 자신을 품은 사람이 새로운 이름으로 태어나는 이야기를 그렸다. 낮게 읊조리던 목소리가 거대한 밴드 사운드와 함께 폭발하는 곡이다.',
+      ],
+    },
+    {
+      heading: '발매 후 첫 단독 공연 ‘2026 Yellow Concert’',
+      paragraphs: [
+        '허클베리핀은 정규 8집 발매 후 첫 단독 공연 ‘2026 Yellow Concert’를 서울과 부산에서 연다. 서울 공연은 10월 31일(토) 오후 7시 KT&G 홍대 상상마당에서, 부산 공연은 12월 5일(토) 오후 7시 부산 오방가르드에서 열린다. 8집 수록 신곡들을 라이브로 처음 선보이는 무대다.',
+        '정규 8집 제작을 위한 텀블벅 펀딩은 10월 11일까지 진행된다. 8집 CD가 포함된 선물을 선택한 후원자의 이름은 앨범 크레딧에 실리며, 공연 티켓은 펀딩 기간 동안 할인된 가격으로 예매할 수 있다.',
+      ],
+    },
+  ] as PressSection[],
+  boilerplateHeading: '허클베리핀(Huckleberryfinn) 소개',
+  boilerplate: [
+    ...band.bio,
+    `현재 멤버는 ${band.members.map((m) => `${m.name}(${m.role.replace(/ · /g, ', ')})`).join(', ')}이다.`,
+  ],
+  assetsNote: '※ 앨범 커버, 싱글 커버, 아티스트 사진, 로고 등 보도용 이미지는 공식 EPK에서 원본으로 내려받을 수 있습니다.',
+  contact: [
+    { label: '레이블', value: contactInfo.label },
+    { label: '이메일', value: contactInfo.email },
+    { label: '공식 EPK', value: SITE_URL },
+    { label: '텀블벅', value: TUMBLBUG_URL },
+  ],
+};
+
+/** Plain-text version for copy / .txt download, laid out like a distributed press release. */
+export function pressReleasePlainText(): string {
+  const r = pressRelease;
+  const lines: string[] = [];
+  lines.push(`[${r.kicker}]`, r.release, '', r.headline, ...r.subheadlines.map((s) => `- ${s}`), '');
+  for (const sec of r.sections) {
+    if (sec.heading) lines.push(`■ ${sec.heading}`, '');
+    for (const p of sec.paragraphs) lines.push(p, '');
+  }
+  lines.push('###', '', `■ ${r.boilerplateHeading}`, '');
+  for (const p of r.boilerplate) lines.push(p, '');
+  lines.push(r.assetsNote, '', '■ 문의');
+  for (const c of r.contact) lines.push(`${c.label}: ${c.value}`);
+  return lines.join('\n');
+}

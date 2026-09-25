@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import { useMotionPrefs } from '@/lib/motionPrefs';
-import { DURATION, EASE_OUT } from '@/lib/motion';
 
 interface CountdownProps {
   target: string; // ISO string with timezone
@@ -35,22 +33,16 @@ function getRemaining(target: string): Remaining {
 }
 
 /**
- * Only the incoming digit animates, and the previous one is replaced immediately, so digits can
- * never pile up (e.g. when a background tab pauses requestAnimationFrame).
- * With ambient motion off (reduced / paused) the digit simply swaps.
+ * A changed digit remounts (key) and plays a one-shot CSS roll-in (.countdown-digit in globals.css):
+ * compositor-only, no JS per frame, and the previous digit is replaced immediately so digits can
+ * never pile up. With ambient motion off (reduced / paused) the digit simply swaps.
  */
 function Digit({ value, animate }: { value: string; animate: boolean }) {
   return (
     <span className="relative inline-block h-[1em] w-[0.62em] overflow-hidden align-baseline">
-      <motion.span
-        key={value}
-        className="absolute inset-0 flex items-center justify-center tabular-nums"
-        initial={animate ? { y: '60%', opacity: 0 } : false}
-        animate={{ y: '0%', opacity: 1 }}
-        transition={{ duration: DURATION.fast, ease: EASE_OUT }}
-      >
+      <span key={value} className={`absolute inset-0 flex items-center justify-center tabular-nums ${animate ? 'countdown-digit' : ''}`}>
         {value}
-      </motion.span>
+      </span>
     </span>
   );
 }
@@ -70,18 +62,30 @@ function Unit({ value, unit, compact, animate }: { value: number; unit: string; 
 
 export default function Countdown({ target, label, doneLabel = '공개되었습니다', compact = false, className = '' }: CountdownProps) {
   const [remaining, setRemaining] = useState<Remaining | null>(null);
+  const [onScreen, setOnScreen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   const { ambient } = useMotionPrefs();
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Tick every second only while visible; off-screen it is refreshed once on re-entry.
+  useEffect(() => {
     setRemaining(getRemaining(target));
+    if (!onScreen) return;
     const id = setInterval(() => setRemaining(getRemaining(target)), 1000);
     return () => clearInterval(id);
-  }, [target]);
+  }, [target, onScreen]);
 
   const done = remaining?.done ?? false;
 
   return (
-    <div className={`flex flex-col gap-2 ${className}`} role="timer" aria-live="off" aria-label={done ? doneLabel : label}>
+    <div ref={ref} className={`flex flex-col gap-2 ${className}`} role="timer" aria-live="off" aria-label={done ? doneLabel : label}>
       {!done && (
         <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-bulb/90 md:text-xs">{label}</span>
       )}

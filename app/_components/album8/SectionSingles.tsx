@@ -8,6 +8,7 @@ import SectionLabel from '@/components/ui/SectionLabel';
 import TiltCard from '@/components/features/TiltCard';
 import Countdown from '@/components/features/Countdown';
 import Lightbox from '@/components/ui/Lightbox';
+import LoopScope from '@/components/motion/LoopScope';
 import { Reveal } from '@/components/motion/Reveal';
 import { singles, Single } from '@/app/data/album8';
 import { DURATION, EASE_OUT } from '@/lib/motion';
@@ -201,6 +202,7 @@ export default function SectionSingles() {
 
   return (
     <section id="singles" aria-labelledby="singles-title" className="relative bg-ink py-24 text-cream scroll-mt-16 md:py-36 md:scroll-mt-20">
+      <LoopScope />
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-bulb/40 to-transparent" />
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <SectionLabel

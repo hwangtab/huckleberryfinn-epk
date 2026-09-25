@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Reveal, RevealGroup, RevealItem } from '@/components/motion/Reveal';
-import { FaDownload, FaCheck, FaCopy } from 'react-icons/fa';
+import { FaDownload, FaCheck, FaCopy, FaFileAlt } from 'react-icons/fa';
 import SectionLabel from '@/components/ui/SectionLabel';
-import { pressAssets, pressReleaseText, TUMBLBUG_URL } from '@/app/data/album8';
+import { pressAssets, TUMBLBUG_URL } from '@/app/data/album8';
+import { pressRelease, pressReleasePlainText } from '@/app/data/pressRelease';
 import { contactInfo } from '@/app/data/contact';
 
 export default function SectionPress() {
@@ -18,7 +19,7 @@ export default function SectionPress() {
 
   const copyText = async () => {
     try {
-      await navigator.clipboard.writeText(pressReleaseText);
+      await navigator.clipboard.writeText(pressReleasePlainText());
       setCopied(true);
       setCopyFailed(false);
       if (timer.current) clearTimeout(timer.current);
@@ -27,6 +28,18 @@ export default function SectionPress() {
       setCopied(false);
       setCopyFailed(true);
     }
+  };
+
+  const downloadText = () => {
+    const blob = new Blob([`\uFEFF${pressReleasePlainText()}`], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = '허클베리핀_멜랑콜리아_보도자료.txt';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   return (
@@ -82,26 +95,76 @@ export default function SectionPress() {
           <Reveal
             className="rounded-2xl border border-cream/10 bg-cream/[0.03] p-6 md:p-8 lg:col-span-8"
           >
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-bulb/80">Press Release</p>
-                <h3 className="mt-1 font-serif-kr text-xl font-bold text-cream md:text-2xl">〈멜랑콜리아〉 곡 설명 (보도자료용)</h3>
+                <h3 className="mt-1 font-serif-kr text-xl font-bold text-cream md:text-2xl">〈멜랑콜리아〉 싱글 공개 보도자료</h3>
               </div>
-              <button
-                type="button"
-                onClick={copyText}
-                className="inline-flex shrink-0 items-center gap-2 min-h-11 rounded-full border border-cream/30 px-4 py-2 text-xs font-semibold text-cream transition-colors hover:border-bulb hover:text-bulb focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb"
-                aria-live="polite"
-              >
-                {copied ? <FaCheck size={11} aria-hidden="true" /> : <FaCopy size={11} aria-hidden="true" />}
-                {copied ? '복사됨' : copyFailed ? '복사 실패 — 직접 선택해 주세요' : '전문 복사'}
-              </button>
+              <div className="flex shrink-0 flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={copyText}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-cream/30 px-4 py-2 text-xs font-semibold text-cream transition-colors hover:border-bulb hover:text-bulb focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb"
+                  aria-live="polite"
+                >
+                  {copied ? <FaCheck size={11} aria-hidden="true" /> : <FaCopy size={11} aria-hidden="true" />}
+                  {copied ? '복사됨' : copyFailed ? '복사 실패 — 직접 선택해 주세요' : '전문 복사'}
+                </button>
+                <button
+                  type="button"
+                  onClick={downloadText}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-cream/30 px-4 py-2 text-xs font-semibold text-cream transition-colors hover:border-bulb hover:text-bulb focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb"
+                >
+                  <FaFileAlt size={11} aria-hidden="true" />
+                  TXT 다운로드
+                </button>
+              </div>
             </div>
-            <div tabIndex={0} role="region" aria-label="보도자료 전문" className="mt-6 max-h-72 space-y-4 overflow-y-auto rounded pr-2 text-sm leading-[1.9] text-cream/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb">
-              {pressReleaseText.split('\n\n').map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
+
+            <article
+              tabIndex={0}
+              aria-label="보도자료 전문"
+              className="mt-6 max-h-[34rem] overflow-y-auto rounded-xl border border-cream/10 bg-ink/60 p-5 text-sm leading-[1.9] text-cream/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb md:p-7"
+            >
+              <p className="text-xs font-semibold text-bulb">
+                [{pressRelease.kicker}] <span className="font-medium text-cream/70">{pressRelease.release}</span>
+              </p>
+              <h4 className="mt-4 font-serif-kr text-lg font-extrabold leading-snug text-cream md:text-xl">{pressRelease.headline}</h4>
+              <ul className="mt-3 space-y-1">
+                {pressRelease.subheadlines.map((sub) => (
+                  <li key={sub} className="font-semibold text-cream/85">
+                    - {sub}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 space-y-4 border-t border-cream/10 pt-6">
+                {pressRelease.sections.map((sec, i) => (
+                  <div key={sec.heading ?? i} className="space-y-4">
+                    {sec.heading && <h5 className="pt-2 font-bold text-cream">■ {sec.heading}</h5>}
+                    {sec.paragraphs.map((para) => (
+                      <p key={para.slice(0, 24)}>{para}</p>
+                    ))}
+                  </div>
+                ))}
+              </div>
+              <p className="my-6 text-center text-cream/60">###</p>
+              <div className="space-y-4">
+                <h5 className="font-bold text-cream">■ {pressRelease.boilerplateHeading}</h5>
+                {pressRelease.boilerplate.map((para) => (
+                  <p key={para.slice(0, 24)}>{para}</p>
+                ))}
+                <p className="text-cream/70">{pressRelease.assetsNote}</p>
+              </div>
+              <div className="mt-6 space-y-1 border-t border-cream/10 pt-6">
+                <h5 className="mb-2 font-bold text-cream">■ 문의</h5>
+                {pressRelease.contact.map((c) => (
+                  <p key={c.label}>
+                    <span className="text-cream/60">{c.label}: </span>
+                    {c.value}
+                  </p>
+                ))}
+              </div>
+            </article>
           </Reveal>
 
           <Reveal

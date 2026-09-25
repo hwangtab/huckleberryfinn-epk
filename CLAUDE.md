@@ -109,7 +109,7 @@ npm run lint
 /components
   /ui/        SectionLabel, Lightbox, Heading, Button
   /features/  Countdown, CursorGlow, TiltCard, ScrambleText, RevealText, ...
-  /motion/    Reveal, AnchorScroll, MotionProvider
+  /motion/    Reveal, AnchorScroll, LoopScope, MotionProvider
   /layout/    Header, Footer
 
 /public/images/8th_album/   album-cover.jpg = the ALBUM cover (light bulb, "모두가 아는 이야기", 1254px — Tumblbug's first story image).
@@ -186,6 +186,8 @@ All motion goes through one small system. Do not hand-roll `initial`/`whileInVie
 - **Entrances** — `components/motion/Reveal.tsx`: `<Reveal>`, `<RevealGroup>` + `<RevealItem>`. Opacity + small vertical translate only (compositor-only). No horizontal slides, no blur filters.
 - **Preferences** — `lib/motionPrefs.ts` (`useMotionPrefs()`): `reduced` (live OS setting), `paused` (site-wide pause switch, mirrored to `html[data-motion="paused"]`), `fine` pointer. Derived: `ambient` (loops may run), `scrollFx` (decorative scroll motion may run), `pointerFx` (cursor effects may run). Every JS-driven effect reads these; `MotionConfig reducedMotion="user"` covers framer transforms.
 - **CSS loops** — add class `motion-loop` to any infinite CSS animation. The pause switch and reduced motion target that class only; one-shot entrances (hero intro) always finish and are never frozen.
+- **Off-screen loops** — every section that contains a `motion-loop` renders `<LoopScope />` (`components/motion/LoopScope.tsx`); it pauses those loops while the section is out of view (browsers keep ticking off-screen CSS animations). Timers that drive UI (Countdown) also stop when off-screen.
+- **Compositor only** — never animate `transform-origin`, `width`, `filter` or SVG attributes per frame. The hero thread updates one shared `<path>` (two `<use>` strokes) at 30fps while idle.
 - **Anchors** — `components/motion/AnchorScroll.tsx` handles every `href="#…"`: jumps across the pinned hero instead of scrolling through it, instant under reduced motion, syncs the hash and focus.
 - **Scroll-linked text** — `RevealText` writes one CSS variable per paragraph (`--p`); words derive opacity in CSS (`.reveal-word`). Never give per-word elements `will-change` or their own motion values.
 - **Performance rules** — animate only `transform`/`opacity`; crossfade two layers instead of animating `filter`; measure rects on pointer-enter, not per move; use IntersectionObserver instead of scroll listeners that read layout.

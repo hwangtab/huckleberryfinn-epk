@@ -96,7 +96,7 @@ const jsonLd = {
       name: '2026 Yellow Concert 〈서울〉',
       startDate: '2026-10-31T19:00:00+09:00',
       performer: band,
-      location: { '@type': 'Place', name: 'KT&G 상상마당 홍대', address: '서울 마포구 어울마당로 65 상상마당 빌딩 지하 2층' },
+      location: { '@type': 'Place', name: 'KT&G 홍대 상상마당', address: '서울 마포구 어울마당로 65 상상마당 빌딩 지하 2층' },
     },
     {
       '@type': 'MusicEvent',

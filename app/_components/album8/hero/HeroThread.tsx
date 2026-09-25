@@ -35,8 +35,9 @@ interface HeroThreadProps {
  */
 export default function HeroThread({ cam, size, progress, stageRef, live, interactive, active }: HeroThreadProps) {
   const baseRef = useRef<SVGPathElement>(null);
-  const glowRef = useRef<SVGPathElement>(null);
-  const coreRef = useRef<SVGPathElement>(null);
+  // One shared geometry path; the glow and core strokes reference it via <use>, so a frame writes one attribute.
+  const shapeRef = useRef<SVGPathElement>(null);
+  const lastFrame = useRef(0);
   const beadRef = useRef<SVGGElement>(null);
   const pts = useRef<Pt[]>([]);
   const lastYs = useRef<number[]>([]);
@@ -110,7 +111,10 @@ export default function HeroThread({ cam, size, progress, stageRef, live, intera
     if (!active.current || p.length === 0) return;
 
     // Ambient sway + plucks only while motion is live; the bead below is scroll-driven and always follows.
-    if (live) {
+    // The idle sway (3px amplitude, 3.9s period) is updated at 30fps; a pluck runs at full frame rate.
+    const hasPluck = plucks.current.length > 0;
+    if (live && (hasPluck || t - lastFrame.current >= 32)) {
+      lastFrame.current = t;
       const now = performance.now();
       const time = t / 1000;
       plucks.current = plucks.current.filter((k) => now - k.t0 < 2600);
@@ -130,8 +134,7 @@ export default function HeroThread({ cam, size, progress, stageRef, live, intera
         ys[i] = y + off;
         d += `${j === 0 ? 'M' : 'L'}${x.toFixed(1)} ${ys[i].toFixed(1)}`;
       }
-      glowRef.current?.setAttribute('d', d);
-      coreRef.current?.setAttribute('d', d);
+      shapeRef.current?.setAttribute('d', d);
       lastYs.current = ys;
     }
     const ys = lastYs.current;
@@ -163,10 +166,11 @@ export default function HeroThread({ cam, size, progress, stageRef, live, intera
       focusable="false"
     >
       <path ref={baseRef} d={THREAD_D} fill="none" stroke="none" />
-      <path
-        ref={glowRef}
-        d={THREAD_D_REV}
-        pathLength={1}
+      <defs>
+        <path ref={shapeRef} id="hero-thread-shape" d={THREAD_D_REV} pathLength={1} />
+      </defs>
+      <use
+        href="#hero-thread-shape"
         className="hero-thread-draw"
         fill="none"
         stroke="var(--color-thread)"
@@ -174,10 +178,8 @@ export default function HeroThread({ cam, size, progress, stageRef, live, intera
         strokeWidth={10}
         strokeLinecap="round"
       />
-      <path
-        ref={coreRef}
-        d={THREAD_D_REV}
-        pathLength={1}
+      <use
+        href="#hero-thread-shape"
         className="hero-thread-draw"
         fill="none"
         stroke="var(--color-thread)"

@@ -2,6 +2,7 @@
 
 import { FaPause, FaPlay } from 'react-icons/fa';
 import { setMotionPaused, useMotionPrefs } from '@/lib/motionPrefs';
+import LoopScope from '@/components/motion/LoopScope';
 import { useNow } from '@/lib/useNow';
 import { isFundingOpen, isMelancholiaOut, isReleased } from '@/lib/timeline';
 
@@ -23,7 +24,8 @@ export default function Ticker() {
   const row = [...items, ...items];
 
   return (
-    <div role="region" aria-label="주요 일정" className="relative z-10 overflow-hidden border-y border-cream/10 bg-ink-2 py-3 text-cream">
+    <div role="region" aria-label="주요 일정" data-loop-scope className="relative z-10 overflow-hidden border-y border-cream/10 bg-ink-2 py-3 text-cream">
+      <LoopScope />
       <ul className="sr-only">
         {items.map((item) => (
           <li key={item}>{item}</li>

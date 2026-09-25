@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import SectionLabel from '@/components/ui/SectionLabel';
 import ScrambleText from '@/components/features/ScrambleText';
 import TiltCard from '@/components/features/TiltCard';
+import LoopScope from '@/components/motion/LoopScope';
 import { Reveal, RevealGroup, RevealItem } from '@/components/motion/Reveal';
 import { DURATION, EASE_OUT, VIEWPORT } from '@/lib/motion';
 import { album, singles } from '@/app/data/album8';
@@ -22,6 +23,7 @@ export default function SectionAlbum() {
 
   return (
     <section id="album" aria-labelledby="album-title" className="relative overflow-hidden bg-ink py-24 text-cream scroll-mt-16 md:py-36 md:scroll-mt-20">
+      <LoopScope />
       {/* subtle color bands echoing the cover */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -left-[10%] top-[10%] h-[70%] w-[45%] rounded-full bg-cobalt/25 blur-[140px]" />
