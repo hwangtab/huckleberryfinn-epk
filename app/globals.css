@@ -2,6 +2,9 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import 'tailwindcss';
 
+/* Landscape phones and other very short viewports */
+@custom-variant short (@media (max-height: 520px) and (orientation: landscape));
+
 /* Watermelon from Noonnu CDN */
 @font-face {
   font-family: 'Watermelon';
@@ -170,14 +173,7 @@ p, span, div {
 }
 
 html {
-  scroll-padding-top: 5rem;
   overflow-x: clip;
-}
-
-@media (min-width: 768px) {
-  html {
-    scroll-padding-top: 6rem;
-  }
 }
 
 summary {

@@ -15,7 +15,7 @@ import {
 import { FaPause, FaPlay } from 'react-icons/fa';
 import { clampCam, type Cam } from './art-space';
 import HeroThread from './HeroThread';
-import { getHeroStatus, type HeroStatus } from './heroStatus';
+import { DATES, getHeroStatus, type HeroStatus } from './heroStatus';
 import { COVER_BLUR } from './coverBlur';
 import { TUMBLBUG_URL } from '@/app/data/album8';
 
@@ -77,8 +77,11 @@ function useCaps(): Caps {
   return caps;
 }
 
+const BUILD_TIME = Number(process.env.NEXT_PUBLIC_BUILD_TIME) || DATES.melancholia - 1;
+
 function useHeroStatus(): HeroStatus {
-  const [status, setStatus] = useState<HeroStatus>(() => getHeroStatus(Date.now()));
+  // First render uses the build time (identical on server and client); the real clock takes over after mount.
+  const [status, setStatus] = useState<HeroStatus>(() => getHeroStatus(BUILD_TIME));
   useEffect(() => {
     const tick = () => setStatus(getHeroStatus(Date.now()));
     tick();
@@ -110,12 +113,13 @@ function HeroTitle({ spread }: { spread: MotionValue<number> }) {
   return (
     <h1
       id="hero-title"
-      className="font-serif-kr text-[clamp(3.4rem,15vw,5.2rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-cream sm:text-[clamp(4rem,11vw,11rem)]"
+      className="font-serif-kr text-[clamp(3.4rem,15vw,5.2rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-cream sm:text-[clamp(4rem,11vw,11rem)] short:whitespace-nowrap short:text-[clamp(2.2rem,11vh,3.4rem)]"
     >
       <span className="sr-only">모두가 아는 이야기</span>
       <span aria-hidden="true">
         {TITLE_LINES.map((line, li) => (
-          <span key={line} className="block whitespace-nowrap">
+          <span key={line} className="block whitespace-nowrap short:inline">
+            {li > 0 && <span className="hidden w-[0.28em] short:inline-block" />}
             {line.split('').map((ch) => {
               const i = idx++;
               return <SpreadChar key={`${li}-${i}`} ch={ch} i={i} center={center} spread={spread} />;
@@ -164,6 +168,21 @@ export default function SectionHero() {
   // ----- scroll → camera -----
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
   const smooth = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.0005 });
+  useEffect(() => {
+    // Scroll restoration on reload / back, Home and End keys: snap the camera instead of flying through every beat.
+    // Only single-step jumps snap; a fast continuous scroll still eases through the spring.
+    let last = 0;
+    const snapIfFar = (v: number) => {
+      if (Math.abs(v - last) > 0.25) smooth.jump(v);
+      last = v;
+    };
+    const unsub = scrollYProgress.on('change', snapIfFar);
+    const id = requestAnimationFrame(() => snapIfFar(scrollYProgress.get()));
+    return () => {
+      unsub();
+      cancelAnimationFrame(id);
+    };
+  }, [scrollYProgress, smooth]);
   const size = useMotionValue<Size>({ W: 1440, H: 900 });
   const cam = useTransform(() => camAt(pinned ? smooth.get() : 0, size.get()));
   const boxX = useTransform(cam, (c) => `${(0.5 - c.x) * c.z * 100}%`);
@@ -199,7 +218,7 @@ export default function SectionHero() {
     const section = sectionRef.current;
     if (!section) return;
     const sync = () => {
-      active.current = onScreen.current && document.visibilityState === 'visible' && !paused;
+      active.current = onScreen.current && document.visibilityState === 'visible';
     };
     const io = new IntersectionObserver(([e]) => {
       onScreen.current = e.isIntersecting;
@@ -212,6 +231,11 @@ export default function SectionHero() {
       io.disconnect();
       document.removeEventListener('visibilitychange', sync);
     };
+  }, []);
+
+  const frozen = useRef(false);
+  useEffect(() => {
+    frozen.current = paused;
   }, [paused]);
 
   // ----- WebGL is progressive enhancement: start after LCP, when idle -----
@@ -304,7 +328,15 @@ export default function SectionHero() {
             aria-hidden="true"
             className={`absolute inset-0 transition-opacity duration-500 ${glReady ? 'opacity-100' : 'opacity-0'}`}
           >
-            <HeroCanvas src={texSrc} cam={cam} finePointer={caps.fine} active={active} onReady={onGlReady} onFail={onGlFail} />
+            <HeroCanvas
+              src={texSrc}
+              cam={cam}
+              finePointer={caps.fine}
+              active={active}
+              frozen={frozen}
+              onReady={onGlReady}
+              onFail={onGlFail}
+            />
           </div>
         )}
 
@@ -405,28 +437,28 @@ export default function SectionHero() {
           {/* bottom */}
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-10">
             <motion.div style={pinned ? { opacity: introOpacity, y: introY } : undefined} className="max-w-full">
-              <p className="hero-fade mb-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-bulb md:mb-4 md:text-xs" style={{ ['--d' as string]: '0.2s' }}>
-                <span className="hidden sm:inline">Huckleberryfinn · </span>8th Studio Album · 정규 8집
+              <p className="hero-fade mb-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-bulb md:mb-4 md:text-xs short:hidden" style={{ ['--d' as string]: '0.2s' }}>
+                <span className="hidden lg:inline">Huckleberryfinn · </span>8th Studio Album · 정규 8집
               </p>
               <HeroTitle spread={spread} />
-              <p lang="en" className="hero-fade mt-3 font-serif-latin text-xl italic text-cream/90 md:mt-4 md:text-3xl" style={{ ['--d' as string]: '0.5s' }}>
+              <p lang="en" className="hero-fade mt-3 font-serif-latin text-xl italic text-cream/90 md:mt-4 md:text-3xl short:hidden" style={{ ['--d' as string]: '0.5s' }}>
                 A Story Everyone Knows
               </p>
-              <p className="hero-fade mt-4 text-[15px] font-semibold tracking-[0.04em] text-cream md:text-base" style={{ ['--d' as string]: '0.6s' }}>
+              <p className="hero-fade mt-4 text-[15px] font-semibold tracking-[0.04em] text-cream md:text-base short:mt-2" style={{ ['--d' as string]: '0.6s' }}>
                 2026. 10. 23 FRI 12:00 KST <span className="font-medium text-cream/75">정규 8집 발매</span>
               </p>
-              <p className="hero-fade mt-1.5 hidden text-sm font-medium text-cream/75 md:block" style={{ ['--d' as string]: '0.7s' }}>
+              <p className="hero-fade mt-1.5 hidden text-sm font-medium text-cream/75 md:block short:hidden" style={{ ['--d' as string]: '0.7s' }}>
                 22th Yellow Concert — Seoul 10.31 · Busan 12.05
               </p>
             </motion.div>
 
             <div className="hero-fade flex shrink-0 flex-col gap-3 md:items-end" style={{ ['--d' as string]: '0.7s' }}>
-              <p className="text-sm font-semibold text-cream" suppressHydrationWarning>
+              <p className="text-sm font-semibold text-cream">
                 <span aria-hidden="true" className="mr-2 inline-block h-2 w-2 rounded-full bg-thread align-middle" />
-                <span aria-hidden="true" suppressHydrationWarning>
+                <span aria-hidden="true">
                   {status.line}
                 </span>
-                <span className="sr-only" suppressHydrationWarning>
+                <span className="sr-only">
                   {status.sr}
                 </span>
               </p>
@@ -464,7 +496,7 @@ export default function SectionHero() {
           <motion.div
             aria-hidden="true"
             style={{ opacity: cueOpacity }}
-            className="pointer-events-none absolute bottom-3 left-1/2 z-[4] hidden -translate-x-1/2 flex-col items-center gap-2 md:flex"
+            className="pointer-events-none absolute bottom-3 left-1/2 z-[4] hidden -translate-x-1/2 flex-col items-center gap-2 lg:flex short:hidden"
           >
             <span className="text-[10px] font-semibold uppercase tracking-[0.35em] text-cream/70">Scroll — follow the thread</span>
             <span className="hero-cue h-8 w-px bg-gradient-to-b from-thread to-transparent" />

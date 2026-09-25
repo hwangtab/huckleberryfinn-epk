@@ -118,7 +118,7 @@ function SinglePanel({ single, flip, onZoom }: { single: Single; flip: boolean; 
   return (
     <article
       id={`single-${single.id}`}
-      className="relative grid items-start gap-10 lg:grid-cols-12 lg:items-stretch lg:gap-14"
+      className="relative grid scroll-mt-20 items-start gap-10 md:scroll-mt-24 lg:grid-cols-12 lg:items-stretch lg:gap-14"
       aria-labelledby={`single-${single.id}-title`}
     >
       {/* Cover */}

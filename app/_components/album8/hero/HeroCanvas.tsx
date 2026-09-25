@@ -10,15 +10,16 @@ type Props = {
   cam: MotionValue<Cam>;              // already clamped (clampCam)
   finePointer: boolean;
   active: React.RefObject<boolean>;   // section on screen && tab visible
+  frozen: React.RefObject<boolean>;   // user paused ambient motion: keep rendering the camera, stop the clock
   onReady: () => void;                // crossfade canvas in over the <Image>
   onFail: () => void;                 // stay on / return to the <Image>
 };
 
-export default function HeroCanvas({ src, cam, finePointer, active, onReady, onFail }: Props) {
+export default function HeroCanvas({ src, cam, finePointer, active, frozen, onReady, onFail }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const r = useRef<CoverRenderer | null>(null);
   const p = useRef({ x: -1e4, y: -1e4, tx: -1e4, ty: -1e4, vx: 0, vy: 0, force: 0 });
-  const t0 = useRef(0);
+  const clock = useRef({ last: 0, t: 0 });
   const readyAt = useRef(0);
 
   useEffect(() => {
@@ -55,8 +56,11 @@ export default function HeroCanvas({ src, cam, finePointer, active, onReady, onF
 
   useAnimationFrame((time) => {
     const renderer = r.current;
+    const k = clock.current;
+    const dt = k.last ? Math.min(100, time - k.last) : 0;
+    k.last = time;
     if (!renderer || !active.current || !readyAt.current) return;
-    if (!t0.current) t0.current = time;
+    if (!frozen.current) k.t += dt;
     const s = p.current;
     if (s.x < -1e3) { s.x = s.tx; s.y = s.ty; }       // first sample: no jump
     const nx = s.x + (s.tx - s.x) * 0.18, ny = s.y + (s.ty - s.y) * 0.18;
@@ -67,7 +71,7 @@ export default function HeroCanvas({ src, cam, finePointer, active, onReady, onF
     const fx = Math.min(1, (performance.now() - readyAt.current) / 1400); // effects ramp in after crossfade
     const c = cam.get();
     renderer.render({
-      time: (time - t0.current) / 1000,
+      time: k.t / 1000,
       camX: c.x, camY: c.y, zoom: c.z,
       mouseX: s.x, mouseY: s.y, velX: s.vx, velY: s.vy,
       force: finePointer ? s.force : 0,
