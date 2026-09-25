@@ -21,10 +21,21 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
 
-  useMotionValueEvent(scrollY, 'change', (latest) => {
-    const heroHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
-    setIsVisible(latest > heroHeight * 0.8);
-  });
+  // Show once the pinned hero has fully scrolled away (tied to the #hero-end sentinel).
+  const syncVisibility = () => {
+    const end = document.getElementById('hero-end');
+    if (!end) {
+      setIsVisible(window.scrollY > window.innerHeight * 0.8);
+      return;
+    }
+    setIsVisible(end.getBoundingClientRect().top <= 80);
+  };
+
+  useMotionValueEvent(scrollY, 'change', syncVisibility);
+
+  useEffect(() => {
+    syncVisibility();
+  }, []);
 
   const handleLinkClick = () => setIsMobileMenuOpen(false);
 

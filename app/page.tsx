@@ -1,4 +1,4 @@
-import SectionHero from './_components/album8/SectionHero';
+import SectionHero from './_components/album8/hero';
 import Ticker from './_components/album8/Ticker';
 import SectionSingles from './_components/album8/SectionSingles';
 import SectionStory from './_components/album8/SectionStory';

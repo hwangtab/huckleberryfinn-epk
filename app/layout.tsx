@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
+import { Instrument_Serif, Nanum_Myeongjo } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import CursorGlow from '@/components/features/CursorGlow';
@@ -9,6 +10,23 @@ const pretendard = localFont({
   display: 'swap',
   variable: '--font-pretendard',
   weight: '100 900',
+});
+
+const nanumMyeongjo = Nanum_Myeongjo({
+  weight: ['400', '700', '800'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-nanum-myeongjo',
+  preload: false,
+  fallback: ['AppleMyungjo', 'Batang', 'serif'],
+});
+
+const instrumentSerif = Instrument_Serif({
+  weight: '400',
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-instrument-serif',
 });
 
 const title = '허클베리핀 정규 8집 〈모두가 아는 이야기〉 | Official EPK';
@@ -65,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" className={`${pretendard.variable} bg-ink`}>
+    <html lang="ko" className={`${pretendard.variable} ${nanumMyeongjo.variable} ${instrumentSerif.variable} bg-ink`}>
       <body className="grain bg-ink font-sans text-cream">
         <CursorGlow />
         <Header />

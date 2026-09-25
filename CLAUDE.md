@@ -66,12 +66,23 @@ npm run lint
 - `cream`: text on dark
 - Display: Nanum Myeongjo (`.font-serif-kr`). Latin accents: Instrument Serif (`.font-serif-latin`). Body: Pretendard.
 
+### Layout rules
+- `html`/`body` use `overflow-x: clip`, not `hidden`. `hidden` turns body into a scroll container and silently breaks every `position: sticky`.
+- The header appears once `#hero-end` (bottom of the hero) reaches the top of the viewport.
+- Never put `mix-blend-mode` on text over the painting; contrast comes from the scrims.
+
 ### Component Structure
 
 ```
 /app
   /_components/album8/   # 8집 sections, mounted in app/page.tsx
-    SectionHero.tsx      # title reveal, 3D-tilt cover, dual countdowns
+    hero/                # "붉은 실 / The Thread" pinned hero (250svh desktop, 200svh mobile)
+      index.tsx          # stage, scroll camera keyframes, beats, CTAs, date-aware status
+      art-space.ts       # painting-space coordinates (0..1), clampCam, thread path
+      HeroThread.tsx     # live SVG thread in art space (idle 124bpm sway, cursor pluck, bead)
+      HeroCanvas.tsx     # WebGL layer, desktop fine-pointer only, loaded after LCP
+      gl/                # zero-dependency WebGL1 renderer + cubist displacement shader
+      heroStatus.ts      # D-day copy that switches after 09-29, 10-11, 10-23 (KST)
     Ticker.tsx           # marquee of key dates
     SectionSingles.tsx   # 박쥐 (MV facade) / 멜랑콜리아 (BPM pulse, lyrics, countdown)
     SectionStory.tsx     # scroll-linked word reveal + sticky crossfading photos
@@ -94,6 +105,7 @@ npm run lint
 /public/images/8th_album/   cover.jpg (official 3000px art, also used as the 멜랑콜리아 single cover),
                             single-bat.jpg, story photos, og-image.jpg.
                             cd-mockup.jpg is the outdated lightbulb draft and is not used.
+/public/images/8th_album/hero/   cover-2400.jpg (next/image source), cover-tex-{2048,1600}.webp (WebGL textures)
 /public/images/yellowconcert/poster-2026.jpg
 /public/images/profile/     ASCII-named copies (band-3, lee-kiyong, ...). next/image fails on Korean/space filenames.
 ```

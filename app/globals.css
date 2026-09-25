@@ -1,6 +1,5 @@
 /* Web Fonts and Tailwind */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
-@import url("https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Instrument+Serif:ital@0;1&display=swap");
 @import 'tailwindcss';
 
 /* Watermelon from Noonnu CDN */
@@ -118,10 +117,11 @@
   --color-bulb: #F5C56A;
   --color-bulb-hot: #FFE3A3;
   --color-cream: #F1E8D6;
+  --color-thread: #E2482F;
 
   /* Font Families */
-  --font-serif-kr: 'Nanum Myeongjo', 'Apple SD Gothic Neo', serif;
-  --font-serif-latin: 'Instrument Serif', 'Times New Roman', serif;
+  --font-serif-kr: var(--font-nanum-myeongjo), 'AppleMyungjo', serif;
+  --font-serif-latin: var(--font-instrument-serif), 'Times New Roman', serif;
   --font-display: 'ONE Mobile Title', sans-serif;
   --font-headline: 'Pretendard', sans-serif;
 }
@@ -135,7 +135,7 @@ body {
   overflow-wrap: break-word;
   word-break: keep-all;
   hyphens: auto;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Enhanced text wrapping for better readability */
@@ -163,10 +163,15 @@ p, span, div {
 }
 
 /* 부드러운 스크롤 */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 5rem;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 @media (min-width: 768px) {
@@ -210,12 +215,12 @@ summary::-webkit-details-marker {
 
 /* ===================== 8th album: 모두가 아는 이야기 ===================== */
 .font-serif-kr {
-  font-family: 'Nanum Myeongjo', 'Apple SD Gothic Neo', serif;
+  font-family: var(--font-nanum-myeongjo), 'AppleMyungjo', serif;
   letter-spacing: -0.02em;
 }
 
 .font-serif-latin {
-  font-family: 'Instrument Serif', 'Times New Roman', serif;
+  font-family: var(--font-instrument-serif), 'Times New Roman', serif;
 }
 
 .text-glow-bulb {
@@ -309,6 +314,112 @@ summary::-webkit-details-marker {
   .bpm-dot,
   .bpm-ring,
   .animate-flicker {
+    animation: none;
+  }
+}
+
+
+/* ===================== Hero: 붉은 실 / The Thread ===================== */
+:root {
+  --hero-seam: 42%;
+}
+
+@media (max-aspect-ratio: 1/1) {
+  :root {
+    --hero-seam: 32%;
+  }
+}
+
+/* Rest crop before hydration (matches the JS camera at progress 0). */
+@media (min-aspect-ratio: 3/2) {
+  .hero-artbox {
+    transform: translateY(13%);
+  }
+}
+
+@keyframes hero-lid-top {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0); }
+}
+
+.hero-lid-top {
+  transform-origin: top;
+  animation: hero-lid-top 0.95s cubic-bezier(0.7, 0, 0.2, 1) 0.2s both;
+}
+
+.hero-lid-bottom {
+  transform-origin: bottom;
+  animation: hero-lid-top 0.95s cubic-bezier(0.7, 0, 0.2, 1) 0.2s both;
+}
+
+@keyframes hero-thread-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+.hero-thread-draw {
+  stroke-dasharray: 1;
+  animation: hero-thread-draw 1.5s cubic-bezier(0.65, 0, 0.25, 1) 0.05s both;
+}
+
+@keyframes hero-char-in {
+  from { opacity: 0; transform: translateY(0.35em); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+.hero-char {
+  display: inline-block;
+  animation: hero-char-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(0.15s + var(--i, 0) * 35ms);
+}
+
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.hero-fade {
+  animation: hero-fade-up 0.6s ease-out both;
+  animation-delay: var(--d, 0.5s);
+}
+
+@keyframes hero-breathe {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+.hero-breathe {
+  animation: hero-breathe 5.8s ease-in-out infinite;
+}
+
+@keyframes hero-cue {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+.hero-cue {
+  animation: hero-cue 2.4s ease-in-out infinite;
+}
+
+.hero-paused *,
+.hero-paused *::before,
+.hero-paused *::after {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-lid-top,
+  .hero-lid-bottom {
+    display: none;
+  }
+
+  .hero-thread-draw,
+  .hero-char,
+  .hero-fade,
+  .hero-breathe,
+  .hero-cue {
     animation: none;
   }
 }
