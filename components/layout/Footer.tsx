@@ -51,7 +51,24 @@ export default function Footer() {
               {contactInfo.email}
             </a>
           </p>
-          <p>© 2026 Huckleberryfinn. All rights reserved.</p>
+          <div className="flex flex-col gap-1 md:items-end">
+            <p>
+              Website by{' '}
+              <a
+                href="https://studionol.co.kr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block py-2 text-cream/90 underline-offset-4 hover:text-bulb hover:underline"
+              >
+                Studio NOL
+              </a>
+              <span className="text-cream/60"> · 황경하 · </span>
+              <a href="mailto:hello@studionol.co.kr" className="inline-block py-2 hover:text-bulb">
+                hello@studionol.co.kr
+              </a>
+            </p>
+            <p>© 2026 Huckleberryfinn. All rights reserved.</p>
+          </div>
         </div>
       </div>
     </footer>
