@@ -37,6 +37,8 @@ export interface Single {
   cover: string;
   videoId: string | null;
   videoThumb?: string;
+  /** 영상 종류. 없으면 뮤직비디오. */
+  videoKind?: 'mv' | 'audio';
   bpm?: number;
   summary: string;
   paragraphs: string[];
@@ -72,7 +74,10 @@ export const singles: Single[] = [
     releaseAt: '2026-09-29T12:00:00+09:00',
     releaseLabel: '2026. 09. 29 (화) 12:00 KST',
     cover: '/images/8th_album/single-melancholia.jpg',
-    videoId: null,
+    // 유튜브 공식 오디오. releaseAt에 공개되므로 그 전까지는 카운트다운을 보인다.
+    videoId: 'J_d4iGPy3Pw',
+    videoThumb: '/images/8th_album/single-melancholia.jpg',
+    videoKind: 'audio',
     bpm: 124,
     summary: '음악을 만들며 살아가는 한 사람이 오랫동안 곁에 머물러온 두려움과 우울을 바라보며, 그 속에서도 노래를 놓지 않는 이야기.',
     keyLine: '나의 노래는 나의 부적',

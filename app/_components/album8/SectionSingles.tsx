@@ -12,6 +12,7 @@ import LoopScope from '@/components/motion/LoopScope';
 import { Reveal } from '@/components/motion/Reveal';
 import { singles, Single } from '@/app/data/album8';
 import { DURATION, EASE_OUT } from '@/lib/motion';
+import { useNow } from '@/lib/useNow';
 
 function VideoFacade({ single }: { single: Single }) {
   const [playing, setPlaying] = useState(false);
@@ -20,6 +21,7 @@ function VideoFacade({ single }: { single: Single }) {
     if (playing) frameRef.current?.focus();
   }, [playing]);
   if (!single.videoId) return null;
+  const kind = single.videoKind === 'audio' ? '오디오' : '뮤직비디오';
 
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black ring-1 ring-cream/10">
@@ -28,7 +30,7 @@ function VideoFacade({ single }: { single: Single }) {
           ref={frameRef}
           className="h-full w-full"
           src={`https://www.youtube.com/embed/${single.videoId}?autoplay=1&rel=0`}
-          title={`${single.title} 뮤직비디오`}
+          title={`${single.title} ${kind}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         />
@@ -37,7 +39,7 @@ function VideoFacade({ single }: { single: Single }) {
           type="button"
           onClick={() => setPlaying(true)}
           className="group relative h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb"
-          aria-label={`${single.title} 뮤직비디오 재생`}
+          aria-label={`${single.title} ${kind} 재생`}
         >
           {single.videoThumb && (
             <Image
@@ -53,7 +55,7 @@ function VideoFacade({ single }: { single: Single }) {
             <FaPlay className="ml-1" />
           </span>
           <span className="absolute bottom-4 left-4 text-xs font-semibold uppercase tracking-[0.3em] text-cream/80">
-            Official Music Video
+            {single.videoKind === 'audio' ? 'Official Audio' : 'Official Music Video'}
           </span>
         </button>
       )}
@@ -122,6 +124,8 @@ function Lyrics({ single }: { single: Single }) {
 }
 
 function SinglePanel({ single, flip, onZoom }: { single: Single; flip: boolean; onZoom: (s: Single) => void }) {
+  const now = useNow();
+  const showVideo = single.videoId && now >= Date.parse(single.releaseAt);
   return (
     <article
       id={`single-${single.id}`}
@@ -182,7 +186,7 @@ function SinglePanel({ single, flip, onZoom }: { single: Single; flip: boolean; 
 
         {single.bpm && <BpmPulse bpm={single.bpm} />}
 
-        {single.videoId ? (
+        {showVideo ? (
           <VideoFacade single={single} />
         ) : (
           <div className="rounded-xl border border-teal/30 bg-teal/5 p-6">
