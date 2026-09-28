@@ -308,7 +308,7 @@ export const band = {
   name: 'Huckleberryfinn',
   nameKr: '허클베리핀',
   since: 1997,
-  photo: { src: '/images/profile/band-3.webp', width: 1920, height: 1280 },
+  photo: { src: '/images/profile/band-4.webp', width: 1999, height: 1999 },
   bio: [
     '1997년 결성된 허클베리핀은 대한민국 1세대 인디 록 밴드다. 1998년 발표한 1집 〈18일의 수요일〉과 2004년 3집 〈올랭피오의 별〉이 ‘한국 대중음악 100대 명반’에 선정되는 등 평단의 극찬을 받으며 독보적인 음악 세계를 구축해왔다.',
     '거친 그런지 록부터 서정적이고 몽환적인 사운드까지 끊임없이 진화하며, 한국대중음악상 최우수 모던록 음반상을 수상하는 등 결성 30년에 가까운 지금까지도 한국 인디 씬에 가장 큰 영향력을 미치는 밴드 중 하나로 평가받는다.',
@@ -330,9 +330,10 @@ export interface PressAsset {
 export const pressAssets: PressAsset[] = [
   { title: '정규 8집 앨범 커버', spec: 'JPG · 1254×1254', href: '/images/8th_album/album-cover.jpg', preview: '/images/8th_album/album-cover.jpg' },
   { title: '〈멜랑콜리아〉 싱글 커버', spec: 'JPG · 3000×3000', href: '/images/8th_album/single-melancholia.jpg', preview: '/images/8th_album/single-melancholia.jpg' },
-  { title: '〈박쥐〉 싱글 커버', spec: 'JPG · 1000×1000', href: '/images/8th_album/single-bat.jpg', preview: '/images/8th_album/single-bat.jpg' },
+  { title: '〈박쥐〉 싱글 커버', spec: 'JPG · 3000×3000', href: '/images/8th_album/single-bat.jpg', preview: '/images/8th_album/single-bat.jpg' },
   { title: '2026 Yellow Concert 포스터', spec: 'JPG · 1061×1500', href: '/images/yellowconcert/poster-2026.jpg', preview: '/images/yellowconcert/poster-2026.jpg' },
-  { title: '밴드 프로필 사진', spec: 'JPG · 6000×4000', href: '/images/profile/band-3.jpg', preview: '/images/profile/band-3.webp' },
+  { title: '밴드 프로필 사진', spec: 'JPG · 1999×1999', href: '/images/profile/band-4.jpg', preview: '/images/profile/band-4.webp' },
+  { title: '밴드 프로필 사진 2', spec: 'JPG · 1999×1999', href: '/images/profile/band-5.jpg', preview: '/images/profile/band-5.webp' },
   { title: '멤버 프로필 — 이기용', spec: 'JPG · 638×850', href: '/images/profile/lee-kiyong.jpg', preview: '/images/profile/lee-kiyong.webp' },
   { title: '멤버 프로필 — 이소영', spec: 'JPG · 638×850', href: '/images/profile/lee-soyoung.jpg', preview: '/images/profile/lee-soyoung.webp' },
   { title: '멤버 프로필 — 성장규', spec: 'JPG · 638×850', href: '/images/profile/sung-janggyu.jpg', preview: '/images/profile/sung-janggyu.webp' },

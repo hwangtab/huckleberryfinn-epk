@@ -45,6 +45,6 @@
 
 ■ 문의
 레이블: 샤 레이블 (Sha Label)
-이메일: shalabel@naver.com
+이메일: shalab@naver.com
 공식 EPK: https://huckleberryfinn.vercel.app
 텀블벅: https://tumblbug.com/hbf8th

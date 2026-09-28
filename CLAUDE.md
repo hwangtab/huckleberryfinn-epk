@@ -118,7 +118,8 @@ npm run lint
 /public/images/8th_album/hero/   melancholia-2400.jpg + melancholia-tex-{2048,1600}.webp — the hero artwork is the
                             〈멜랑콜리아〉 single cover, credited in the hero ("Artwork · 2nd Single 〈멜랑콜리아〉").
 /public/images/yellowconcert/poster-2026.jpg
-/public/images/profile/     ASCII-named copies (band-3, lee-kiyong, ...). next/image fails on Korean/space filenames.
+/public/images/profile/     ASCII-named copies (band-4 = current wide band photo, band-5 = secondary press photo,
+                            band-3 = older photo kept but unused, lee-kiyong, ...). next/image fails on Korean/space filenames.
 ```
 
 ## Key Implementation Details

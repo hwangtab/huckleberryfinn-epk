@@ -126,7 +126,7 @@
     *   **Body Text:** 모든 문의사항은 아래 연락처로 연락 주시기 바랍니다.
     *   **Label:** 샤 레이블 (Sha Label)
     *   **Contact Person:** 성장규
-    *   **Email:** shalabel@naver.com
+    *   **Email:** shalab@naver.com
     *   **Phone:** 010-5229-8099
     *   **SNS Icons:** YouTube, Instagram, Facebook
 
@@ -135,6 +135,6 @@
     *   **Body Text:** For all inquiries, please feel free to contact us below.
     *   **Label:** Sha Label
     *   **Contact Person:** Seong, Chang-gyu
-    *   **Email:** shalabel@naver.com
+    *   **Email:** shalab@naver.com
     *   **Phone:** +82-10-5229-8099
     *   **SNS Icons:** YouTube, Instagram, Facebook

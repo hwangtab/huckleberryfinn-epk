@@ -84,7 +84,7 @@ export default function SectionFuture() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          <Button href="mailto:shalabel@naver.com">
+          <Button href="mailto:shalab@naver.com">
             프로젝트 참여하기
           </Button>
         </motion.div>
