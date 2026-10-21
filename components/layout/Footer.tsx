@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FaYoutube, FaInstagram, FaFacebook, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaYoutube, FaInstagram, FaFacebook } from 'react-icons/fa';
 import { contactInfo } from '@/app/data/contact';
 import { album } from '@/app/data/album8';
 
@@ -32,15 +32,6 @@ export default function Footer() {
                 <FaFacebook />
               </a>
             </div>
-            <a
-              href={contactInfo.tumblbug}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-bulb transition-colors hover:text-bulb-hot"
-            >
-              <FaExternalLinkAlt size={11} aria-hidden="true" />
-              텀블벅 펀딩 페이지
-            </a>
           </div>
         </div>
 

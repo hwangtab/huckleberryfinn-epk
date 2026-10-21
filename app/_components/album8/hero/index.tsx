@@ -20,7 +20,6 @@ import { getHeroStatus, type HeroStatus } from './heroStatus';
 import { useNow } from '@/lib/useNow';
 import { setMotionPaused, useMotionPrefs } from '@/lib/motionPrefs';
 import { ART_BLUR } from './artBlur';
-import { TUMBLBUG_URL } from '@/app/data/album8';
 
 const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false });
 
@@ -484,28 +483,17 @@ export default function SectionHero() {
               </p>
               <div className="flex flex-wrap gap-2.5">
                 <a
-                  href="#singles"
+                  href="#title-track"
                   className="inline-flex min-h-11 items-center gap-2 rounded-full bg-thread-deep px-5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
                 >
-                  싱글 듣기 <span aria-hidden="true">↓</span>
+                  타이틀곡 MV <span aria-hidden="true">↓</span>
                 </a>
-                {status.fundingOpen ? (
-                  <a
-                    href={TUMBLBUG_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center rounded-full bg-ink/80 px-5 text-sm font-semibold text-cream ring-1 ring-cream/40 transition-colors hover:bg-cream hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
-                  >
-                    텀블벅 후원 ~10.11
-                  </a>
-                ) : (
-                  <a
-                    href="#concert"
-                    className="inline-flex min-h-11 items-center rounded-full bg-ink/80 px-5 text-sm font-semibold text-cream ring-1 ring-cream/40 transition-colors hover:bg-cream hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
-                  >
-                    Yellow Concert
-                  </a>
-                )}
+                <a
+                  href="#concert"
+                  className="inline-flex min-h-11 items-center rounded-full bg-ink/80 px-5 text-sm font-semibold text-cream ring-1 ring-cream/40 transition-colors hover:bg-cream hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                >
+                  Yellow Concert
+                </a>
               </div>
             </div>
           </div>

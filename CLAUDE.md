@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an EPK (Electronic Press Kit) website for Huckleberryfinn, a legendary Korean indie rock band.
 
-**Current site (since 2026-09): 정규 8집 〈모두가 아는 이야기〉** — release date 2026-10-23 12:00 KST. Two pre-release singles: 〈박쥐〉 (A Bat In The Sun, 2026-08-21, MV on YouTube) and 〈멜랑콜리아〉 (Melancholia, 2026-09-29 12:00 KST, 124 bpm). Tied to a Tumblbug campaign (https://tumblbug.com/hbf8th, 2026-09-17 ~ 10-11) and the 22nd Yellow Concert (the official poster spells it "22th") (Seoul 상상마당 10-31, Busan 오방가르드 12-05). Source material lives in `docs/8집/`.
+**Current site (since 2026-09): 정규 8집 〈모두가 아는 이야기〉** — release date 2026-10-23 12:00 KST. Two pre-release singles: 〈박쥐〉 (A Bat In The Sun, 2026-08-21, MV on YouTube) and 〈멜랑콜리아〉 (Melancholia, 2026-09-29 12:00 KST, 124 bpm). Title track 〈모두가 아는 이야기〉 MV (YouTube `jZOUn4nINMI`) goes public with the album. Five title tracks: 멜랑콜리아, 모두가 아는 이야기, 나선의 밤, 황혼의 기수와 말, 세계 끝 (full 9-track list in `app/data/album8.ts`). 22nd Yellow Concert: Seoul KT&G 상상마당 홍대 라이브홀 10-31, Busan 오방가르드 12-05. The Tumblbug campaign (09-17 ~ 10-11) has ended and was removed from the site. Album press release (2026-10-20): `public/press/huckleberryfinn-8th-album-press-release.pdf`, text in `app/data/pressRelease.ts` and `docs/8집/press-release-album.md`. Source material lives in `docs/8집/`.
 
 **Legacy:** the previous site promoted the 2025 re-recording of the 2001 second album "나를 닮은 사내". Those sections (`app/_components/Section*.tsx`, `app/data/tracks.ts` etc.) are kept in the repo but are no longer mounted from `app/page.tsx`.
 
@@ -67,8 +67,8 @@ npm run lint
 - Display: Nanum Myeongjo (`.font-serif-kr`). Latin accents: Instrument Serif (`.font-serif-latin`). Body: Pretendard.
 
 ### Date-dependent copy
-- All release/funding dates live in `lib/timeline.ts`. Components read the clock with `useNow()` (`lib/useNow.ts`), which renders the build time first so SSR and hydration always match, then switches to the real clock.
-- After 10-11 the funding CTAs, Tumblbug discount prices and "Support" button switch off automatically; after 09-29 / 10-23 the "Out now" copy switches on.
+- All release dates live in `lib/timeline.ts`. Components read the clock with `useNow()` (`lib/useNow.ts`), which renders the build time first so SSR and hydration always match, then switches to the real clock.
+- After 09-29 / 10-23 the "Out now" copy switches on; the title-track MV embed replaces its countdown at 10-23 12:00 KST.
 
 ### Shared behaviours
 - Scroll locks go through `lib/scrollLock.ts` (locks `<html>`, reference-counted). Never set `body.style.overflow` directly.
@@ -93,11 +93,11 @@ npm run lint
       gl/                # zero-dependency WebGL1 renderer + cubist displacement shader
       heroStatus.ts      # D-day copy that switches after 09-29, 10-11, 10-23 (KST)
     Ticker.tsx           # marquee of key dates
+    SectionTitleTrack.tsx # title-track MV (countdown until release) + credits
     SectionSingles.tsx   # 박쥐 (MV facade) / 멜랑콜리아 (BPM pulse, lyrics, countdown)
     SectionStory.tsx     # scroll-linked word reveal + sticky crossfading photos
-    SectionAlbum.tsx     # CSS jewel case + spinning disc from cover, specs, 9-slot tracklist
+    SectionAlbum.tsx     # CSS jewel case + spinning disc from cover, specs, tracklist (title badges)
     SectionConcert.tsx   # 22nd Yellow Concert Seoul / Busan
-    SectionFunding.tsx   # Tumblbug reward rail
     SectionBand.tsx      # B&W-to-colour band photo, member cards
     SectionPress.tsx     # downloadable assets, copyable press text, contact
   /_components/Section*.tsx   # legacy 2집 sections (unmounted)
@@ -112,13 +112,13 @@ npm run lint
   /motion/    Reveal, AnchorScroll, LoopScope, MotionProvider
   /layout/    Header, Footer
 
-/public/images/8th_album/   album-cover.jpg = the ALBUM cover (light bulb, "모두가 아는 이야기", 1254px — Tumblbug's first story image).
+/public/images/8th_album/   album-cover.jpg = the final ALBUM cover (Edison bulb, vertical title, logo at bottom, 1417px).
                             single-melancholia.jpg = the 〈멜랑콜리아〉 SINGLE cover (face with red thread, 3000px).
                             single-bat.jpg, story photos, og-album.jpg (from the album cover), cd-mockup.jpg (unused).
 /public/images/8th_album/hero/   melancholia-2400.jpg + melancholia-tex-{2048,1600}.webp — the hero artwork is the
                             〈멜랑콜리아〉 single cover, credited in the hero ("Artwork · 2nd Single 〈멜랑콜리아〉").
-/public/images/yellowconcert/poster-2026.jpg
-/public/images/profile/     ASCII-named copies (band-4 = current wide band photo, band-5 = secondary press photo,
+/public/images/yellowconcert/poster-2026.jpg   22nd Yellow Concert poster with band photo (1500×2000)
+/public/images/profile/     ASCII-named copies (band-6 = current band photo, 3:2 2000×1333; band-4 = secondary press photo,
                             band-3 = older photo kept but unused, lee-kiyong, ...). next/image fails on Korean/space filenames.
 ```
 

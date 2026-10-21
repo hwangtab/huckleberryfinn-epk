@@ -4,17 +4,17 @@ import { FaPause, FaPlay } from 'react-icons/fa';
 import { setMotionPaused, useMotionPrefs } from '@/lib/motionPrefs';
 import LoopScope from '@/components/motion/LoopScope';
 import { useNow } from '@/lib/useNow';
-import { isFundingOpen, isMelancholiaOut, isReleased } from '@/lib/timeline';
+import { isMelancholiaOut, isReleased } from '@/lib/timeline';
 
 function tickerItems(now: number): string[] {
   const released = isReleased(now);
   return [
     released ? '정규 8집 〈모두가 아는 이야기〉 Out now' : '정규 8집 〈모두가 아는 이야기〉',
     ...(released ? [] : ['2026. 10. 23 (금) 12:00 KST 발매']),
+    released ? '타이틀곡 〈모두가 아는 이야기〉 MV Out now' : '타이틀곡 〈모두가 아는 이야기〉 MV 10. 23 (금) 12:00',
     isMelancholiaOut(now) ? '2nd Single 〈멜랑콜리아〉 Out now' : '2nd Single 〈멜랑콜리아〉 09. 29 (화) 12:00 KST',
     '1st Single 〈박쥐〉 Out now',
     '22nd Yellow Concert — Seoul 10. 31 · Busan 12. 05',
-    ...(isFundingOpen(now) ? ['텀블벅 펀딩 진행 중 ~ 10. 11'] : []),
   ];
 }
 

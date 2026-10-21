@@ -1,9 +1,7 @@
 /**
  * 허클베리핀 정규 8집 〈모두가 아는 이야기〉 EPK 데이터
- * 출처: docs/8집/ (텀블벅 스토리, 멜랑콜리아 곡 설명, 가사)
+ * 출처: docs/8집/ (앨범 소개, 멜랑콜리아 곡 설명, 가사, 정규 8집 보도자료)
  */
-
-export const TUMBLBUG_URL = 'https://tumblbug.com/hbf8th';
 
 export const album = {
   number: 8,
@@ -13,16 +11,66 @@ export const album = {
   releaseLabel: '2026. 10. 23 (금) 12:00 KST',
   releaseShort: '10.23 (금) 낮 12시',
   trackCount: 9,
-  format: 'Jewel Case CD · 8p 북클릿 (예정)',
+  format: 'Jewel Case CD · 8p 북클릿',
   label: '샤 레이블 (Sha Label)',
+  distributor: '미러볼뮤직',
+  producer: '이기용',
   cover: '/images/8th_album/album-cover.jpg',
   cdMockup: '/images/8th_album/cd-mockup.jpg',
   ogImage: '/images/8th_album/og-album.jpg',
   tagline: '내 안에서 낯설어진 존재들을 다시 부르는 노래',
   notes: [
-    '8집에는 총 9곡이 수록될 예정이며, 각 곡의 제목과 수록 순서는 확정되는 대로 안내됩니다.',
-    '정규 앨범 발매 전 디지털 싱글 2곡을 선공개합니다. 8월 21일 〈박쥐〉, 9월 29일 〈멜랑콜리아〉.',
-    '실물 CD 패키지의 세부 디자인은 제작 과정에서 달라질 수 있습니다.',
+    '2022년 정규 7집 〈The Light Of Rain(비의 빛)〉 이후 4년 만의 정규 앨범입니다.',
+    '타이틀곡은 〈멜랑콜리아〉, 〈모두가 아는 이야기〉, 〈나선의 밤〉, 〈황혼의 기수와 말〉, 〈세계 끝〉 다섯 곡입니다.',
+    '앞서 8월 21일 〈박쥐〉, 9월 29일 〈멜랑콜리아〉를 디지털 싱글로 선공개했습니다.',
+    '10월 23일(금) 낮 12시, 미러볼뮤직을 통해 각종 온라인 음원 사이트에서 공개됩니다.',
+  ],
+};
+
+export interface Track {
+  no: number;
+  title: string;
+  /** 타이틀곡 */
+  isTitle?: boolean;
+  /** 선공개 싱글 id (singles[].id) */
+  singleId?: string;
+}
+
+export const tracklist: Track[] = [
+  { no: 1, title: '멜랑콜리아', isTitle: true, singleId: 'melancholia' },
+  { no: 2, title: '모두가 아는 이야기', isTitle: true },
+  { no: 3, title: '나선의 밤', isTitle: true },
+  { no: 4, title: 'Live To Tell' },
+  { no: 5, title: '구름을 밀어낼게' },
+  { no: 6, title: '박쥐', singleId: 'bat' },
+  { no: 7, title: '바라본다' },
+  { no: 8, title: '황혼의 기수와 말', isTitle: true },
+  { no: 9, title: '세계 끝', isTitle: true },
+];
+
+/** 동명 타이틀곡 〈모두가 아는 이야기〉 뮤직비디오 + 크레딧 */
+export const titleTrack = {
+  title: '모두가 아는 이야기',
+  releaseAt: '2026-10-23T12:00:00+09:00',
+  releaseLabel: '2026. 10. 23 (금) 12:00 KST',
+  videoId: 'jZOUn4nINMI',
+  videoUrl: 'https://www.youtube.com/watch?v=jZOUn4nINMI',
+  videoThumb: '/images/8th_album/album-cover.jpg',
+  summary:
+    '거울 속 자신을 바라보며, 마지막에 자신을 구해줄 사람은 결국 자기 자신이라는 사실을 깨닫는 장면. 오래된 세계가 무너지고 새로운 얼굴로 다시 태어나더라도 이전의 이름과 상처, 사랑은 사라지지 않는다.',
+  credits: [
+    { role: '보컬', names: ['이소영'] },
+    { role: '기타', names: ['이기용', '장웅'] },
+    { role: '드럼', names: ['성장규', '장웅', '이설'] },
+    { role: '베이스', names: ['장웅'] },
+    { role: '작사 · 작곡', names: ['이기용'] },
+    { role: '편곡', names: ['이기용', '이소영', '성장규', '장웅'] },
+    { role: '믹스', names: ['성장규', '장웅'] },
+    { role: '마스터링', names: ['성장규'] },
+  ],
+  mvCredits: [
+    { role: '뮤직비디오', names: ['전용현'] },
+    { role: '주연', names: ['정지현'] },
   ],
 };
 
@@ -118,7 +166,7 @@ export const singles: Single[] = [
   },
 ];
 
-/** 앨범 소개 (텀블벅 스토리) */
+/** 앨범 소개 */
 export const story = {
   heading: '내 안에서 낯설어진 존재들을 다시 부르는 노래',
   opening: '오랫동안 살아오면서 우리는 수많은 자신을 뒤에 남겨둡니다.',
@@ -156,21 +204,17 @@ export interface ConcertShow {
   venue: string;
   address: string;
   seating: string;
-  originalPrice: number;
-  discountPrice: number;
-  discount: string;
+  price: number;
 }
 
 export const concert = {
   edition: 22,
-  name: '2026 Yellow Concert',
-  poster: '/images/yellowconcert/poster-2026.jpg',
+  name: '22nd Yellow Concert',
+  poster: { src: '/images/yellowconcert/poster-2026.jpg', width: 1500, height: 2000 },
   description:
-    '정규 8집 발매 후 첫 단독 공연. 8집에 수록된 신곡들을 라이브로 처음 선보이는 무대인 동시에, 지난 1년 동안 성장하고 변화하며 쌓아올린 허클베리핀만의 에너지와 감성을 보여드리는 공연입니다.',
+    '2004년 시작해 매년 이어온 허클베리핀의 단독 공연 브랜드 ‘옐로우 콘서트’가 올해 22번째 무대를 맞습니다. 정규 8집 발매 후 첫 단독 공연으로, 새 앨범의 수록곡과 오랜 시간 축적해 온 밴드의 음악을 라이브로 만나는 자리입니다.',
   filmingNotice:
     '본 공연은 영상 촬영이 진행되며, 촬영 동의 여부를 공연 당일 티켓 수령처에서 받습니다. 비동의 시 지급해드리는 마스크를 착용하고 관람해주시기 바라며, 이로 인한 환불은 불가합니다.',
-  ticketNotice:
-    '티켓은 배송되지 않으며 공연 당일 현장에서 수령합니다. 텀블벅 후원 번호로 본인 확인을 진행하니 미리 확인해 주세요.',
   shows: [
     {
       id: 'seoul',
@@ -179,12 +223,10 @@ export const concert = {
       date: '2026-10-31T19:00:00+09:00',
       dateLabel: '2026. 10. 31 (토)',
       time: '오후 7시',
-      venue: 'KT&G 홍대 상상마당',
+      venue: 'KT&G 상상마당 홍대 라이브홀',
       address: '서울 마포구 어울마당로 65 상상마당 빌딩 지하 2층',
       seating: '스탠딩 + 일부 좌석제 (선착순 입장 후 선택)',
-      originalPrice: 70000,
-      discountPrice: 56000,
-      discount: '20%',
+      price: 70000,
     },
     {
       id: 'busan',
@@ -196,124 +238,16 @@ export const concert = {
       venue: '오방가르드',
       address: '부산 남구 용소로7번길 15-1 지하',
       seating: '전석 비지정 좌석제 (선착순 입장 후 좌석 선택)',
-      originalPrice: 50000,
-      discountPrice: 40000,
-      discount: '20%',
+      price: 50000,
     },
   ] as ConcertShow[],
-};
-
-export interface Reward {
-  id: number;
-  name: string;
-  price: number;
-  discount?: string;
-  recommended?: boolean;
-  includes: string[];
-}
-
-export const funding = {
-  url: TUMBLBUG_URL,
-  startDate: '2026-09-17',
-  endDate: '2026-10-11',
-  paymentDate: '2026-10-12',
-  deliveryStart: '2026-10-23',
-  goal: 3000000,
-  creditNote:
-    '8집 앨범이 포함된 선물을 후원하신 모든 분의 성함 혹은 닉네임을 앨범 크레딧에 기명합니다.',
-  rewards: [
-    { id: 1, name: '선물 없이 후원하기', price: 1000, includes: ['선물 없음'] },
-    {
-      id: 2,
-      name: '허클 정규 8집',
-      price: 20000,
-      includes: ['정규 8집 〈모두가 아는 이야기〉 CD', '8집 앨범 크레딧 기명', '배송비 무료'],
-    },
-    {
-      id: 3,
-      name: 'Yellow Concert 서울 티켓',
-      price: 56000,
-      discount: '20%',
-      includes: ['2026 Yellow Concert 〈서울〉 티켓 1매'],
-    },
-    {
-      id: 4,
-      name: 'Yellow Concert 부산 티켓',
-      price: 40000,
-      discount: '20%',
-      includes: ['2026 Yellow Concert 〈부산〉 티켓 1매'],
-    },
-    {
-      id: 5,
-      name: '8집 CD + 서울 콘서트',
-      price: 67500,
-      discount: '25%',
-      recommended: true,
-      includes: ['정규 8집 CD', '2026 Yellow Concert 〈서울〉 티켓 1매', '8집 앨범 크레딧 기명'],
-    },
-    {
-      id: 6,
-      name: '8집 CD + 부산 콘서트',
-      price: 52500,
-      discount: '25%',
-      includes: ['정규 8집 CD', '2026 Yellow Concert 〈부산〉 티켓 1매', '8집 앨범 크레딧 기명'],
-    },
-    {
-      id: 7,
-      name: '8집 CD + 서울 & 부산',
-      price: 98000,
-      discount: '30%',
-      includes: ['정규 8집 CD', '서울 티켓 1매 + 부산 티켓 1매', '8집 앨범 크레딧 기명'],
-    },
-    {
-      id: 8,
-      name: 'All In One Package',
-      price: 300000,
-      includes: [
-        '정규 8집 CD',
-        '서울 티켓 2매 + 부산 티켓 2매',
-        '8집 발매 기념 한정판 티셔츠 · 맨투맨 각 1벌',
-        '1~8집 앨범 자켓 마그네틱 세트',
-        '무릎 담요 · 박쥐 쿠션 · 키캡 키링 각 1개',
-        '8집 크레딧 Special Thanks To 기명',
-      ],
-    },
-    {
-      id: 9,
-      name: 'Complete Works CD Package',
-      price: 500000,
-      includes: [
-        '허클베리핀 정규 앨범 CD 패키지 (총 11장)',
-        '서울 티켓 2매 + 부산 티켓 2매',
-        '한정판 티셔츠 · 맨투맨 각 2벌',
-        '마그네틱 세트 · 무릎 담요 · 박쥐 쿠션 · 키캡 키링 각 1개',
-        '8집 커버 고급 인화 액자 (50×50cm) 1개',
-        '8집 크레딧 Special Thanks To 기명',
-      ],
-    },
-    {
-      id: 10,
-      name: 'Special Thanks Package',
-      price: 1000000,
-      includes: [
-        '허클베리핀 멤버들과의 식사권',
-        '허클베리핀 정규 앨범 CD 패키지 (총 11장)',
-        '서울 티켓 2매 + 부산 티켓 2매',
-        '한정판 티셔츠 · 맨투맨 각 2벌',
-        '마그네틱 세트 · 무릎 담요 각 1개',
-        '박쥐 쿠션 · 키캡 키링 각 2개',
-        '8집 커버 고급 인화 액자 (50×50cm) 2개',
-        '8집 크레딧 Special Thanks To 기명',
-      ],
-    },
-  ] as Reward[],
 };
 
 export const band = {
   name: 'Huckleberryfinn',
   nameKr: '허클베리핀',
   since: 1997,
-  photo: { src: '/images/profile/band-4.webp', width: 1999, height: 1999 },
+  photo: { src: '/images/profile/band-6.webp', width: 2000, height: 1333 },
   bio: [
     '1997년 결성된 허클베리핀은 대한민국 1세대 인디 록 밴드다. 1998년 발표한 1집 〈18일의 수요일〉과 2004년 3집 〈올랭피오의 별〉이 ‘한국 대중음악 100대 명반’에 선정되는 등 평단의 극찬을 받으며 독보적인 음악 세계를 구축해왔다.',
     '거친 그런지 록부터 서정적이고 몽환적인 사운드까지 끊임없이 진화하며, 한국대중음악상 최우수 모던록 음반상을 수상하는 등 결성 30년에 가까운 지금까지도 한국 인디 씬에 가장 큰 영향력을 미치는 밴드 중 하나로 평가받는다.',
@@ -333,12 +267,12 @@ export interface PressAsset {
 }
 
 export const pressAssets: PressAsset[] = [
-  { title: '정규 8집 앨범 커버', spec: 'JPG · 1254×1254', href: '/images/8th_album/album-cover.jpg', preview: '/images/8th_album/album-cover.jpg' },
+  { title: '정규 8집 앨범 커버', spec: 'JPG · 1417×1417', href: '/images/8th_album/album-cover.jpg', preview: '/images/8th_album/album-cover.jpg' },
   { title: '〈멜랑콜리아〉 싱글 커버', spec: 'JPG · 3000×3000', href: '/images/8th_album/single-melancholia.jpg', preview: '/images/8th_album/single-melancholia.jpg' },
   { title: '〈박쥐〉 싱글 커버', spec: 'JPG · 3000×3000', href: '/images/8th_album/single-bat.jpg', preview: '/images/8th_album/single-bat.jpg' },
-  { title: '2026 Yellow Concert 포스터', spec: 'JPG · 1061×1500', href: '/images/yellowconcert/poster-2026.jpg', preview: '/images/yellowconcert/poster-2026.jpg' },
-  { title: '밴드 프로필 사진', spec: 'JPG · 1999×1999', href: '/images/profile/band-4.jpg', preview: '/images/profile/band-4.webp' },
-  { title: '밴드 프로필 사진 2', spec: 'JPG · 1999×1999', href: '/images/profile/band-5.jpg', preview: '/images/profile/band-5.webp' },
+  { title: '22nd Yellow Concert 포스터', spec: 'JPG · 1500×2000', href: '/images/yellowconcert/poster-2026.jpg', preview: '/images/yellowconcert/poster-2026.jpg' },
+  { title: '밴드 프로필 사진', spec: 'JPG · 2000×1333', href: '/images/profile/band-6.jpg', preview: '/images/profile/band-6.webp' },
+  { title: '밴드 프로필 사진 2', spec: 'JPG · 1999×1999', href: '/images/profile/band-4.jpg', preview: '/images/profile/band-4.webp' },
   { title: '멤버 프로필 — 이기용', spec: 'JPG · 638×850', href: '/images/profile/lee-kiyong.jpg', preview: '/images/profile/lee-kiyong.webp' },
   { title: '멤버 프로필 — 이소영', spec: 'JPG · 638×850', href: '/images/profile/lee-soyoung.jpg', preview: '/images/profile/lee-soyoung.webp' },
   { title: '멤버 프로필 — 성장규', spec: 'JPG · 638×850', href: '/images/profile/sung-janggyu.jpg', preview: '/images/profile/sung-janggyu.webp' },

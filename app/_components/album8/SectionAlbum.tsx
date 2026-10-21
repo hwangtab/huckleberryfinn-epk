@@ -3,24 +3,20 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import SectionLabel from '@/components/ui/SectionLabel';
-import ScrambleText from '@/components/features/ScrambleText';
 import TiltCard from '@/components/features/TiltCard';
 import LoopScope from '@/components/motion/LoopScope';
 import { Reveal, RevealGroup, RevealItem } from '@/components/motion/Reveal';
 import { DURATION, EASE_OUT, VIEWPORT } from '@/lib/motion';
-import { album, singles } from '@/app/data/album8';
+import { album, singles, titleTrack, tracklist } from '@/app/data/album8';
 
 const specs = [
   { k: 'Release', v: album.releaseLabel },
   { k: 'Format', v: album.format },
-  { k: 'Tracks', v: `${album.trackCount} Tracks` },
-  { k: 'Pre-release', v: '2 Singles' },
+  { k: 'Tracks', v: `${album.trackCount} Tracks · 5 Titles` },
+  { k: 'Label / Dist.', v: `Sha Label · ${album.distributor}` },
 ];
 
 export default function SectionAlbum() {
-  // 9 slots: two disclosed singles, order not yet announced.
-  const slots = Array.from({ length: album.trackCount }, (_, i) => i + 1);
-
   return (
     <section id="album" aria-labelledby="album-title" className="relative overflow-hidden bg-ink py-24 text-cream scroll-mt-16 md:py-36 md:scroll-mt-20">
       <LoopScope />
@@ -40,7 +36,7 @@ export default function SectionAlbum() {
               정규 8집 <span className="text-bulb">〈{album.title}〉</span>
             </>
           }
-          description="아홉 개의 이야기가 한 장의 CD에 담깁니다. 수록곡의 제목과 순서는 확정되는 대로 안내됩니다."
+          description="2022년 정규 7집 이후 4년 만의 정규 앨범. 내 안의 낯선 자신을 마주하는 아홉 곡이 한 장의 CD에 담겼습니다."
         />
 
         <div className="mt-16 grid gap-14 lg:grid-cols-12 lg:gap-12">
@@ -105,40 +101,49 @@ export default function SectionAlbum() {
           <RevealGroup className="lg:col-span-6" stagger={0.05}>
             <div className="mb-5 flex items-end justify-between">
               <h3 className="font-serif-latin text-3xl italic text-cream/80">Tracklist</h3>
-              <span className="text-xs uppercase tracking-[0.25em] text-cream/60">Order TBA</span>
+              <span className="text-xs uppercase tracking-[0.25em] text-cream/60">{album.trackCount} Tracks</span>
             </div>
             <ol className="divide-y divide-cream/10 border-y border-cream/10">
-              {slots.map((n) => {
-                const disclosed = n <= singles.length ? singles[n - 1] : null;
-                return (
-                  <RevealItem as="li" key={n} className="group flex items-center gap-5 py-4 md:py-5">
-                    <span className="w-8 font-serif-latin text-lg text-cream/60" aria-hidden="true">
-                      {String(n).padStart(2, '0')}
+              {tracklist.map((t) => {
+                const single = t.singleId ? singles.find((x) => x.id === t.singleId) : undefined;
+                const href = single ? `#single-${single.id}` : t.title === titleTrack.title ? '#title-track' : undefined;
+                const name = (
+                  <span>
+                    <span className="font-serif-kr text-xl font-bold text-cream transition-colors group-hover:text-bulb md:text-2xl">
+                      {t.title}
                     </span>
-                    {disclosed ? (
+                    {single && <span className="ml-3 hidden font-serif-latin text-base italic text-cream/60 sm:inline">{single.titleLatin}</span>}
+                  </span>
+                );
+                const badges = (
+                  <span className="flex shrink-0 gap-1.5">
+                    {t.isTitle && (
+                      <span className="rounded-full bg-bulb px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em] text-ink">Title</span>
+                    )}
+                    {single && (
+                      <span className="rounded-full border border-bulb/40 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-bulb">
+                        {single.orderLabel}
+                      </span>
+                    )}
+                  </span>
+                );
+                return (
+                  <RevealItem as="li" key={t.no} className="group flex items-center gap-5 py-4 md:py-5">
+                    <span className="w-8 font-serif-latin text-lg text-cream/60" aria-hidden="true">
+                      {String(t.no).padStart(2, '0')}
+                    </span>
+                    {href ? (
                       <a
-                        href={`#single-${disclosed.id}`}
+                        href={href}
                         className="flex flex-1 items-center justify-between gap-4 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb"
                       >
-                        <span>
-                          <span className="font-serif-kr text-xl font-bold text-cream transition-colors group-hover:text-bulb md:text-2xl">
-                            {disclosed.title}
-                          </span>
-                          <span className="ml-3 hidden font-serif-latin text-base italic text-cream/60 sm:inline">{disclosed.titleLatin}</span>
-                        </span>
-                        <span className="shrink-0 rounded-full border border-bulb/40 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-bulb">
-                          {disclosed.orderLabel}
-                        </span>
+                        {name}
+                        {badges}
                       </a>
                     ) : (
                       <span className="flex flex-1 items-center justify-between gap-4">
-                        <ScrambleText
-                          text="제목 미정"
-                          loop
-                          intervalMs={140 + n * 9}
-                          className="font-serif-kr text-xl font-bold text-cream/50 md:text-2xl"
-                        />
-                        <span className="shrink-0 text-[10px] uppercase tracking-[0.2em] text-cream/60">TBA</span>
+                        {name}
+                        {badges}
                       </span>
                     )}
                   </RevealItem>
@@ -146,7 +151,7 @@ export default function SectionAlbum() {
               })}
             </ol>
             <p className="mt-4 text-xs leading-relaxed text-cream/60">
-              트랙 번호는 자리표시이며 실제 수록 순서와 다를 수 있습니다. 선공개 싱글 두 곡 외 나머지 일곱 곡의 제목은 확정되는 대로 안내됩니다.
+              <span className="font-semibold text-bulb">Title</span> 표시는 타이틀곡입니다. 서로 다른 색채의 곡들이 하나의 서사처럼 이어지며 앨범 전체를 관통하는 주제를 완성합니다.
             </p>
 
             <ul className="mt-10 space-y-3">
