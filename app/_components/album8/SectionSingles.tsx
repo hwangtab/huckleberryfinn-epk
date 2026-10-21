@@ -10,7 +10,7 @@ import VideoFacade from '@/components/features/VideoFacade';
 import Lightbox from '@/components/ui/Lightbox';
 import LoopScope from '@/components/motion/LoopScope';
 import { Reveal } from '@/components/motion/Reveal';
-import { singles, Single } from '@/app/data/album8';
+import { album, singles, Single, tracklist } from '@/app/data/album8';
 import { DURATION, EASE_OUT } from '@/lib/motion';
 import { useNow } from '@/lib/useNow';
 
@@ -77,6 +77,7 @@ function Lyrics({ single }: { single: Single }) {
 function SinglePanel({ single, flip, onZoom }: { single: Single; flip: boolean; onZoom: (s: Single) => void }) {
   const now = useNow();
   const showVideo = single.videoId && now >= Date.parse(single.releaseAt);
+  const track = tracklist.find((t) => t.singleId === single.id);
   return (
     <article
       id={`single-${single.id}`}
@@ -119,6 +120,12 @@ function SinglePanel({ single, flip, onZoom }: { single: Single; flip: boolean; 
             {single.title}
           </h3>
           <p className="mt-3 font-serif-latin text-2xl italic text-cream/60 md:text-3xl">{single.titleLatin}</p>
+          {track && (
+            <p className="mt-4 text-sm text-cream/75">
+              정규 8집 〈{album.title}〉 {track.no}번 트랙
+              {track.isTitle && <span className="ml-2 rounded-full bg-bulb px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em] text-ink">Title</span>}
+            </p>
+          )}
         </header>
 
         {single.keyLine && (
@@ -184,7 +191,7 @@ export default function SectionSingles() {
       </div>
 
       {zoom && (
-        <Lightbox src={zoom.cover} alt={`${zoom.title} 싱글 커버`} width={zoom.id === "melancholia" ? 3000 : 1000} height={zoom.id === "melancholia" ? 3000 : 1000} onClose={() => setZoom(null)} />
+        <Lightbox src={zoom.cover} alt={`${zoom.title} 싱글 커버`} width={3000} height={3000} onClose={() => setZoom(null)} />
       )}
     </section>
   );
