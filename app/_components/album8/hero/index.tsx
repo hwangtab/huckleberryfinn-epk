@@ -410,7 +410,7 @@ export default function SectionHero() {
           <div>
             <div className="flex items-center justify-between gap-3">
               <a
-                href="#singles"
+                href="#title-track"
                 className="sr-only rounded-full bg-ink px-4 py-2 text-sm font-semibold text-cream focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream"
               >
                 인트로 건너뛰기
@@ -439,7 +439,7 @@ export default function SectionHero() {
                   </button>
                 )}
                 <a
-                  href="#singles"
+                  href="#title-track"
                   tabIndex={-1}
                   className="inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-3 text-xs font-semibold uppercase tracking-[0.2em] text-cream/90 hover:text-cream"
                 >
