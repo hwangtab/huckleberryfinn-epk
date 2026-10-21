@@ -4,7 +4,6 @@ export interface ContactInfo {
   youtube: string;
   instagram: string;
   facebook: string;
-  tumblbug: string;
 }
 
 export const contactInfo: ContactInfo = {
@@ -13,5 +12,4 @@ export const contactInfo: ContactInfo = {
   youtube: 'https://www.youtube.com/user/shalabel',
   instagram: 'https://www.instagram.com/band__huckleberryfinn/',
   facebook: 'https://www.facebook.com/HuckleberryFinn.Band/',
-  tumblbug: 'https://tumblbug.com/hbf8th',
 };

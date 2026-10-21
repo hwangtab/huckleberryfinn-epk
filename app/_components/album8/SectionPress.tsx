@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Reveal, RevealGroup, RevealItem } from '@/components/motion/Reveal';
-import { FaDownload, FaCheck, FaCopy, FaFileAlt } from 'react-icons/fa';
+import { FaDownload, FaCheck, FaCopy, FaFileAlt, FaFilePdf } from 'react-icons/fa';
 import SectionLabel from '@/components/ui/SectionLabel';
-import { pressAssets, TUMBLBUG_URL } from '@/app/data/album8';
-import { pressRelease, pressReleasePlainText } from '@/app/data/pressRelease';
+import { pressAssets } from '@/app/data/album8';
+import { PRESS_PDF, pressRelease, pressReleasePlainText } from '@/app/data/pressRelease';
 import { contactInfo } from '@/app/data/contact';
 
 export default function SectionPress() {
@@ -35,7 +35,7 @@ export default function SectionPress() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = '허클베리핀_멜랑콜리아_보도자료.txt';
+    link.download = '허클베리핀_정규8집_모두가아는이야기_보도자료.txt';
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -98,9 +98,17 @@ export default function SectionPress() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-bulb/80">Press Release</p>
-                <h3 className="mt-1 font-serif-kr text-xl font-bold text-cream md:text-2xl">〈멜랑콜리아〉 싱글 공개 보도자료</h3>
+                <h3 className="mt-1 font-serif-kr text-xl font-bold text-cream md:text-2xl">정규 8집 〈모두가 아는 이야기〉 발매 보도자료</h3>
               </div>
               <div className="flex shrink-0 flex-wrap gap-2">
+                <a
+                  href={PRESS_PDF}
+                  download="허클베리핀_정규8집_모두가아는이야기_보도자료.pdf"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-bulb px-4 py-2 text-xs font-semibold text-ink transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                >
+                  <FaFilePdf size={11} aria-hidden="true" />
+                  PDF 다운로드
+                </a>
                 <button
                   type="button"
                   onClick={copyText}
@@ -148,15 +156,41 @@ export default function SectionPress() {
                 ))}
               </div>
               <p className="my-6 text-center text-cream/60">###</p>
-              <div className="space-y-4">
-                <h5 className="font-bold text-cream">■ {pressRelease.boilerplateHeading}</h5>
-                {pressRelease.boilerplate.map((para) => (
-                  <p key={para.slice(0, 24)}>{para}</p>
+              <div className="space-y-6">
+                {pressRelease.facts.map((f) => (
+                  <div key={f.heading}>
+                    <h5 className="mb-2 font-bold text-cream">■ {f.heading}</h5>
+                    <dl className="space-y-1">
+                      {f.rows.map((row) => (
+                        <div key={row.label}>
+                          <dt className="inline text-cream/60">{row.label}: </dt>
+                          <dd className="inline">{row.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
                 ))}
+                <div className="space-y-4">
+                  <h5 className="font-bold text-cream">■ {pressRelease.boilerplateHeading}</h5>
+                  {pressRelease.boilerplate.map((para) => (
+                    <p key={para.slice(0, 24)}>{para}</p>
+                  ))}
+                </div>
+                <div className="space-y-1">
+                  <h5 className="mb-2 font-bold text-cream">■ 공식 채널</h5>
+                  {pressRelease.channels.map((c) => (
+                    <p key={c.label}>
+                      <span className="text-cream/60">{c.label}: </span>
+                      <a href={c.value} target="_blank" rel="noopener noreferrer" className="break-all underline-offset-4 hover:text-bulb hover:underline">
+                        {c.value}
+                      </a>
+                    </p>
+                  ))}
+                </div>
                 <p className="text-cream/70">{pressRelease.assetsNote}</p>
               </div>
               <div className="mt-6 space-y-1 border-t border-cream/10 pt-6">
-                <h5 className="mb-2 font-bold text-cream">■ 문의</h5>
+                <h5 className="mb-2 font-bold text-cream">■ 언론 문의</h5>
                 {pressRelease.contact.map((c) => (
                   <p key={c.label}>
                     <span className="text-cream/60">{c.label}: </span>
@@ -188,12 +222,8 @@ export default function SectionPress() {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-cream/60">Funding</dt>
-                  <dd>
-                    <a href={TUMBLBUG_URL} target="_blank" rel="noopener noreferrer" className="text-bulb underline-offset-4 hover:underline">
-                      tumblbug.com/hbf8th
-                    </a>
-                  </dd>
+                  <dt className="text-cream/60">Contact</dt>
+                  <dd className="text-cream">성장규</dd>
                 </div>
               </dl>
             </div>

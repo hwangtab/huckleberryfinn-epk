@@ -6,13 +6,11 @@ import { Reveal } from '@/components/motion/Reveal';
 import SectionLabel from '@/components/ui/SectionLabel';
 import TiltCard from '@/components/features/TiltCard';
 import Lightbox from '@/components/ui/Lightbox';
-import { concert, ConcertShow, TUMBLBUG_URL } from '@/app/data/album8';
-import { useNow } from '@/lib/useNow';
-import { isFundingOpen } from '@/lib/timeline';
+import { concert, ConcertShow } from '@/app/data/album8';
 
 const won = (n: number) => `${n.toLocaleString('ko-KR')}원`;
 
-function ShowCard({ show, index, fundingOpen }: { show: ConcertShow; index: number; fundingOpen: boolean }) {
+function ShowCard({ show, index }: { show: ConcertShow; index: number }) {
   const accent = show.id === 'seoul' ? 'from-cobalt/40 to-teal/20' : 'from-coral/40 to-bulb/10';
   return (
     <Reveal as="article"
@@ -48,20 +46,10 @@ function ShowCard({ show, index, fundingOpen }: { show: ConcertShow; index: numb
         </dl>
 
         <div className="mt-6 flex items-end justify-between border-t border-cream/10 pt-5">
-          {fundingOpen ? (
-            <div>
-              <p className="text-xs text-cream/60 line-through">정가 {won(show.originalPrice)}</p>
-              <p className="font-serif-latin text-3xl text-bulb">{won(show.discountPrice)}</p>
-              <p className="mt-1 text-xs font-semibold text-cream/75">텀블벅 한정 {show.discount} 할인 · 10.11까지</p>
-            </div>
-          ) : (
-            <div>
-              <p className="font-serif-latin text-3xl text-bulb">
-                {won(show.originalPrice)}
-                <span className="ml-2 font-sans text-xs font-semibold text-cream/75">정가</span>
-              </p>
-            </div>
-          )}
+          <p className="font-serif-latin text-3xl text-bulb">
+            {won(show.price)}
+            <span className="ml-2 font-sans text-xs font-semibold text-cream/75">정가</span>
+          </p>
         </div>
       </div>
     </Reveal>
@@ -70,7 +58,6 @@ function ShowCard({ show, index, fundingOpen }: { show: ConcertShow; index: numb
 
 export default function SectionConcert() {
   const [open, setOpen] = useState(false);
-  const fundingOpen = isFundingOpen(useNow());
 
   return (
     <section id="concert" aria-labelledby="concert-title" className="relative bg-ink-2 py-24 text-cream scroll-mt-16 md:py-36 md:scroll-mt-20">
@@ -81,16 +68,16 @@ export default function SectionConcert() {
             className="lg:col-span-5"
           >
             <div className="lg:sticky lg:top-28">
-              <TiltCard maxTilt={6} className="mx-auto w-full max-w-md lg:max-w-[calc((100svh-9rem)*0.7073)]">
+              <TiltCard maxTilt={6} className="mx-auto w-full max-w-md lg:max-w-[calc((100svh-9rem)*0.75)]">
                 <button
                   type="button"
                   onClick={() => setOpen(true)}
-                  className="relative block aspect-[1061/1500] w-full cursor-zoom-in overflow-hidden rounded-lg shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] ring-1 ring-cream/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb"
-                  aria-label="2026 Yellow Concert 포스터 확대"
+                  className="relative block aspect-[3/4] w-full cursor-zoom-in overflow-hidden rounded-lg shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] ring-1 ring-cream/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb"
+                  aria-label="22nd Yellow Concert 포스터 확대"
                 >
                   <Image
-                    src={concert.poster}
-                    alt="2026 Yellow Concert 포스터 — 서울 상상마당 10월 31일, 부산 오방가르드 12월 5일"
+                    src={concert.poster.src}
+                    alt="22nd Yellow Concert 포스터 — 서울 상상마당 10월 31일(토) 오후 7시, 부산 오방가르드 12월 5일(토) 오후 7시"
                     fill
                     sizes="(max-width: 1024px) 100vw, 40vw"
                     className="object-cover"
@@ -117,36 +104,22 @@ export default function SectionConcert() {
 
             <div className="mt-12 grid gap-6 md:grid-cols-2">
               {concert.shows.map((show, i) => (
-                <ShowCard key={show.id} show={show} index={i} fundingOpen={fundingOpen} />
+                <ShowCard key={show.id} show={show} index={i} />
               ))}
             </div>
 
             <Reveal
               className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
             >
-              {fundingOpen ? (
-                <a
-                  href={TUMBLBUG_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-bulb px-7 py-3.5 text-sm font-semibold text-ink transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb focus-visible:ring-offset-2 focus-visible:ring-offset-ink-2"
-                >
-                  텀블벅에서 티켓 예매하기
-                </a>
-              ) : (
-                <p className="shrink-0 text-sm font-semibold text-cream/85">텀블벅 펀딩이 종료되었습니다. 일반 예매 정보는 추후 공지됩니다.</p>
-              )}
-              <ul className="space-y-2 text-xs leading-relaxed text-cream/70 sm:max-w-sm">
-                <li>{concert.ticketNotice}</li>
-                <li>{concert.filmingNotice}</li>
-              </ul>
+              <p className="shrink-0 text-sm font-semibold text-cream/85">일반 예매 정보는 추후 공지됩니다.</p>
+              <p className="text-xs leading-relaxed text-cream/70 sm:max-w-sm">{concert.filmingNotice}</p>
             </Reveal>
           </div>
         </div>
       </div>
 
       {open && (
-        <Lightbox src={concert.poster} alt="2026 Yellow Concert 포스터" width={1061} height={1500} onClose={() => setOpen(false)} />
+        <Lightbox src={concert.poster.src} alt="22nd Yellow Concert 포스터" width={concert.poster.width} height={concert.poster.height} onClose={() => setOpen(false)} />
       )}
     </section>
   );

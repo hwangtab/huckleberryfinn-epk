@@ -28,7 +28,7 @@ const instrumentSerif = Instrument_Serif({
 
 const title = '허클베리핀 정규 8집 〈모두가 아는 이야기〉 | Official EPK';
 const description =
-  '허클베리핀 정규 8집 〈모두가 아는 이야기〉 2026년 10월 23일(금) 낮 12시 발매. 두 번째 싱글 〈멜랑콜리아〉 9월 29일(화) 낮 12시 공개. 22nd Yellow Concert 서울 10.31 · 부산 12.05.';
+  '허클베리핀 정규 8집 〈모두가 아는 이야기〉 2026년 10월 23일(금) 낮 12시 발매. 동명 타이틀곡 뮤직비디오 동시 공개. 22nd Yellow Concert 서울 10.31 상상마당 · 부산 12.05 오방가르드.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -45,7 +45,6 @@ export const metadata: Metadata = {
     '인디 록',
     'Korean indie rock',
     'Yellow Concert',
-    '텀블벅',
   ],
   openGraph: {
     title,
@@ -93,14 +92,14 @@ const jsonLd = {
     },
     {
       '@type': 'MusicEvent',
-      name: '2026 Yellow Concert 〈서울〉',
+      name: '22nd Yellow Concert 〈서울〉',
       startDate: '2026-10-31T19:00:00+09:00',
       performer: band,
-      location: { '@type': 'Place', name: 'KT&G 홍대 상상마당', address: '서울 마포구 어울마당로 65 상상마당 빌딩 지하 2층' },
+      location: { '@type': 'Place', name: 'KT&G 상상마당 홍대 라이브홀', address: '서울 마포구 어울마당로 65 상상마당 빌딩 지하 2층' },
     },
     {
       '@type': 'MusicEvent',
-      name: '2026 Yellow Concert 〈부산〉',
+      name: '22nd Yellow Concert 〈부산〉',
       startDate: '2026-12-05T19:00:00+09:00',
       performer: band,
       location: { '@type': 'Place', name: '오방가르드', address: '부산 남구 용소로7번길 15-1 지하' },

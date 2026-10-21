@@ -6,19 +6,16 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { FaPause, FaPlay } from 'react-icons/fa';
-import { TUMBLBUG_URL } from '@/app/data/album8';
 import { DURATION, EASE_OUT, STAGGER } from '@/lib/motion';
 import { lockScroll } from '@/lib/scrollLock';
 import { setMotionPaused, useMotionPrefs } from '@/lib/motionPrefs';
-import { useNow } from '@/lib/useNow';
-import { isFundingOpen } from '@/lib/timeline';
 
 const navLinks = [
+  { href: '#title-track', label: 'MV' },
   { href: '#singles', label: 'Singles' },
   { href: '#story', label: 'Story' },
   { href: '#album', label: 'Album' },
   { href: '#concert', label: 'Concert' },
-  { href: '#funding', label: 'Funding' },
   { href: '#band', label: 'Band' },
   { href: '#press', label: 'Press' },
 ];
@@ -30,7 +27,6 @@ export default function Header() {
   const [pastHero, setPastHero] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { paused } = useMotionPrefs();
-  const fundingOpen = isFundingOpen(useNow());
   const toggleRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const menuRef = useRef<HTMLElement>(null);
@@ -155,17 +151,6 @@ export default function Header() {
                 >
                   {paused ? <FaPlay size={10} /> : <FaPause size={10} />}
                 </button>
-                {fundingOpen && (
-                  <a
-                    href={TUMBLBUG_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    tabIndex={tab}
-                    className={`rounded-full bg-bulb px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-ink transition-transform hover:scale-105 ${focusRing}`}
-                  >
-                    Support
-                  </a>
-                )}
               </div>
 
               <button
@@ -219,16 +204,6 @@ export default function Header() {
                 </motion.a>
               ))}
               <div className="pointer-events-auto mt-4 flex items-center gap-3">
-                {fundingOpen && (
-                  <a
-                    href={TUMBLBUG_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`rounded-full bg-bulb px-6 py-3 text-sm font-bold text-ink ${focusRing}`}
-                  >
-                    텀블벅 후원하기
-                  </a>
-                )}
                 <button
                   type="button"
                   onClick={() => setMotionPaused(!paused)}

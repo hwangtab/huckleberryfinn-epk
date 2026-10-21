@@ -1,67 +1,18 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FaPlay } from 'react-icons/fa';
 import SectionLabel from '@/components/ui/SectionLabel';
 import TiltCard from '@/components/features/TiltCard';
 import Countdown from '@/components/features/Countdown';
+import VideoFacade from '@/components/features/VideoFacade';
 import Lightbox from '@/components/ui/Lightbox';
 import LoopScope from '@/components/motion/LoopScope';
 import { Reveal } from '@/components/motion/Reveal';
 import { singles, Single } from '@/app/data/album8';
 import { DURATION, EASE_OUT } from '@/lib/motion';
 import { useNow } from '@/lib/useNow';
-
-function VideoFacade({ single }: { single: Single }) {
-  const [playing, setPlaying] = useState(false);
-  const frameRef = useRef<HTMLIFrameElement>(null);
-  useEffect(() => {
-    if (playing) frameRef.current?.focus();
-  }, [playing]);
-  if (!single.videoId) return null;
-  const kind = single.videoKind === 'audio' ? '오디오' : '뮤직비디오';
-
-  return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black ring-1 ring-cream/10">
-      {playing ? (
-        <iframe
-          ref={frameRef}
-          className="h-full w-full"
-          src={`https://www.youtube.com/embed/${single.videoId}?autoplay=1&rel=0`}
-          title={`${single.title} ${kind}`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      ) : (
-        <button
-          type="button"
-          onClick={() => setPlaying(true)}
-          className="group relative h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bulb"
-          aria-label={`${single.title} ${kind} 재생`}
-        >
-          {single.videoThumb && (
-            <Image
-              src={single.videoThumb}
-              alt=""
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" />
-          <span className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-bulb text-ink shadow-[0_0_40px_rgba(245,197,106,0.6)] transition-transform group-hover:scale-110">
-            <FaPlay className="ml-1" />
-          </span>
-          <span className="absolute bottom-4 left-4 text-xs font-semibold uppercase tracking-[0.3em] text-cream/80">
-            {single.videoKind === 'audio' ? 'Official Audio' : 'Official Music Video'}
-          </span>
-        </button>
-      )}
-    </div>
-  );
-}
 
 function BpmPulse({ bpm }: { bpm: number }) {
   return (
@@ -187,7 +138,12 @@ function SinglePanel({ single, flip, onZoom }: { single: Single; flip: boolean; 
         {single.bpm && <BpmPulse bpm={single.bpm} />}
 
         {showVideo ? (
-          <VideoFacade single={single} />
+          <VideoFacade
+            videoId={single.videoId!}
+            title={single.title}
+            thumb={single.videoThumb}
+            kind={single.videoKind === 'audio' ? 'audio' : 'mv'}
+          />
         ) : (
           <div className="rounded-xl border border-teal/30 bg-teal/5 p-6">
             <Countdown target={single.releaseAt} label={`〈${single.title}〉 음원 공개까지`} doneLabel="음원 공개 — 음원 사이트에서 감상하세요" compact />
@@ -217,7 +173,7 @@ export default function SectionSingles() {
               두 개의 문, <span className="text-bulb">두 개의 노래</span>
             </>
           }
-          description="정규 8집에 앞서 두 곡을 디지털 싱글로 먼저 공개합니다. 어둠 속에서 빛을 갈망하는 〈박쥐〉, 그리고 두려움과 함께 걸어가는 〈멜랑콜리아〉."
+          description="정규 8집에 앞서 두 곡을 디지털 싱글로 먼저 공개했습니다. 어둠 속에서 빛을 갈망하는 〈박쥐〉, 그리고 두려움과 함께 걸어가는 〈멜랑콜리아〉."
         />
 
         <div className="mt-20 space-y-32 md:mt-28 md:space-y-44">

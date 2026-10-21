@@ -4,10 +4,10 @@ import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, use
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaCompress, FaExpand, FaPause, FaPlay, FaRedoAlt, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
-import { album, concert, story, TUMBLBUG_URL } from '@/app/data/album8';
+import { album, concert, story } from '@/app/data/album8';
 import { useMotionPrefs } from '@/lib/motionPrefs';
 import { useNow } from '@/lib/useNow';
-import { isFundingOpen, isMelancholiaOut, isReleased } from '@/lib/timeline';
+import { isMelancholiaOut, isReleased } from '@/lib/timeline';
 import { THREAD_D } from '@/app/_components/album8/hero/art-space';
 import { apply, BEAT, BPM, fmtTime, pulse, type Track } from './engine';
 import { SOUNDTRACK } from './soundtrack';
@@ -93,7 +93,6 @@ export default function Teaser() {
   const now = useNow();
   const released = isReleased(now);
   const melOut = isMelancholiaOut(now);
-  const fundingOpen = isFundingOpen(now);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -145,7 +144,7 @@ export default function Teaser() {
     });
     bindingsRef.current = bindings;
     render(beatRef.current);
-  }, [layout, released, melOut, fundingOpen, render]);
+  }, [layout, released, melOut, render]);
 
   /* Stage size → layout (landscape / portrait end card, portrait cover fill). */
   useEffect(() => {
@@ -504,19 +503,11 @@ export default function Teaser() {
               <span className="text-cream/50">2nd Single</span> 〈멜랑콜리아〉 {melOut ? 'Out now' : '09.29 (화) 12:00 공개'}
             </li>
             <li data-tl="eRow1">
-              <span className="text-cream/50">22nd Yellow Concert</span> 서울 {mmdd(seoul.date)} {seoul.venue.replace('KT&G ', '')} · 부산{' '}
+              <span className="text-cream/50">22nd Yellow Concert</span> 서울 {mmdd(seoul.date)} {seoul.venue.replace('KT&G ', '').replace(' 라이브홀', '')} · 부산{' '}
               {mmdd(busan.date)} {busan.venue}
             </li>
             <li data-tl="eRow2">
-              {fundingOpen ? (
-                <>
-                  <span className="text-cream/50">텀블벅 후원</span> ~10.11 · {TUMBLBUG_URL.replace('https://', '')}
-                </>
-              ) : (
-                <>
-                  <span className="text-cream/50">EPK</span> huckleberryfinn.vercel.app
-                </>
-              )}
+              <span className="text-cream/50">EPK</span> huckleberryfinn.vercel.app
             </li>
           </ul>
         </div>
