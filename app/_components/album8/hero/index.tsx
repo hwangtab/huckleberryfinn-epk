@@ -181,12 +181,13 @@ export default function SectionHero() {
   const boxS = useTransform(cam, (c) => c.z);
 
   // ----- beats -----
-  const introOpacity = useTransform(smooth, [0, 0.04, 0.08, 0.9, 0.96], [1, 1, 0, 0, 1]);
-  const introY = useTransform(smooth, [0, 0.08, 0.9, 0.96], [0, -36, 24, 0]);
-  const spread = useTransform(() => (pinned ? transform(smooth.get(), [0, 0.08, 0.9, 0.96], [0, 34, 34, 0]) : 0));
+  const introOpacity = useTransform(smooth, [0, 0.06, 0.1, 0.9, 0.96], [1, 1, 0, 0, 1]);
+  const introY = useTransform(smooth, [0, 0.1, 0.9, 0.96], [0, -36, 24, 0]);
+  const spread = useTransform(() => (pinned ? transform(smooth.get(), [0, 0.1, 0.9, 0.96], [0, 34, 34, 0]) : 0));
   const dim = useTransform(smooth, [0.06, 0.1, 0.88, 0.93], [0, 0.42, 0.42, 0]);
   // Each line holds for ~45svh of scroll (section is 400svh → 300svh of travel), so a small scroll never skips one.
-  const beatA = useTransform(smooth, [0.1, 0.14, 0.3, 0.34], [0, 1, 1, 0]);
+  // Beat A crossfades with the title, so there is never a frame without text.
+  const beatA = useTransform(smooth, [0.06, 0.09, 0.3, 0.34], [0, 1, 1, 0]);
   const beatB = useTransform(smooth, [0.38, 0.42, 0.58, 0.62], [0, 1, 1, 0]);
   const beatC = useTransform(smooth, [0.66, 0.7, 0.84, 0.88], [0, 1, 1, 0]);
   const cueOpacity = useTransform(smooth, [0, 0.02], [1, 0]);
