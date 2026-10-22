@@ -185,7 +185,7 @@ export default function SectionHero() {
   const introY = useTransform(smooth, [0, 0.08, 0.9, 0.96], [0, -36, 24, 0]);
   const spread = useTransform(() => (pinned ? transform(smooth.get(), [0, 0.08, 0.9, 0.96], [0, 34, 34, 0]) : 0));
   const dim = useTransform(smooth, [0.06, 0.1, 0.88, 0.93], [0, 0.42, 0.42, 0]);
-  // Each line holds for ~80svh of scroll (section is 600svh → 500svh of travel), so a small scroll never skips one.
+  // Each line holds for ~45svh of scroll (section is 400svh → 300svh of travel), so a small scroll never skips one.
   const beatA = useTransform(smooth, [0.1, 0.14, 0.3, 0.34], [0, 1, 1, 0]);
   const beatB = useTransform(smooth, [0.38, 0.42, 0.58, 0.62], [0, 1, 1, 0]);
   const beatC = useTransform(smooth, [0.66, 0.7, 0.84, 0.88], [0, 1, 1, 0]);
@@ -273,7 +273,7 @@ export default function SectionHero() {
       id="top"
       aria-labelledby="hero-title"
       className={`relative bg-ink text-cream ${
-        pinned ? 'h-[600svh] motion-reduce:h-svh' : 'h-svh'
+        pinned ? 'h-[400svh] motion-reduce:h-svh' : 'h-svh'
       }`}
     >
       <LoopScope />
