@@ -85,7 +85,7 @@ npm run lint
 ```
 /app
   /_components/album8/   # 8집 sections, mounted in app/page.tsx
-    hero/                # "붉은 실 / The Thread" pinned hero (250svh desktop, 200svh mobile)
+    hero/                # "붉은 실 / The Thread" pinned hero (600svh; each lyric beat holds ~80svh of scroll)
       index.tsx          # stage, scroll camera keyframes, beats, CTAs, date-aware status
       art-space.ts       # painting-space coordinates (0..1), clampCam, thread path
       HeroThread.tsx     # live SVG thread in art space (idle 124bpm sway, cursor pluck, bead)

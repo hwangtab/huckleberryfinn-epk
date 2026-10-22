@@ -35,13 +35,13 @@ type Size = { W: number; H: number };
  * The visitor's scroll drives the camera: rest → covered eyes → along the thread → empty chair → pull back.
  */
 const LANDSCAPE = {
-  at: [0, 0.12, 0.36, 0.5, 0.62, 0.84, 1],
+  at: [0, 0.07, 0.34, 0.5, 0.61, 0.87, 1],
   x: [0.5, 0.5, 0.44, 0.66, 0.88, 0.5, 0.5],
   y: [0.37, 0.37, 0.3, 0.36, 0.58, 0.4, 0.4],
   z: [1, 1, 1.85, 1.95, 1.9, 1.06, 1.06],
 };
 const PORTRAIT = {
-  at: [0, 0.1, 0.34, 0.5, 0.62, 0.84, 1],
+  at: [0, 0.06, 0.32, 0.5, 0.61, 0.87, 1],
   x: [0.5, 0.5, 0.42, 0.62, 0.86, 0.5, 0.5],
   y: [0.5, 0.5, 0.31, 0.36, 0.58, 0.5, 0.5],
   z: [1, 1, 1.5, 1.55, 1.45, 1, 1],
@@ -181,14 +181,15 @@ export default function SectionHero() {
   const boxS = useTransform(cam, (c) => c.z);
 
   // ----- beats -----
-  const introOpacity = useTransform(smooth, [0, 0.07, 0.13, 0.86, 0.94], [1, 1, 0, 0, 1]);
-  const introY = useTransform(smooth, [0, 0.13, 0.86, 0.94], [0, -36, 24, 0]);
-  const spread = useTransform(() => (pinned ? transform(smooth.get(), [0, 0.13, 0.86, 0.94], [0, 34, 34, 0]) : 0));
-  const dim = useTransform(smooth, [0.12, 0.2, 0.84, 0.92], [0, 0.42, 0.42, 0]);
-  const beatA = useTransform(smooth, [0.15, 0.2, 0.31, 0.36], [0, 1, 1, 0]);
-  const beatB = useTransform(smooth, [0.42, 0.47, 0.58, 0.63], [0, 1, 1, 0]);
-  const beatC = useTransform(smooth, [0.66, 0.71, 0.8, 0.85], [0, 1, 1, 0]);
-  const cueOpacity = useTransform(smooth, [0, 0.04], [1, 0]);
+  const introOpacity = useTransform(smooth, [0, 0.04, 0.08, 0.9, 0.96], [1, 1, 0, 0, 1]);
+  const introY = useTransform(smooth, [0, 0.08, 0.9, 0.96], [0, -36, 24, 0]);
+  const spread = useTransform(() => (pinned ? transform(smooth.get(), [0, 0.08, 0.9, 0.96], [0, 34, 34, 0]) : 0));
+  const dim = useTransform(smooth, [0.06, 0.1, 0.88, 0.93], [0, 0.42, 0.42, 0]);
+  // Each line holds for ~80svh of scroll (section is 600svh → 500svh of travel), so a small scroll never skips one.
+  const beatA = useTransform(smooth, [0.1, 0.14, 0.3, 0.34], [0, 1, 1, 0]);
+  const beatB = useTransform(smooth, [0.38, 0.42, 0.58, 0.62], [0, 1, 1, 0]);
+  const beatC = useTransform(smooth, [0.66, 0.7, 0.84, 0.88], [0, 1, 1, 0]);
+  const cueOpacity = useTransform(smooth, [0, 0.02], [1, 0]);
 
   // ----- stage size -----
   // Measured synchronously before the first client paint (layout effect), so the camera never
@@ -272,7 +273,7 @@ export default function SectionHero() {
       id="top"
       aria-labelledby="hero-title"
       className={`relative bg-ink text-cream ${
-        pinned ? 'h-[200svh] md:h-[250svh] motion-reduce:h-svh md:motion-reduce:h-svh' : 'h-svh'
+        pinned ? 'h-[600svh] motion-reduce:h-svh' : 'h-svh'
       }`}
     >
       <LoopScope />

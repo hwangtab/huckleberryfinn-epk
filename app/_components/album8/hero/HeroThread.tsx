@@ -143,8 +143,8 @@ export default function HeroThread({ cam, size, progress, stageRef, live, intera
     const bead = beadRef.current;
     if (bead) {
       const prog = progress.get();
-      const tt = Math.min(1, Math.max(0, (prog - 0.36) / 0.3));
-      const visible = prog > 0.36 && prog < 0.66;
+      const tt = Math.min(1, Math.max(0, (prog - 0.34) / 0.3));
+      const visible = prog > 0.34 && prog < 0.64;
       let i0 = 0;
       while (i0 < N - 1 && p[i0].x < BEAD_FROM_X) i0++;
       const fi = i0 + (N - 1 - i0) * tt;
