@@ -456,22 +456,22 @@ export default function SectionHero() {
           {/* bottom */}
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-10">
             <motion.div style={pinned ? { opacity: introOpacity, y: introY } : undefined} className="max-w-full">
-              <p className="hero-fade mb-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-bulb md:mb-4 md:text-xs short:hidden" style={{ ['--d' as string]: '0.2s' }}>
+              <p className="hero-fade mb-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-bulb md:mb-4 md:text-xs short:hidden" style={{ ['--d' as string]: '0.45s' }}>
                 <span className="hidden lg:inline">Huckleberryfinn · </span>8th Studio Album · 정규 8집
               </p>
               <HeroTitle spread={spread} />
-              <p className="hero-fade mt-3 font-serif-kr text-lg font-bold text-cream/90 md:mt-4 md:text-2xl short:hidden" style={{ ['--d' as string]: '0.5s' }}>
+              <p className="hero-fade mt-3 font-serif-kr text-lg font-bold text-cream/90 md:mt-4 md:text-2xl short:hidden" style={{ ['--d' as string]: '1.3s' }}>
                 내 안에서 낯설어진 존재들을 다시 부르는 노래
               </p>
-              <p className="hero-fade mt-4 text-[15px] font-semibold tracking-[0.04em] text-cream md:text-base short:mt-2" style={{ ['--d' as string]: '0.6s' }}>
+              <p className="hero-fade mt-4 text-[15px] font-semibold tracking-[0.04em] text-cream md:text-base short:mt-2" style={{ ['--d' as string]: '1.5s' }}>
                 2026. 10. 23 (금) 12:00 KST <span className="font-medium text-cream/75">정규 8집 발매</span>
               </p>
-              <p className="hero-fade mt-1.5 hidden text-sm font-medium text-cream/75 md:block short:hidden" style={{ ['--d' as string]: '0.7s' }}>
+              <p className="hero-fade mt-1.5 hidden text-sm font-medium text-cream/75 md:block short:hidden" style={{ ['--d' as string]: '1.65s' }}>
                 22nd Yellow Concert — Seoul 10.31 · Busan 12.05
               </p>
             </motion.div>
 
-            <div className="hero-fade flex shrink-0 flex-col gap-3 md:items-end" style={{ ['--d' as string]: '0.7s' }}>
+            <div className="hero-fade flex shrink-0 flex-col gap-3 md:items-end" style={{ ['--d' as string]: '1.8s' }}>
               <p className="text-sm font-semibold text-cream">
                 <span aria-hidden="true" className="mr-2 inline-block h-2 w-2 rounded-full bg-thread align-middle" />
                 <span aria-hidden="true">
